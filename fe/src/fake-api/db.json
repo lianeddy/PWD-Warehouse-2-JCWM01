@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "username": "Kevin",
+      "email": "kevinnp28@gmail.com",
+      "password": "1234",
+      "id": 1
+    },
+    {
+      "username": "Marvin",
+      "email": "Marvin@mny.co.us",
+      "password": "5678",
+      "role": "user",
+      "id": 2
+    },
+    {
+      "username": "Victoria",
+      "email": "Victoria@yahoo.com",
+      "password": "1234",
+      "role": "user",
+      "id": 3
+    }
+  ],
+  "transactions": [],
+  "products": [],
+  "carts": []
+}
