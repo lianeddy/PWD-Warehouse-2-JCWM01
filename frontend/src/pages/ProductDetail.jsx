@@ -35,7 +35,7 @@ class ProductDetail extends React.Component {
   renderSize = () => {
     return this.state.productData.map((val)=> {
       const capital = val.size.toUpperCase();
-      return <option value="">{capital}</option>
+      return <option value={val.size}>{capital}</option>
     })
   }
 
