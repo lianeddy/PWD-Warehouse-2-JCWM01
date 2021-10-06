@@ -7,9 +7,6 @@
     width: 18vw;
     height: 27vw;
     border: 1px solid #e2e5e6;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
     margin: 0vw 0.77vw;
 }
 
@@ -20,6 +17,7 @@
 }
 
 .product-card img {
+    border-radius: 4px;
     object-fit:cover;
     height: 100%;
     width: 100%;
@@ -31,59 +29,12 @@
     justify-content: center;
 }
 
-.link:hover{
+Link:hover{
     text-decoration: underline;
     color: inherit;
 }
 
-.btn-basic{
-    color: white;
-    background-color: black;
-    transition: transform .1s;
-}
 
-.btn-basic:hover{
-    color: white;
-    background-color: black;
-    transform: scale(1.06);
-    animation:ease-in-out;
-}
-
-.btn-second{
-    color: black;
-    background-color: white;
-    transition: transform .1s;
-}
-
-.btn-second:hover{
-    color: black;
-    background-color: white;
-    text-decoration: underline;
-    animation:ease-in-out;
-}
-
-.btn-add{
-    color: white;
-    background-color: black;
-}
-
-.btn-add:hover{
-    color: white;
-    background-color: black;
-}
-
-.btn-cancel{
-    color: white;
-    background-color:#a63a32;
-    transition: transform .1s;
-}
-
-.btn-cancel:hover{
-    color: white;
-    background-color:#a63a32;
-    transform: scale(1.06);
-    animation:ease-in-out;
-}
 
 h1{
     font-family: 'poppins-regular';

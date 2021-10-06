@@ -89,11 +89,11 @@ class ProductCard extends React.Component{
                     <div>
                         <div className="card-text">
 
-                                <h4 >
+                                <h3 >
                                     {this.props.productData.product_name}
-                                </h4>
+                                </h3>
 
-                            <p className="text-muted">Rp. {this.props.productData.price_sell.toLocaleString()}</p>
+                            <h4 className="text-muted">Rp. {this.props.productData.price_sell.toLocaleString()}</h4>
                         </div>
                     </div>
                 </div>
