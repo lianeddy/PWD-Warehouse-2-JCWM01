@@ -1,0 +1,72 @@
+@font-face { font-family: poppins-regular; src: url('../fonts/Poppins-Regular.ttf'); } 
+
+.filter-bar{
+    margin-left: 0;
+
+}
+
+.container-style{
+    padding: 100px 32px 0px 32px;
+    margin-top: 100px;
+
+}
+
+.container-top {
+    padding: 0px 40px;
+}
+
+.text-page{
+    width: 8vw;
+}
+
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.filter-style{
+    position: relative;
+    width:12vw;
+    font-family: 'poppins-regular';
+    font-size: 14px;
+    border: 0.5px solid lightgrey;
+}
+
+.button-second{
+    color: black;
+    background-color: white;
+    border: none;
+}
+
+.button-secon:hover{
+    color: black;
+    background-color: white;
+    border: none;
+    text-decoration:darkslategrey;
+}
+
+h1{
+    font-family: 'poppins-regular';
+    font-size: 36px;
+}
+
+h2{
+    font-family: 'poppins-regular';
+    font-size: 24px;
+}
+
+h3{
+    font-family: 'poppins-regular';
+    font-size: 18px;
+}
+
+h4{
+    font-family: 'poppins-regular';
+    font-size: 14px;
+}
+
+p{
+    font-family: 'poppins-regular';
+    font-size: 12px;
+    margin:0px;
+}
