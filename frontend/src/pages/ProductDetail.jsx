@@ -13,15 +13,27 @@ class ProductDetail extends React.Component {
     sizeAvailable:[],
     productNotFound: false,
     productQty: 1,
+    selectedSize:"",
+    availableStock:1,
+  }
+
+  inputHandler = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
+
+    //name dikasi kurung siku soalnya dia variabel
+    this.setState({[name] : value.toUpperCase()})
   }
 
   fetchproducts = () => {
-    console.log(this.props.match.params.product_id)
+    // console.log(this.props.match.params.product_id)
     Axios.get(`${API_URL}/get-products-detail?product_id=${this.props.match.params.product_id}`)
     .then((result) => {
       if(result.data.length){
         this.setState({productData: result.data})
         this.setState({shownData:result.data[0]})
+        this.setState({availableStock:result.data[0].available_stock})
+        this.setState({selectedSize:result.data[0].size.toUpperCase()})
         // alert("Berhasil mengambil data produk.")
       } else {
         this.setState({productNotFound:true})
@@ -32,9 +44,20 @@ class ProductDetail extends React.Component {
   })
   } 
 
+  availableStock = (event) => {
+    this.inputHandler(event)
+    this.state.productData.map((val)=>{
+      if (val.size === this.state.selectedSize){
+        this.setState({availableStock: val.available_stock}) 
+        // console.log(this.state.availableStock)
+      }
+    })
+  }
+
   renderSize = () => {
     return this.state.productData.map((val)=> {
       const capital = val.size.toUpperCase();
+      // console.log("stock",this.state.availableStock)
       return <option value={val.size}>{capital}</option>
     })
   }
@@ -85,8 +108,9 @@ class ProductDetail extends React.Component {
               {this.state.shownData.product_desc} 
             </h4>
             <div className="d-flex flex-row align-items-center mt-3">
-              <div className="mx-2 col-2">
-                <select className="selectSize" name="size" id="size">
+              <div className="mx-2 col-3 d-flex flex-row align-items-center justify-content-start">
+                <p className="me-2">Select size: </p>
+                <select onChange={(event)=>this.availableStock(event)} className="selectSize" name="selectedSize" id="size">
                   {this.renderSize()}
                 </select>
               </div>
@@ -96,9 +120,14 @@ class ProductDetail extends React.Component {
               <div className="mx-4">
                 <h4>{this.state.productQty}</h4>
               </div>
-              <button onClick={this.fnQuantityUp} className="btn btn-dark btn-sm">
+              <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock} className="btn btn-dark btn-sm">
                 +
               </button>
+              {
+                this.state.productQty===this.state.availableStock?
+                <p className="warning">Sorry, you have reached size {this.state.selectedSize} maximum stock.</p>
+                : null
+              }
 
             </div>
             <button className="btn btn-sm btn-dark mt-3 col-6">

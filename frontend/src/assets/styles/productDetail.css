@@ -15,7 +15,12 @@
     border-radius: 2px;
     width:3vw;
     height:2.5vw;
-    padding:0.2vw 0.2vw 0.2vw 1vw;
+    padding:0.2vw 0.2vw 0.2vw 0.9vw;
+}
+
+.warning {
+    margin-left: 1vw;
+    color: brown;
 }
 
 h1{
@@ -35,7 +40,12 @@ h3{
 
 h4{
     font-family: 'poppins-regular';
-    font-size: 18px;
+    font-size: 14px;
+}
+
+option{
+    font-family: 'poppins-regular';
+    font-size: 14px;
 }
 
 p{
