@@ -26,7 +26,7 @@ class Home extends React.Component {
     })
     .catch((err)=>{
       alert(err)
-  })
+    })
   }
 
   fetchCategoryList = () => {
@@ -86,6 +86,25 @@ class Home extends React.Component {
     this.setState({[name] : value})
   }
 
+  sortHandler = (event) => {
+    const value = event.target.value;
+
+    this.setState({sortProduct : value},this.fetchSortedProducts)
+    this.setState({page : 1})
+  }
+
+  fetchSortedProducts = () => {
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}`)
+    .then((result) => {
+      this.setState({productList: result.data})
+      //this.setState({page: this.state.page + result.data.length })
+      // alert("Berhasil mengambil data produk.")
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+  }
+
   nextPageHandler = () => {
     this.setState({page: this.state.page + 1}, this.fetchproducts)
     // console.log(this.state.page)
@@ -135,12 +154,12 @@ class Home extends React.Component {
           <div className="col-10 ">
               <div className="d-flex flex-direction-row align-items-center justify-content-between mb-3">
                 <div className="d-flex flex-direction-row align-items-center justify-content-start col-4 px-3">
-                  <select onChange={this.inputHandler} onClick={this.resetPage} name="sortProduct" className="form-control filter-style">
+                  <select onChange={this.sortHandler} name="sortProduct" className="form-control filter-style">
                     <option value="def">SORT BY</option>
-                    <option value="asc">Lowest price</option>
-                    <option value="dsc">Highest price</option>
-                    <option value="aToZ">A to Z</option>
-                    <option value="ztoA">Z to A</option>
+                    <option value="price_asc">Lowest price</option>
+                    <option value="price_desc">Highest price</option>
+                    <option value="name_asc">A to Z</option>
+                    <option value="name_dsc">Z to A</option>
                   </select>
                 </div>
                 <div className="col-4 "> </div>

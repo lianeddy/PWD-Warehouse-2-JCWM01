@@ -74,29 +74,26 @@ class ProductCard extends React.Component{
 
     render(){
         return(
-            <div className="d-flex justify-content-between mb-2">
+            <div className="d-flex flex-direction-column justify-content-between mb-2">
                 <div>
-                <Link to={`/product/${this.props.productData.product_id}`} style={{textDecoration:"none",color:"inherit"}}>
-                    <div className="product-card">
+                    <Link to={`/products/${this.props.productData.product_id}`} style={{textDecoration:"none",color:"inherit"}}>
+                        <div className="product-card">
 
-                        <img 
-                            src={this.props.productData.product_image}
-                            alt="" 
-                        />
+                            <img 
+                                src={this.props.productData.product_image}
+                                alt="" 
+                            />
 
-                    </div>
-                </Link>
-                    <div>
-                        <div className="card-text">
-
-                                <h3 >
-                                    {this.props.productData.product_name}
-                                </h3>
-
-                            <h4 className="text-muted">Rp. {this.props.productData.price_sell.toLocaleString()}</h4>
                         </div>
+                    </Link>
+                    <div className="card-text">
+                        <h3>
+                            {this.props.productData.product_name}
+                        </h3>
+                        <h4 className="text-muted">Rp. {this.props.productData.price_sell.toLocaleString()}</h4>
                     </div>
                 </div>
+
             </div>
 
         )

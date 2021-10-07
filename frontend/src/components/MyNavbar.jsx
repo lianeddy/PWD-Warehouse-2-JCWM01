@@ -38,7 +38,7 @@ class MyNavbar extends React.Component{
         return(
 
             <Navbar color="white" light className="navbar px-3 d-flex justify-content-between" fixed="top" >
-                <Link to="/home" className="col-4 link">
+                <Link to="/" className="col-4 link">
                    <img src={logo} alt="home" className="navbar-logo"/>
                 </Link>
                 <div>

@@ -3,7 +3,7 @@ import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 
 import LandingPage from './pages/LandingPage'
-import Home from './pages/Home'
+import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
 
@@ -14,8 +14,8 @@ class App extends React.Component {
           <BrowserRouter>
             <MyNavbar />
             <Switch>
-              <Route component={ProductDetail} path="/product/:product_id" />
-              <Route component={Home} path="/home" />
+              <Route component={ProductDetail} path="/products/:product_id" />
+              <Route component={Products} path="/products" />
               <Route component={LandingPage} path="/" />
             </Switch>
           </BrowserRouter>
