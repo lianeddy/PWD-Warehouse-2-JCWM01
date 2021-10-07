@@ -1,7 +1,11 @@
 import React from "react";
+import Axios from 'axios'
+import { loginUser } from "../redux/actions/user";  
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export class Login extends React.Component {
+
+class Login extends React.Component {
     state = {
     username: "",
     password:"",
@@ -15,8 +19,23 @@ export class Login extends React.Component {
         this.setState({ [name]: value })
     }
 
-    loginHandler = () => {
-        alert(`username: ${this.state.username}\n password:${this.state.password}`)
+    loginUser = ({ username, password }) => {
+        
+            Axios.get('http://localhost:2601/login', {
+                params: {
+                    username: username,
+                    password: password,
+                }
+            }) 
+            .then((res)=> {
+                alert("Login successful");
+                console.log(res.data);
+            })
+            .catch(err =>{
+                alert("Login failed")
+                console.log(err)
+            })
+        
     }
 
     render() {
@@ -36,11 +55,23 @@ export class Login extends React.Component {
                 </div>
                 </div>
                 <div className="footer">
-                    <h6>Don't have Annett's account? Create <a href="/">here</a></h6> /* link*/
-                    <button onClick={this.loginHandler} type="submit" className="btn btn-success">Login</button>
+                    <h6>Don't have Annett's account? Create <a href="/">here</a></h6>
+                    <button onClick={()=>this.loginUser(this.state)} type="submit" className="btn btn-success">Login</button>
                 </div>
             </div>
             
             
     }
 }
+
+// const mapStateToProps = (state) => ({
+//     user: state.login
+// })
+
+// const mapDispatchToProps = {
+//     loginUser,
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default Login;
