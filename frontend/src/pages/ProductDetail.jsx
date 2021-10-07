@@ -46,6 +46,11 @@ class ProductDetail extends React.Component {
 
   availableStock = (event) => {
     this.inputHandler(event)
+
+    this.setState({productQty:1}, this.changeAvailableStock)
+  }
+
+  changeAvailableStock = () => {
     this.state.productData.map((val)=>{
       if (val.size === this.state.selectedSize){
         this.setState({availableStock: val.available_stock}) 
