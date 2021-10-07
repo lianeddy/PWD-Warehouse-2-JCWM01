@@ -55,7 +55,7 @@ class LandingPage extends React.Component {
                 <div className="d-flex flex-column align-items-center ">
                     <h1 >Fashion is an inseparable part of our lives.</h1>
                     <h4>Explore our collections to find the exact attire for your every needs. </h4>
-                    <Link className="mt-2" to={"/home"}>
+                    <Link className="mt-2" to={"/products"}>
                         <button className="btn btn-basic mt-2">Explore now</button>
                     </Link>
                 </div>
