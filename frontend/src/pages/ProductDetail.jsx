@@ -15,6 +15,7 @@ class ProductDetail extends React.Component {
     productQty: 1,
     selectedSize:"",
     availableStock:1,
+    disable:false
   }
 
   inputHandler = (event) => {
@@ -33,8 +34,7 @@ class ProductDetail extends React.Component {
         this.setState({productData: result.data})
         this.setState({shownData:result.data[0]})
         this.setState({availableStock:result.data[0].available_stock})
-        this.setState({selectedSize:result.data[0].size.toUpperCase()})
-        // alert("Berhasil mengambil data produk.")
+        this.setState({selectedSize:result.data[0].size})
       } else {
         this.setState({productNotFound:true})
       }
@@ -45,16 +45,14 @@ class ProductDetail extends React.Component {
   } 
 
   availableStock = (event) => {
-    this.inputHandler(event)
-
-    this.setState({productQty:1}, this.changeAvailableStock)
-  }
-
-  changeAvailableStock = () => {
+    // console.log(event.target.value)
+    this.setState({productQty:1})
     this.state.productData.map((val)=>{
-      if (val.size === this.state.selectedSize){
-        this.setState({availableStock: val.available_stock}) 
-        // console.log(this.state.availableStock)
+      if (val.size === event.target.value){
+        this.setState({selectedSize: val.size.toUpperCase()}) //ini buat nanti add to cart aja
+        this.setState({availableStock: val.available_stock}) //ini buat nanti add to cart aja
+ 
+        console.log("size:",val.size," stock:",val.available_stock)
       }
     })
   }

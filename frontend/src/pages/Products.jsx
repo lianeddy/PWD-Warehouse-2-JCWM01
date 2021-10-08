@@ -2,7 +2,7 @@ import React from 'react';
 import ProductCard from '../components/ProductCard'
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
-import "../assets/styles/home.css"
+import "../assets/styles/product.css"
 
 class Home extends React.Component {
   state = {
