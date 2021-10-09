@@ -16,10 +16,11 @@ class Home extends React.Component {
     searchCategory:"",
     searchColor:"",
     sortProduct:"",
+    product_name:"",
   }
  
   fetchproducts = () => {
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&product_name=${this.state.product_name}`)
     .then((result) => {
       this.setState({productList: result.data})
       //this.setState({page: this.state.page + result.data.length })
@@ -81,7 +82,7 @@ class Home extends React.Component {
   }
 
   fetchMaxPage = () => {
-    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}`)
+    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.product_name}`)
     .then((result) => {
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
@@ -115,15 +116,15 @@ class Home extends React.Component {
     this.setState({page : 1})
   }
 
-  fetchSortedProducts = () => {
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}`)
-    .then((result) => {
-      this.setState({productList: result.data})
-    })
-    .catch((err)=>{
-      alert(err)
-    })
-  }
+  // fetchSortedProducts = () => {
+  //   Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}`)
+  //   .then((result) => {
+  //     this.setState({productList: result.data})
+  //   })
+  //   .catch((err)=>{
+  //     alert(err)
+  //   })
+  // }
 
   fetchFilteredProducts = () => {
     console.log(this.state.sortProduct)
@@ -131,7 +132,7 @@ class Home extends React.Component {
     console.log(this.state.searchColor)
     this.fetchMaxPage()
 
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.product_name}`)
     .then((result) => {
       this.setState({productList: result.data})
     })
@@ -161,6 +162,7 @@ class Home extends React.Component {
   clearFilter=()=>{
     this.setState({searchCategory:""})
     this.setState({searchColor:""})
+    this.fetchproducts()
   }
 
   componentDidMount(){
@@ -188,8 +190,8 @@ class Home extends React.Component {
               </ul>
             </div>
             <div>
-              <button className="btn btn-dark btn-sm" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
-              <button className="btn btn-light btn-sm ms-2" onClick={this.clearFilter}><p>Reset Filter</p></button>
+              <button className="btn btn-dark btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
+              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.clearFilter}><p>Reset Filter</p></button>
             </div>
 
           </div>

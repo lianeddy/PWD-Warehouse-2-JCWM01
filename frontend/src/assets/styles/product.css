@@ -50,17 +50,18 @@ select{
     color: black;
     background-color: white;
     border: none;
-    text-decoration:underline;
 }
 
 .btn-dark:hover{
-    text-decoration: underline;
     box-shadow: 1px 1px 1px 1px grey;
 }
 
 .btn-light:hover{
-    text-decoration: underline;
     box-shadow: 1px 1px 1px 1px lightgrey;
+}
+
+.filter:hover{
+    text-decoration: underline;
 }
 
 h1{
