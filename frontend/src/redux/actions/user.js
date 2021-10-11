@@ -1,21 +1,25 @@
-import React from 'react';
 import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 
-export const confirmRegBtn = () => {
+export const confirmRegBtn = (data) => {
     return (dispatch) => {
     Axios.post('http://localhost:2601/register/add-user', {
-        username: this.props.state.username,
-        email: this.props.state.email,
-        password: this.props.state.password,
-        fullname: this.props.state.fullname,
-        gender: this.props.state.gender,
-        age: this.props.state.age,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        fullname: data.fullname,
+        gender: data.gender,
+        age: data.age,
         auth_status: "user"
     })
-        .then(res=> {
+        .then((res) => {
             alert("Registration successful")
             console.log(res.data)
+            dispatch ({
+                type: "USER_LOGIN",
+                payload: res.data[0]
+            });
         })
         .catch(err =>{
             alert("Registration failed")
@@ -24,18 +28,21 @@ export const confirmRegBtn = () => {
     }
 }
 
-
-export const loginUser = ({ username, password }) => {
+export const loginUser = (data) => {
     return (dispatch) => {
-        Axios.get('http://localhost:2601/login', {
-            params: {
-                username: username,
-                password: password,
-            }
+        Axios.post('http://localhost:2601/login/get-user', {
+                username: data.username,
+                password: data.password,
         }) 
         .then((res)=> {
-            alert("Login successful");
-            console.log(res.data);
+            delete res.data[0].password;
+            console.log(res.data[0]);
+
+            dispatch ({
+                type: "USER_LOGIN",
+                payload: res.data[0]
+            });
+            
         })
         .catch(err =>{
             alert("Login failed")

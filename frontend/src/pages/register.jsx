@@ -1,8 +1,7 @@
 import React from "react";
-import Axios from 'axios';
 import { confirmRegBtn } from "../redux/actions/user";  
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 class Register extends React.Component {
 
@@ -17,34 +16,22 @@ class Register extends React.Component {
         auth_status: "user"
     }
 
+    redirectHandler = () => {
+        this.setState({redirect: true}) //function untuk redirect setelah user submit data Register
+    }
+
     inputHandler = (event) =>{
         const value = event.target.value;
         const name = event.target.name;
-
         this.setState({ [name]: value })
     }
 
-
-    // confirmRegBtn = () => {
-
-    //     Axios.post('http://localhost:2601/register/add-user', {
-    //         username: this.state.username,
-    //         email: this.state.email,
-    //         password: this.state.password,
-    //         fullname: this.state.fullname,
-    //         gender: this.state.gender,
-    //         age: this.state.age,
-    //         auth_status: "user"
-    //     })
-    //     .then(res=> {
-    //         console.log(res.data)
-    //     })
-    //     .catch(err =>{
-    //         console.log(err)
-    //     })
-    // }
-
     render() {
+        const { redirect } = this.state;
+        if(redirect) {
+            return <Redirect to="/"/>
+        }
+
         return <div className=".base-container" ref={this.props.containerRef}>
                 
                 <div className="content">
@@ -78,8 +65,8 @@ class Register extends React.Component {
                 </div>
                 </div>
                 <div className="footer">
-                <h6>Already have Annett's account? Login <a href="login.jsx">here</a></h6>
-                    <button type="submit" onClick={()=>this.props.confirmRegBtn()} className="btn btn-success">Register Now!</button>
+                <h6>Already have Annett's account? Login <a href="./login.jsx">here</a></h6>
+                    <button type="submit" onClick={()=>{this.props.confirmRegBtn(this.state); ; this.redirectHandler()}} className="btn btn-success">Register Now!</button>
                 </div>
             </div>
        
@@ -88,11 +75,11 @@ class Register extends React.Component {
     }
 }
 
-//export default (Register);
-
-const mapStateToProps = (state) => ({
-    user: state.register
-})
+const mapStateToProps = (state) => {
+    return {
+        userGlobal: state.user,
+    }
+}
 
 const mapDispatchToProps = {
     confirmRegBtn,

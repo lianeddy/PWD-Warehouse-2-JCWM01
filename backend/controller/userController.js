@@ -2,6 +2,7 @@
 const { db } = require('../database')
 
 module.exports = {
+
     addUser: (req, res) => {
         console.log(req.body)
         let { username, email, password, fullname, gender, age, auth_status } = req.body
@@ -13,17 +14,33 @@ module.exports = {
         ${db.escape(gender)},
         ${db.escape(age)},
         ${db.escape(auth_status)});`
-        console.log(insertQuery)
         db.query(insertQuery, (err, results) => {
             if (err) {
                 console.log(err)
                 return res.status(500).send(err)
             }
-            db.query(`Select * from user where username = ${db.escape(username)};`, (err2, results2) => {
+            db.query(`SELECT * FROM user WHERE username = ${db.escape(username)};`, (err2, results2) => {
                 if (err2) return res.status(500).send(err2)
                 return res.status(200).send({ message: 'registration succesfull', data: results2 })
                 
             })
         }) 
-    }
+    },
+
+    getUser: (req,res) => {
+        let { username, password } = req.body;
+        db.query(`SELECT * FROM user WHERE username = ? AND password = ?`, [username, password],
+        (err, result) => {
+            if (err) {
+                res.send(err)
+            }
+            if (result.length > 0) {
+                res.send(result)
+            } else {
+                res.send({ message: "Wrong username or password" })
+            }
+            
+        })
+    },
 }
+

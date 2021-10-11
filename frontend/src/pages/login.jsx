@@ -1,49 +1,41 @@
 import React from "react";
-import Axios from 'axios'
 import { loginUser } from "../redux/actions/user";  
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 
 class Login extends React.Component {
     state = {
     username: "",
     password:"",
+    redirect: false
     }
 
+    redirectHandler = () => {
+        this.setState({redirect: true}) //function untuk redirect setelah user submit data login
+    }
 
-    inputHandler = (event) =>{
+    inputHandler = (event) => {
         const value = event.target.value;
         const name = event.target.name;
-
         this.setState({ [name]: value })
     }
 
-    loginUser = ({ username, password }) => {
-        
-            Axios.get('http://localhost:2601/login', {
-                params: {
-                    username: username,
-                    password: password,
-                }
-            }) 
-            .then((res)=> {
-                alert("Login successful");
-                console.log(res.data);
-            })
-            .catch(err =>{
-                alert("Login failed")
-                console.log(err)
-            })
-        
-    }
-
     render() {
+        if (this.props.userGlobal.username){
+            return <Redirect to="/"/>
+        }
+
+        const { redirect } = this.state;
+        if(redirect) {
+            return <Redirect to="/"/>
+        }
         return <div className=".base-container" ref={this.props.containerRef}>
                 
                 <div className="content">
                 <div className="header">LOGIN</div>
                 <div className="form">
+                    
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input type="text" name="username" onChange={this.inputHandler} placeholder="username"></input>
@@ -56,22 +48,22 @@ class Login extends React.Component {
                 </div>
                 <div className="footer">
                     <h6>Don't have Annett's account? Create <a href="/">here</a></h6>
-                    <button onClick={()=>this.loginUser(this.state)} type="submit" className="btn btn-success">Login</button>
+                    <button onClick={()=>{this.props.loginUser(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-success">Login</button>
                 </div>
             </div>
-            
-            
     }
 }
 
-// const mapStateToProps = (state) => ({
-//     user: state.login
-// })
 
-// const mapDispatchToProps = {
-//     loginUser,
-// }
+const mapStateToProps = (state) => {
+    return {
+        userGlobal: state.user,
+    }
+}
 
-// export default connect(mapStateToProps, mapDispatchToProps)(Login);
+const mapDispatchToProps = {
+    loginUser,
+}
 
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+

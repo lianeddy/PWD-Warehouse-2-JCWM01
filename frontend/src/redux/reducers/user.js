@@ -1,10 +1,11 @@
-
 const init_state = {
     username: "",
     email: "",
     password: "",
-    role: "",
-    id: 0
+    fullname: "",
+    gender: "",
+    age: "",
+    auth_status: "user"
 }
 
 export default (state = init_state, action) => {
