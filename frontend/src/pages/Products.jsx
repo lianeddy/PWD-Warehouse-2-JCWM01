@@ -16,13 +16,13 @@ class Home extends React.Component {
     searchCategory:"",
     searchColor:"",
     sortProduct:"",
-    product_name:"",
+    searchName:"",
   }
  
   fetchproducts = () => {
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&product_name=${this.state.product_name}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&product_name=${this.state.searchName}`)
     .then((result) => {
-      this.setState({productList: result.data})
+      this.setState({productList: result.data},this.fetchMaxPage())
       //this.setState({page: this.state.page + result.data.length })
       // alert("Berhasil mengambil data produk.")
     })
@@ -82,7 +82,7 @@ class Home extends React.Component {
   }
 
   fetchMaxPage = () => {
-    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.product_name}`)
+    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.searchName}`)
     .then((result) => {
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
@@ -116,23 +116,14 @@ class Home extends React.Component {
     this.setState({page : 1})
   }
 
-  // fetchSortedProducts = () => {
-  //   Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}`)
-  //   .then((result) => {
-  //     this.setState({productList: result.data})
-  //   })
-  //   .catch((err)=>{
-  //     alert(err)
-  //   })
-  // }
-
   fetchFilteredProducts = () => {
-    console.log(this.state.sortProduct)
-    console.log(this.state.searchCategory)
-    console.log(this.state.searchColor)
+    console.log("sortby",this.state.sortProduct)
+    console.log("category",this.state.searchCategory)
+    console.log("color",this.state.searchColor)
+    console.log("product_name",this.state.searchName)
     this.fetchMaxPage()
 
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.product_name}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.searchName}`)
     .then((result) => {
       this.setState({productList: result.data})
     })
