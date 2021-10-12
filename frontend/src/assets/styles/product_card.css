@@ -1,0 +1,63 @@
+@font-face { font-family: poppins-regular; src: url('../fonts/Poppins-Regular.ttf'); } 
+
+.product-card{
+    border-radius: 4px;
+    transition: all ease 150ms;
+    box-sizing: border-box;
+    width: 18vw;
+    height: 27vw;
+    border: 1px solid #e2e5e6;
+    margin: 0vw 0.77vw;
+}
+
+.product-card:hover{
+    box-shadow: 0px 8px 16px rgba(92, 107, 192, 0.2),
+    0px 4px 8px rgba(59, 69, 123, 0.2)
+
+}
+
+.product-card img {
+    border-radius: 4px;
+    object-fit:cover;
+    height: 100%;
+    width: 100%;
+}
+
+.card-text{
+    padding: 8px 16px 32px 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+Link:hover{
+    text-decoration: underline;
+    color: inherit;
+}
+
+
+
+h1{
+    font-family: 'poppins-regular';
+    font-size: 36px;
+}
+
+h2{
+    font-family: 'poppins-regular';
+    font-size: 24px;
+}
+
+h3{
+    font-family: 'poppins-regular';
+    font-size: 18px;
+}
+
+h4{
+    font-family: 'poppins-regular';
+    font-size: 18px;
+}
+
+p{
+    font-family: 'poppins-regular';
+    font-size: 12px;
+}
