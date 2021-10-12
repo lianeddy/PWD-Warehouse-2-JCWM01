@@ -1,6 +1,16 @@
 import Axios from 'axios';
 import {API_URL} from '../../constants/API'
 
+
+export const searchProduct = (searchProduct) => {
+    return (dispatch) => {
+        dispatch({
+            type: "SEARCH_PRODUCT",
+            payload: searchProduct
+        })
+}
+}
+
 export const registerUser = ({fullName,username,email,password}) => {
     return (dispatch) => {
         Axios.post(`${API_URL}/users`,{

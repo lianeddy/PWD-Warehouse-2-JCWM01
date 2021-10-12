@@ -3,8 +3,9 @@ import ProductCard from '../components/ProductCard'
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
 import "../assets/styles/product.css"
+import { connect } from 'react-redux'
 
-class Home extends React.Component {
+class Products extends React.Component {
   state = {
     productList: [],
     categoryList:[],
@@ -16,11 +17,10 @@ class Home extends React.Component {
     searchCategory:"",
     searchColor:"",
     sortProduct:"",
-    searchName:"",
   }
  
   fetchproducts = () => {
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&product_name=${this.state.searchName}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({productList: result.data},this.fetchMaxPage())
       //this.setState({page: this.state.page + result.data.length })
@@ -82,7 +82,7 @@ class Home extends React.Component {
   }
 
   fetchMaxPage = () => {
-    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.searchName}`)
+    Axios.get(`${API_URL}/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
@@ -120,10 +120,10 @@ class Home extends React.Component {
     console.log("sortby",this.state.sortProduct)
     console.log("category",this.state.searchCategory)
     console.log("color",this.state.searchColor)
-    console.log("product_name",this.state.searchName)
+    console.log("product_name",this.props.userGlobal.searchProduct)
     this.fetchMaxPage()
 
-    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.state.searchName}`)
+    Axios.get(`${API_URL}/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({productList: result.data})
     })
@@ -161,6 +161,7 @@ class Home extends React.Component {
     this.fetchCategoryList()
     this.fetchColorList()
     this.fetchMaxPage()
+    console.log(this.props.userGlobal.searchProduct)
   }
 
   render(){
@@ -184,9 +185,8 @@ class Home extends React.Component {
               <button className="btn btn-dark btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
               <button className="btn btn-light btn-sm ms-2 filter" onClick={this.clearFilter}><p>Reset Filter</p></button>
             </div>
-
           </div>
-          
+
           <div className="col-10 ">
               <div className="d-flex flex-direction-row align-items-center justify-content-between mb-3">
                 <div className="d-flex flex-direction-row align-items-center justify-content-start col-4 px-3">
@@ -242,4 +242,10 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+const mapStateToProps =(state)=> {
+  return{
+    userGlobal: state.user,
+  }
+  };
+
+  export default connect(mapStateToProps)(Products);
