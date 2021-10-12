@@ -30,6 +30,7 @@ class Login extends React.Component {
         if(redirect) {
             return <Redirect to="/"/>
         }
+        
         return <div className=".base-container" ref={this.props.containerRef}>
                 
                 <div className="content">
