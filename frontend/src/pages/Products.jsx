@@ -156,6 +156,13 @@ class Products extends React.Component {
     this.fetchproducts()
   }
 
+  componentDidUpdate(prevProps){
+    if (prevProps.userGlobal.searchProduct !== this.props.userGlobal.searchProduct)
+    {
+      this.fetchFilteredProducts()
+    }
+  }
+
   componentDidMount(){
     this.fetchproducts()
     this.fetchCategoryList()

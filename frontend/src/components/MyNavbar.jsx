@@ -20,8 +20,8 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { searchProduct } from '../redux/actions/user';
 
-class MyNavbar extends React.Component{
 
+class MyNavbar extends React.Component{
     state = {
         searchProduct:"",
     }
@@ -31,6 +31,11 @@ class MyNavbar extends React.Component{
         const name = event.target.name;
   
         this.setState({[name] : value})
+    }
+
+    searchProductHandler = () => {
+        console.log("search clicked", this.state.searchProduct)
+        this.props.searchProduct(this.state)
     }
 
     render(){
@@ -46,9 +51,11 @@ class MyNavbar extends React.Component{
                 {/* search bar */}
                 <form class="form-inline my-2 my-lg-0 col-4 d-flex align-items-center">
                     <input class="form-control" name="searchProduct"  onChange={this.inputHandler} type="search" placeholder="Search products..." />
+
                     <Link  to="/products" >
-                        <button onClick={()=>this.props.searchProduct(this.state)} class="btn btn-dark ms-2" type="submit"><p>Search</p></button>
-                    </Link>
+                        <button onClick={this.searchProductHandler} class="btn btn-dark ms-2" type="submit"><p>Search</p></button>
+                    </Link> 
+
                 </form>
                 <Nav className="navbar col-4 d-flex justify-content-between align-items-center flex-direction-row ">
                     <>
