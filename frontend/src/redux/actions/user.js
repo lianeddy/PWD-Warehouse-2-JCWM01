@@ -11,70 +11,53 @@ export const searchProduct = (searchProduct) => {
 }
 }
 
-export const registerUser = ({fullName,username,email,password}) => {
+export const confirmRegBtn = (data) => {
     return (dispatch) => {
-        Axios.post(`${API_URL}/users`,{
-            fullName,
-            username,
-            email,
-            password,
-            role:"user",
-        })
-        .then((result)=> {
-            delete result.data.password
-            
-            dispatch({
+    Axios.post('http://localhost:2700/register/add-user', {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        fullname: data.fullname,
+        gender: data.gender,
+        age: data.age,
+        auth_status: "user"
+    })
+        .then((res) => {
+            alert("Registration successful")
+            console.log(res.data)
+            dispatch ({
                 type: "USER_LOGIN",
-                payload: result.data
-            })
-            alert("User berhasil ditambahkan.")
+                payload: res.data[0]
+            });
         })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
+        .catch(err =>{
+            alert("Registration failed")
+            console.log(err)
         })
-}
+    }
 }
 
-export const loginUser = ({username,password}) => {
+export const loginUser = (data) => {
     return (dispatch) => {
-        Axios.get(`${API_URL}/users`,{
-            params: {
-              username,
-            }
+        Axios.post('http://localhost:2700/login/get-user', {
+                username: data.username,
+                password: data.password,
+        }) 
+        .then((res)=> {
+            delete res.data[0].password;
+            console.log(res.data[0]);
+
+            dispatch ({
+                type: "USER_LOGIN",
+                payload: res.data[0]
+            });
+            
         })
-        .then((result)=> {
-            if (result.data.length !== 0){
-                if (password===result.data[0].password){
-                    delete result.data[0].password
-                    //biar gak ilang terus
-                    localStorage.setItem("userDataEmmerce",JSON.stringify(result.data[0]))
-                    dispatch({
-                        type: "USER_LOGIN",
-                        payload: result.data[0]
-                    })
-
-                   } else{
-                    //wrong password
-                    dispatch({
-                        type: "USER_ERROR",
-                        payload: "Password salah, mohon masukkan kembali."
-                    })
-                   }
-
-            } else {
-                //wrong username
-                dispatch({
-                    type: "USER_ERROR",
-                    payload: "Username salah, mohon masukkan kembali."
-                })
-            }
-
-
+        .catch(err =>{
+            alert("Login failed")
+            console.log(err)
         })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
-        })
-}
+    }
 }
 
 export const logoutUser = () => {
