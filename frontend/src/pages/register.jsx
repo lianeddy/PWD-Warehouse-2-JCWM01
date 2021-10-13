@@ -61,10 +61,10 @@ class Register extends React.Component {
                     <label htmlFor="gender">Gender</label>
                     <div className="gender-group">
                         <span className="radiocontainer">
-                        <label for="genderMale" className="radiolabel">Male</label>
-                        <input class="selector" name="gender" type="radio" value="Male" onChange={this.inputHandler} />
-                        <label for="genderFemale" className="radiolabelfem">Female</label>
-                        <input class="selector" name="gender" type="radio" value="Female" onChange={this.inputHandler} />   
+                        <label htmlFor="genderMale" className="radiolabel">Male</label>
+                        <input className="selector" name="gender" type="radio" value="Male" onChange={this.inputHandler} />
+                        <label htmlFor="genderFemale" className="radiolabelfem">Female</label>
+                        <input className="selector" name="gender" type="radio" value="Female" onChange={this.inputHandler} />   
                         </span>
                     </div>
 
