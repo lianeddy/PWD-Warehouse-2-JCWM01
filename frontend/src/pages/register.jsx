@@ -1,7 +1,7 @@
 import React from "react";
 import { confirmRegBtn } from "../redux/actions/user";  
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class Register extends React.Component {
 
@@ -17,7 +17,7 @@ class Register extends React.Component {
     }
 
     redirectHandler = () => {
-        this.setState({redirect: true}) //function untuk redirect setelah user submit data Register
+        this.setState({redirect: true})
     }
 
     inputHandler = (event) =>{
@@ -37,36 +37,47 @@ class Register extends React.Component {
                 <div className="content">
                 <div className="header">REGISTER</div>
                 <div className="form">
+
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input type="text" name="username" onChange={this.inputHandler} placeholder="username"></input>
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
                         <input type="text" name="email" onChange={this.inputHandler} placeholder="email"></input>                
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input type="password" name="password" onChange={this.inputHandler} placeholder="password"></input>                
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="fullname">Full Name</label>
                         <input type="text" name="fullname" onChange={this.inputHandler} placeholder="full name"></input>                
                     </div>
+
+                    <label htmlFor="gender">Gender</label>
                     <div className="gender-group">
-                        <label htmlFor="gender">Gender</label>
-                        <input type="radio" name="gender" value="Male" onChange={this.inputHandler} />Male
-                        <input type="radio" name="gender" value="Female" onChange={this.inputHandler} />Female            
+                        <span className="radiocontainer">
+                        <label for="genderMale" className="radiolabel">Male</label>
+                        <input class="selector" name="gender" type="radio" value="Male" onChange={this.inputHandler} />
+                        <label for="genderFemale" className="radiolabelfem">Female</label>
+                        <input class="selector" name="gender" type="radio" value="Female" onChange={this.inputHandler} />   
+                        </span>
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="age">Age</label>
                         <input type="text" name="age" onChange={this.inputHandler} placeholder="age"></input>                
                     </div>
+
                 </div>
                 </div>
                 <div className="footer">
-                <h6>Already have Annett's account? Login <a href="./login.jsx">here</a></h6>
-                    <button type="submit" onClick={()=>{this.props.confirmRegBtn(this.state); ; this.redirectHandler()}} className="btn btn-success">Register Now!</button>
+                <h6>Already have Annett's account? Login <Link to="/login">here</Link></h6>
+                    <button type="submit" onClick={()=>{this.props.confirmRegBtn(this.state); ; this.redirectHandler()}} className="btn btn-login">Register Now!</button>
                 </div>
             </div>
        

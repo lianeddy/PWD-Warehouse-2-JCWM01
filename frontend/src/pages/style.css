@@ -1,5 +1,7 @@
+    @font-face { font-family: poppins-regular; src: url('../fonts/Poppins-Regular.ttf'); } 
+
+
     .base-container {
-        
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -10,7 +12,7 @@
     .content {
         display: flex;
         flex-direction: column;
-        margin-top: 40px;
+        margin-top: 4px;
         padding: 20px 20px;
        /* -webkit-box-shadow: 0px 0px 5px 3px rgba(56,53,56,0.55);
         -moz-box-shadow: 0px 0px 5px 3px rgba(56,53,56,0.55);
@@ -18,9 +20,8 @@
     }
 
     .header {
-        
         font-size: 48px;
-        font-family: "Quicksand";
+        font-family: 'poppins-regular';
         font-weight: 700;
     }
 
@@ -29,44 +30,54 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: 24px;
-        font-family: "Dosis";
+        font-size: 18px;
+        font-family: 'poppins-regular';
         font-weight: 200;
     }
 
     .form-group {
         display: flex;
-        
         flex-direction: column;
         align-items: flex;
         width: fit-content;
+        margin-bottom: 1rem;
     }
 
     .gender-group {
-        display: flex;
-        margin: 0 5rem 0 5rem;
-        flex-direction: row;
-        align-items: center;
-        width: fit-content;
-        justify-content: space-around;
+        margin-bottom: 1rem;
     }
 
+    .radiocontainer {
+        display: inline-grid;
+        grid-auto-flow: dense;
+        align-items: center;
+      }
+      
+      .radiocontainer label {
+        grid-column: 2;
+        padding-left: 5px;
+        padding-right: 10px;
+      }
+
+      .radiocontainer .radiolabelfem {
+        padding-left: 1.4rem;
+      }
+
     .label {
-        font-size: 12px;
+        font-size: 24px;
     }
 
     .input {
         margin-top: 6px;
         min-width: 18em;
         height: 37px;
-        padding: 0 10px;
-        font-size: 12px;
-        font-family: "Dosis";
+        font-size: 18px;
+        font-family: 'poppins-regular';
         font-weight: 200;
         background-color: #f3f3f3;
         border: 0;
         border-radius: 4px;
-        margin-bottom: 31px;
+        margin-bottom: 1px;
         transition: all 250ms ease-in-out;
     }
 
@@ -75,6 +86,32 @@
         box-shadow: 0px 0px 12px 0.8px #0e81ce96;
     }
 
+    .btn-login{
+        color: white;
+        font-family: 'poppins-regular';
+        font-weight: 700;
+        background-color: black;
+        border: none;
+        padding: 10px;
+    }
+    
+    .btn-login:hover{
+        color: black;
+        font-family: 'poppins-regular';
+        font-weight: 700;
+        background-color: #FF4D00;
+        border: none;
+        text-decoration:darkslategrey;
+        padding: 10px;
+    }
+
     .footer{
-        margin-top: 3em;
+        margin: 1rem 2rem 2rem 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+    }
+
+    .footer h6 {
+        padding: 1rem;
     }
