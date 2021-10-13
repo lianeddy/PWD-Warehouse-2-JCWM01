@@ -6,7 +6,6 @@ const init_state = {
   id: 0,
   errMsg: "",
   searchProduct:"",
-  storageIsChecked: false,
 };
 
 const reducer = (state = init_state, action) => {
@@ -14,13 +13,11 @@ const reducer = (state = init_state, action) => {
     case "SEARCH_PRODUCT":
       return { ...state, ...action.payload};
     case "USER_LOGIN":
-      return { ...state, ...action.payload, storageIsChecked: true };
+      return { ...state, ...action.payload };
     case "USER_ERROR":
       return { ...state, errMsg: action.payload };
     case "USER_LOGOUT":
-      return { ...init_state, storageIsChecked: true };
-    case "CHECK_STORAGE":
-      return { ...state, storageIsChecked: true };
+      return { ...init_state };
     default:
       return state;
   }

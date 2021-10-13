@@ -69,29 +69,3 @@ export const logoutUser = () => {
 
     }
 }
-
-//ambil data dari local storage supaya login terus
-export const userKeepLogin = (userData) => {
-    const username = userData.username
-    console.log("userkeeplogin action",username)
-    return (dispatch) =>{
-        Axios.post(`http://localhost:2700/login/get-user-keeplogin?username=${username}`)
-        .then((result) => {
-            delete result.data[0].password
-            localStorage.setItem("userDataEmmerce",JSON.stringify(result.data[0]))
-            dispatch({
-                type: "USER_LOGIN",
-                payload: result.data[0]
-            })
-        })
-        .catch((err)=>{
-            alert(err)
-        })
-    }
-}
-
-export const checkStorage = () => {
-    return {
-        type: "CHECK_STORAGE"
-    }
-}
