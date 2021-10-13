@@ -1,10 +1,5 @@
-/* font dari google fonts */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;800&display=swap');
-
 .App {
   text-align: center;
-  padding: 10rem;
 }
 
 .App-logo {
