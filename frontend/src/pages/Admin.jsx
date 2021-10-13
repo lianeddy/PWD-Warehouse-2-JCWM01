@@ -2,7 +2,7 @@ import React from 'react';
 import ProductCard from '../components/ProductCard'
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
-import "../assets/styles/product.css"
+import "../assets/styles/admin.css"
 import { connect } from 'react-redux'
 
 class Admin extends React.Component {
@@ -21,8 +21,8 @@ class Admin extends React.Component {
  
   render(){
     return(
-        <div>
-
+        <div className="container">
+          Admin PAGE
         </div>
     )
   }

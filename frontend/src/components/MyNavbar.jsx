@@ -106,7 +106,7 @@ class MyNavbar extends React.Component{
                                         this.props.userGlobal.auth_status === "user" ?
                                         null
                                         :
-                                        <DropdownItem><h4>Admin</h4></DropdownItem>
+                                        <DropdownItem><Link to="/admin"><h4>Admin</h4></Link></DropdownItem>
                                     }
                                 </DropdownMenu>
                             </UncontrolledDropdown>

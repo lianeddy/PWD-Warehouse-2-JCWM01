@@ -11,6 +11,7 @@ import LandingPage from './pages/LandingPage'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
+import Admin from './pages/Admin'
 
 class App extends React.Component {
 
@@ -39,7 +40,9 @@ class App extends React.Component {
               <Route component={Register} path="/register" />
               <Route component={ProductDetail} path="/products/:product_id" />
               <Route component={Products} path="/products" />
+              <Route component={Admin} path="/admin" />
               <Route component={LandingPage} path="/" />
+            
             </Switch>
           </BrowserRouter>
 
