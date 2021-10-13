@@ -14,8 +14,8 @@ export const getCartData = (userId) => {
                 payload: result.data
             })
         })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
+        .catch((err)=>{
+            alert(err)
         })
 }
 }

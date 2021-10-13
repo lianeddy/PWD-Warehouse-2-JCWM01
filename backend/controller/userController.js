@@ -4,7 +4,7 @@ const { db } = require('../database')
 module.exports = {
 
     addUser: (req, res) => {
-        console.log(req.body)
+        // console.log(req.body)
         let { username, email, password, fullname, gender, age, auth_status } = req.body
         let insertQuery = `Insert into user (username, email, password, fullname, gender, age, auth_status) values (
         ${db.escape(username)},
@@ -29,7 +29,24 @@ module.exports = {
 
     getUser: (req,res) => {
         let { username, password } = req.body;
+        // console.log(username, password)
         db.query(`SELECT * FROM user WHERE username = ? AND password = ?`, [username, password],
+        (err, result) => {
+            if (err) {
+                res.send(err)
+            }
+            if (result.length > 0) {
+                res.send(result)
+            } else {
+                res.send({ message: "Wrong username or password" })
+            }
+            
+        })
+    },
+    keeplogin: (req,res) => {
+        let username = req.query.username;
+        // console.log("username keeplogin",username)
+        db.query(`SELECT * FROM user WHERE username = ${db.escape(username)}`,
         (err, result) => {
             if (err) {
                 res.send(err)

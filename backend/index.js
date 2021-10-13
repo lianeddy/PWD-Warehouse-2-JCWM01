@@ -16,6 +16,7 @@ const {
 // app.use("/products", productsRouter); //hubungin routernya juga
 // app.use("/register", addUserRouter);
 app.use("/login", addUserRouter);
+app.use("/products", productsRouter);
 
 app.listen(port, () => console.log(`Server running in port ${port}`));
 //running nya pakai npx nodemon index.js
