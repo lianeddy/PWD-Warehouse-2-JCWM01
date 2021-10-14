@@ -1,6 +1,4 @@
 import Axios from 'axios';
-import { Redirect } from 'react-router-dom';
-
 
 export const confirmRegBtn = (data) => {
     return (dispatch) => {

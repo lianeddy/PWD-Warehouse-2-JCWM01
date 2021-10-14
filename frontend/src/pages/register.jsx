@@ -2,6 +2,7 @@ import React from "react";
 import { confirmRegBtn } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
+import "../assets/styles/style.css";
 
 class Register extends React.Component {
 
