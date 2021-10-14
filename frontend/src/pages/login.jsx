@@ -2,7 +2,8 @@ import React from "react";
 import { loginUser } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
-import "../assets/styles/style.css";
+import "../assets/styles/loginRegister.css"
+
 
 class Login extends React.Component {
     state = {
