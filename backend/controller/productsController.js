@@ -4,49 +4,71 @@ module.exports = {
     getProducts: (request,response) => {
         // console.log(request.query.page)
         const limit = 8;
+        console.log(request.query.product_name)
+
         let scriptQuery = `select * from fp_pwd_5.products p 
         join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
         on p.product_id = ws.product_id 
+        where product_name like '%${request.query.product_name}%'
         limit ${limit} offset ${request.query.page*limit};`
 
-        if(request.query.sortby){
-            //name_asc, name_desc, price_asc, price_desc
-            // console.log(request.query.sortby)
-            switch(request.query.sortby){
-                case "name_asc":
-                    scriptQuery = `select * from fp_pwd_5.products p 
-                    join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
-                    on p.product_id = ws.product_id 
-                    order by product_name asc
-                    limit ${limit} offset ${request.query.page*limit};`
-                    break;
-                case "name_desc":
-                    scriptQuery = `select * from fp_pwd_5.products p 
-                    join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
-                    on p.product_id = ws.product_id 
-                    order by product_name desc
-                    limit ${limit} offset ${request.query.page*limit};`
-                    break;
-                case "price_asc":
-                    scriptQuery = `select * from fp_pwd_5.products p 
-                    join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
-                    on p.product_id = ws.product_id 
-                    order by price_sell asc
-                    limit ${limit} offset ${request.query.page*limit};`
-                    break;
-                case "price_desc":
-                    scriptQuery = `select * from fp_pwd_5.products p 
-                    join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
-                    on p.product_id = ws.product_id 
-                    order by price_sell desc
-                    limit ${limit} offset ${request.query.page*limit};`
-                    break;
-                default:
-                    scriptQuery = `select * from fp_pwd_5.products p 
-                    join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
-                    on p.product_id = ws.product_id 
-                    limit ${limit} offset ${request.query.page*limit};`
+        let sort = ""
+
+
+        switch(request.query.sortby){
+            case "name_asc":
+                sort = "order by product_name asc"
+                break;
+            case "name_desc":
+                sort = "order by product_name desc"
+                break;
+            case "price_asc":
+                sort = "order by price_sell asc"
+                break;
+            case "price_desc":
+                sort = "order by price_sell desc"
+                break;
+            default:
+                sort = ""
+        }
+
+        scriptQuery = `select * from fp_pwd_5.products p 
+        join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+        on p.product_id = ws.product_id 
+        where product_name like '%${request.query.product_name}%'
+        ${sort}
+        limit ${limit} offset ${request.query.page*limit};`
+
+        if(request.query.category||request.query.color){
+            const category = request.query.category
+            const color = request.query.color
+
+            if(request.query.category&&request.query.color){
+                scriptQuery = `select * from fp_pwd_5.products p 
+                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                on p.product_id = ws.product_id 
+                where category = ${db.escape(category)} and color = ${db.escape(color)} and product_name like '%${request.query.product_name}%'
+                ${sort}
+                limit ${limit} offset ${request.query.page*limit};`
+
+            } else if (request.query.category){
+                scriptQuery = `select * from fp_pwd_5.products p 
+                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                on p.product_id = ws.product_id 
+                where category = ${db.escape(category)} and product_name like '%${request.query.product_name}%'
+                ${sort}
+                limit ${limit} offset ${request.query.page*limit};`
+
+            } else if (request.query.color) {
+                scriptQuery = `select * from fp_pwd_5.products p 
+                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                on p.product_id = ws.product_id 
+                where color = ${db.escape(color)} and product_name like '%${request.query.product_name}%'
+                ${sort}
+                limit ${limit} offset ${request.query.page*limit};`
             }
+
+            
         }
 
         db.query(scriptQuery, (err, result)=> {
@@ -98,15 +120,24 @@ module.exports = {
         })
     },
     getMaxPage: (request,response) => {
-        let scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products;`
-        if(request.query.category){
-            scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-            where category = ${db.escape(request.query.category)};` //query ambil data ini bikin otomatis nentuin tipe datanya apa
-        }
+        let scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+        where product_name like '%${request.query.product_name}%';`
 
-        if(request.query.product_color){
-            scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-            where color = ${db.escape(request.query.color)};` //query ambil data ini bikin otomatis nentuin tipe datanya apa
+        
+        if(request.query.category||request.query.color){
+            if(request.query.category&&request.query.color){
+                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%';` 
+
+            } else if (request.query.category){
+                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}%';` 
+
+            } else if (request.query.color) {
+                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%';` 
+            }
+
         }
     
         db.query(scriptQuery, (err, result)=> {

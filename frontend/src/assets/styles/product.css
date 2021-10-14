@@ -19,6 +19,14 @@
     width: 8vw;
 }
 
+.selected {
+    text-decoration: underline;
+}
+
+.unselected{
+    color:lightgrey;
+}
+
 select{
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -38,11 +46,22 @@ select{
     border: none;
 }
 
-.button-secon:hover{
+.button-second:hover{
     color: black;
     background-color: white;
     border: none;
-    text-decoration:darkslategrey;
+}
+
+.btn-dark:hover{
+    box-shadow: 1px 1px 1px 1px grey;
+}
+
+.btn-light:hover{
+    box-shadow: 1px 1px 1px 1px lightgrey;
+}
+
+.filter:hover{
+    text-decoration: underline;
 }
 
 h1{

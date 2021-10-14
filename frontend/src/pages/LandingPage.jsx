@@ -2,9 +2,15 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel'
 import "../assets/styles/landingPage.css"
 import {Link} from 'react-router-dom'
+import { connect } from 'react-redux';
+import { searchProduct } from '../redux/actions/user';
 import logo from "../assets/logo.png"
 
 class LandingPage extends React.Component {
+    state = {
+        searchProduct:"",
+    }
+
   render(){
     return(
         <div className="mb-5 mx-5 d-flex box justify-content-between" >
@@ -56,7 +62,7 @@ class LandingPage extends React.Component {
                     <h1 >Fashion is an inseparable part of our lives.</h1>
                     <h4>Explore our collections to find the exact attire for your every needs. </h4>
                     <Link className="mt-2" to={"/products"}>
-                        <button className="btn btn-basic mt-2">Explore now</button>
+                        <button onClick={()=>this.props.searchProduct(this.state)} className="btn btn-basic mt-2">Explore now</button>
                     </Link>
                 </div>
             </div>
@@ -67,4 +73,14 @@ class LandingPage extends React.Component {
   }
 }
 
-export default LandingPage;
+const mapStateToProps =(state)=> {
+    return{
+        userGlobal: state.user,
+    }
+};
+
+const mapDispatchToProps = {
+    searchProduct, 
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(LandingPage);

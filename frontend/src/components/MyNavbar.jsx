@@ -17,21 +17,25 @@ import { IoMdBasket,IoMdTime,IoIosArrowDown } from "react-icons/io"
 import "../../src/assets/styles/navbar.css"
 
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { searchProduct } from '../redux/actions/user';
+
 
 class MyNavbar extends React.Component{
-
     state = {
-        productList: [],
+        searchProduct:"",
     }
-    
-    fetchproducts = () => {
-    Axios.get(`${API_URL}/get-products-available`)
-    .then((result) => {
-        this.setState({productList: result.data})
-    })
-    .catch((err)=>{
-        alert(err)
-    })
+
+    inputHandler = (event) => {
+        const value = event.target.value;
+        const name = event.target.name;
+  
+        this.setState({[name] : value})
+    }
+
+    searchProductHandler = () => {
+        console.log("search clicked", this.state.searchProduct)
+        this.props.searchProduct(this.state)
     }
 
     render(){
@@ -46,10 +50,12 @@ class MyNavbar extends React.Component{
                 </div>
                 {/* search bar */}
                 <form class="form-inline my-2 my-lg-0 col-4 d-flex align-items-center">
-                    <input class="form-control" type="search" placeholder="Search products..." />
-                    <Link  to="/home" >
-                        <button class="btn btn-dark ms-2" type="submit"><p>Search</p></button>
-                    </Link>
+                    <input class="form-control" name="searchProduct"  onChange={this.inputHandler} type="search" placeholder="Search products..." />
+
+                    <Link  to="/products" >
+                        <button onClick={this.searchProductHandler} class="btn btn-dark ms-2" type="submit"><p>Search</p></button>
+                    </Link> 
+
                 </form>
                 <Nav className="navbar col-4 d-flex justify-content-between align-items-center flex-direction-row ">
                     <>
@@ -65,8 +71,6 @@ class MyNavbar extends React.Component{
                         <div className="mx-2 d-flex justify-content-between align-items-center flex-direction-row">
                             <button className="button">Log out</button>
                         </div>
-
- 
                     </div>
                     <div className="col-5">
                         <UncontrolledDropdown className="centered dropdown">
@@ -91,4 +95,14 @@ class MyNavbar extends React.Component{
     }
 }
 
-export default MyNavbar;
+const mapStateToProps =(state)=> {
+    return{
+        userGlobal: state.user,
+    }
+};
+
+const mapDispatchToProps = {
+    searchProduct, 
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MyNavbar);

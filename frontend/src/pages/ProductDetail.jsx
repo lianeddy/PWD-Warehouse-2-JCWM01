@@ -15,6 +15,7 @@ class ProductDetail extends React.Component {
     productQty: 1,
     selectedSize:"",
     availableStock:1,
+    disable:false
   }
 
   inputHandler = (event) => {
@@ -33,8 +34,7 @@ class ProductDetail extends React.Component {
         this.setState({productData: result.data})
         this.setState({shownData:result.data[0]})
         this.setState({availableStock:result.data[0].available_stock})
-        this.setState({selectedSize:result.data[0].size.toUpperCase()})
-        // alert("Berhasil mengambil data produk.")
+        this.setState({selectedSize:result.data[0].size})
       } else {
         this.setState({productNotFound:true})
       }
@@ -45,16 +45,14 @@ class ProductDetail extends React.Component {
   } 
 
   availableStock = (event) => {
-    this.inputHandler(event)
-
-    this.setState({productQty:1}, this.changeAvailableStock)
-  }
-
-  changeAvailableStock = () => {
+    // console.log(event.target.value)
+    this.setState({productQty:1})
     this.state.productData.map((val)=>{
-      if (val.size === this.state.selectedSize){
-        this.setState({availableStock: val.available_stock}) 
-        // console.log(this.state.availableStock)
+      if (val.size === event.target.value){
+        this.setState({selectedSize: val.size.toUpperCase()}) //ini buat nanti add to cart aja
+        this.setState({availableStock: val.available_stock}) //ini buat nanti add to cart aja
+ 
+        console.log("size:",val.size," stock:",val.available_stock)
       }
     })
   }
@@ -112,32 +110,66 @@ class ProductDetail extends React.Component {
             <h4 className="col-10">
               {this.state.shownData.product_desc} 
             </h4>
-            <div className="d-flex flex-row align-items-center mt-3">
-              <div className="mx-2 col-3 d-flex flex-row align-items-center justify-content-start">
-                <p className="me-2">Select size: </p>
-                <select onChange={(event)=>this.availableStock(event)} className="selectSize" name="selectedSize" id="size">
-                  {this.renderSize()}
-                </select>
-              </div>
-              <button disabled={this.state.productQty===1} onClick={this.fnQuantityDown} className="btn btn-dark btn-sm">
-                -
-              </button>
-              <div className="mx-4">
-                <h4>{this.state.productQty}</h4>
-              </div>
-              <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock} className="btn btn-dark btn-sm">
-                +
-              </button>
-              {
-                this.state.productQty===this.state.availableStock?
-                <p className="warning">Sorry, you have reached size {this.state.selectedSize} maximum stock.</p>
-                : null
-              }
 
-            </div>
-            <button className="btn btn-sm btn-dark mt-3 col-6">
-                <p>Add to cart</p>
-            </button>
+            {
+              this.state.availableStock === 0 ?
+              <>
+                <div className="d-flex flex-row align-items-center mt-3">
+                  <div className="mx-2 col-3 d-flex flex-row align-items-center justify-content-start">
+                    <p className="me-2">Select size: </p>
+                    <select onChange={(event)=>this.availableStock(event)} className="selectSize" name="selectedSize" id="size">
+                      {this.renderSize()}
+                    </select>
+                  </div>
+                  <button disabled={true} onClick={this.fnQuantityDown} className="btn btn-dark btn-sm">
+                    -
+                  </button>
+                  <div className="mx-4">
+                    <h4>0</h4>
+                  </div>
+                  <button onClick={this.fnQuantityUp} disabled={true} className="btn btn-dark btn-sm">
+                    +
+                  </button>
+                  <p className="warning">Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
+
+                </div>
+                <button disabled={true} className="btn btn-sm btn-dark mt-3 col-6">
+                    <p>Add to cart</p>
+                </button>
+              </>
+              :
+              <>
+                <div className="d-flex flex-row align-items-center mt-3">
+                  <div className="mx-2 col-3 d-flex flex-row align-items-center justify-content-start">
+                    <p className="me-2">Select size: </p>
+                    <select onChange={(event)=>this.availableStock(event)} className="selectSize" name="selectedSize" id="size">
+                      {this.renderSize()}
+                    </select>
+                  </div>
+                  <button disabled={this.state.productQty===1} onClick={this.fnQuantityDown} className="btn btn-dark btn-sm">
+                    -
+                  </button>
+                  <div className="mx-4">
+                    <h4>{this.state.productQty}</h4>
+                  </div>
+                  <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock} className="btn btn-dark btn-sm">
+                    +
+                  </button>
+                  {
+                    this.state.productQty===this.state.availableStock?
+                    <p className="warning">Sorry, you have reached size {this.state.selectedSize.toUpperCase()} maximum stock.</p>
+                    : null
+                  }
+
+                </div>
+                <button className="btn btn-sm btn-dark mt-3 col-6">
+                    <p>Add to cart</p>
+                </button>
+              </>
+            }
+
+
+
               <button className="btn btn-light mt-3 col-6">
                 <p>See Cart</p>
               </button>
