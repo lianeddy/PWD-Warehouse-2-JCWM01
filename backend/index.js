@@ -13,7 +13,7 @@ const {
     productsRouter, 
     addUserRouter } = require("./routers"); //hubungin dgn router
 
-// app.use("/products", productsRouter); //hubungin routernya juga
+app.use("/products", productsRouter); //hubungin routernya juga
 app.use("/register", addUserRouter);
 app.use("/login", addUserRouter);
 
