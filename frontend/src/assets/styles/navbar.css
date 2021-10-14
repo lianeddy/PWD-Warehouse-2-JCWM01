@@ -97,7 +97,12 @@ p{
 
 .link{
     text-decoration: none;
-    color:inherit;
+    color:black;
+}
+
+.button-link{
+    text-decoration: none;
+    color:black;
 }
 
 .middle-nav{
