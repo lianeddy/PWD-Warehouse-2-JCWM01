@@ -83,7 +83,9 @@ class MyNavbar extends React.Component{
                         <div className="mx-2 d-flex justify-content-between align-items-center flex-direction-row">
                             {
                                 this.props.userGlobal.username ?
-                                <button onClick={this.props.logoutUser} className="button">Log out</button>
+                                <Link to="/">
+                                    <button onClick={this.props.logoutUser} className="button">Log out</button>
+                                </Link>
                                 :
                                 <Link to="/login">
                                     <button className="button">Log in</button>
