@@ -1,15 +1,12 @@
 import React from 'react';
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
-
 import LandingPage from './pages/LandingPage'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
-import MyNavbar from './components/MyNavbar';
 import Register from "./pages/register";
 import Login from "./pages/login";
 import MyNavbar from "./components/MyNavbar.jsx"
-import Home from "./pages/home";
 
 class App extends React.Component {
 
@@ -23,7 +20,6 @@ class App extends React.Component {
               <Route component={LandingPage} path="/" />
               <Route component={Login} path="/login" />
               <Route component={Register} path="/register" />
-              <Route component={Home} path="/" />
             </Switch>
           </BrowserRouter>
 

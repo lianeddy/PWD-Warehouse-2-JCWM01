@@ -12,7 +12,7 @@ export const searchProduct = (searchProduct) => {
 
 export const confirmRegBtn = (data) => {
   return (dispatch) => {
-    Axios.post("http://localhost:2700/register/add-user", {
+    Axios.post(API_URL + "/register/add-user", {
       username: data.username,
       email: data.email,
       password: data.password,
@@ -38,7 +38,7 @@ export const confirmRegBtn = (data) => {
 
 export const loginUser = (data) => {
   return (dispatch) => {
-    Axios.post("http://localhost:2700/login/get-user", {
+    Axios.post(API_URL + "/login/get-user", {
       username: data.username,
       password: data.password,
     })

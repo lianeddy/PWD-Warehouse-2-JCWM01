@@ -2,6 +2,8 @@ import React from "react";
 import { confirmRegBtn } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
+import "../assets/styles/loginRegister.css"
+
 
 class Register extends React.Component {
 
@@ -77,7 +79,7 @@ class Register extends React.Component {
                 </div>
                 <div className="footer">
                 <h6>Already have Annett's account? Login <Link to="/login">here</Link></h6>
-                    <button type="submit" onClick={()=>{this.props.confirmRegBtn(this.state); ; this.redirectHandler()}} className="btn btn-login">Register Now!</button>
+                    <button type="submit" onClick={()=>{this.props.confirmRegBtn(this.state); this.redirectHandler()}} className="btn btn-login">Register Now!</button>
                 </div>
             </div>
        

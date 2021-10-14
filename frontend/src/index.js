@@ -8,7 +8,6 @@ import { createStore, applyMiddleware } from "redux";
 import ReduxThunk from "redux-thunk";
 import rootReducer from "./redux/reducers";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./pages/style.css";
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
