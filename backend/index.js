@@ -14,7 +14,7 @@ const {
     addUserRouter } = require("./routers"); //hubungin dgn router
 
 // app.use("/products", productsRouter); //hubungin routernya juga
-// app.use("/register", addUserRouter);
+app.use("/register", addUserRouter);
 app.use("/login", addUserRouter);
 
 app.listen(port, () => console.log(`Server running in port ${port}`));
