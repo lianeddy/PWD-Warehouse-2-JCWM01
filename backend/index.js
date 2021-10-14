@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const bearerToken = require('express-bearer-token')
 
-const port = 2601;
+const port = 2700;
 const app = express();
 
 app.use(cors())

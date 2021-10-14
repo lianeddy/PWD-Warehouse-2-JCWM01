@@ -1,8 +1,9 @@
 import Axios from 'axios';
+import { API_URL } from '../../constant/API_URL';
 
 export const confirmRegBtn = (data) => {
     return (dispatch) => {
-    Axios.post('http://localhost:2601/register/add-user', {
+    Axios.post(API_URL + '/register/add-user', {
         username: data.username,
         email: data.email,
         password: data.password,
@@ -28,7 +29,7 @@ export const confirmRegBtn = (data) => {
 
 export const loginUser = (data) => {
     return (dispatch) => {
-        Axios.post('http://localhost:2601/login/get-user', {
+        Axios.post(API_URL +'/login/get-user', {
                 username: data.username,
                 password: data.password,
         }) 

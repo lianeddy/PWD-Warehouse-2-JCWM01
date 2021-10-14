@@ -1,4 +1,5 @@
 import React from "react";
+import "../assets/styles/loginRegisterStyle.css";
 
 class Home extends React.Component {
     state = {
