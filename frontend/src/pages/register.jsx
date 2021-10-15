@@ -33,7 +33,7 @@ class Register extends React.Component {
             return <Redirect to="/"/>
         }
 
-        return <div className=".base-container" ref={this.props.containerRef}>
+        return <div className="base-container" ref={this.props.containerRef}>
                 
                 <div className="content">
                 <div className="header">REGISTER</div>

@@ -3,7 +3,7 @@ import { API_URL } from '../../constant/API_URL';
 
 export const confirmRegBtn = (data) => {
     return (dispatch) => {
-    Axios.post(API_URL + '/register/add-user', {
+    Axios.post(API_URL + '/register/', {
         username: data.username,
         email: data.email,
         password: data.password,
@@ -29,7 +29,7 @@ export const confirmRegBtn = (data) => {
 
 export const loginUser = (data) => {
     return (dispatch) => {
-        Axios.post(API_URL +'/login/get-user', {
+        Axios.post(API_URL +'/login/', {
                 username: data.username,
                 password: data.password,
         }) 

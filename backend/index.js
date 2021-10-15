@@ -10,10 +10,10 @@ app.use(express.json())
 app.use(bearerToken())
 
 
-const { addUserRouter } = require('./routers')
+const { registerRouter, loginRouter } = require('./routers')
 
-app.use('/register', addUserRouter)
-app.use('/login', addUserRouter)
+app.use('/register', registerRouter)
+app.use('/login', loginRouter)
 
 app.listen(port, ()=> console.log(`server running on port: ${port}`))
 
