@@ -24,7 +24,7 @@ class ProductCard extends React.Component{
 
     fetchSize = (val) => {
         // console.log("fetched id",val.product_id)
-        Axios.get(`${API_URL}/products/get-products-size?product_id=${val.product_id}`)
+        Axios.get(`${API_URL}/products/size?product_id=${val.product_id}`)
         .then((result) => {
           this.setState({productDetail: result.data})
 

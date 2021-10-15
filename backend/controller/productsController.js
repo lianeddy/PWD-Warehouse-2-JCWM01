@@ -9,7 +9,7 @@ module.exports = {
         let scriptQuery = `select * from fp_pwd_5.products p 
         join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
         on p.product_id = ws.product_id 
-        where product_name like '%${request.query.product_name}%'
+        where product_name like '%${request.query.product_name}%' and hide = 1
         limit ${limit} offset ${request.query.page*limit};`
 
         let sort = ""
@@ -35,7 +35,7 @@ module.exports = {
         scriptQuery = `select * from fp_pwd_5.products p 
         join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
         on p.product_id = ws.product_id 
-        where product_name like '%${request.query.product_name}%'
+        where product_name like '%${request.query.product_name}%' and hide = 1
         ${sort}
         limit ${limit} offset ${request.query.page*limit};`
 
@@ -47,7 +47,7 @@ module.exports = {
                 scriptQuery = `select * from fp_pwd_5.products p 
                 join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
-                where category = ${db.escape(category)} and color = ${db.escape(color)} and product_name like '%${request.query.product_name}%'
+                where category = ${db.escape(category)} and color = ${db.escape(color)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
                 limit ${limit} offset ${request.query.page*limit};`
 
@@ -55,7 +55,7 @@ module.exports = {
                 scriptQuery = `select * from fp_pwd_5.products p 
                 join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
-                where category = ${db.escape(category)} and product_name like '%${request.query.product_name}%'
+                where category = ${db.escape(category)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
                 limit ${limit} offset ${request.query.page*limit};`
 
@@ -63,7 +63,7 @@ module.exports = {
                 scriptQuery = `select * from fp_pwd_5.products p 
                 join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
-                where color = ${db.escape(color)} and product_name like '%${request.query.product_name}%'
+                where color = ${db.escape(color)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
                 limit ${limit} offset ${request.query.page*limit};`
             }
@@ -83,12 +83,12 @@ module.exports = {
         let scriptQuery = `select category from fp_pwd_5.products p group by category;`
         if(request.query.product_id){
             scriptQuery = `select category from fp_pwd_5.products p group by category 
-            where p.product_id = ${db.escape(request.query.product_id)}` //query ambil data ini bikin otomatis nentuin tipe datanya apa
+            where p.product_id = ${db.escape(request.query.product_id)} and hide = 1`
         }
 
         if(request.query.product_name){
             scriptQuery = `select category from fp_pwd_5.products p group by category
-            where p.product_name = ${db.escape(request.query.product_name)}` //query ambil data ini bikin otomatis nentuin tipe datanya apa
+            where p.product_name = ${db.escape(request.query.product_name)} and hide = 1` 
         }
     
         db.query(scriptQuery, (err, result)=> {
@@ -103,12 +103,12 @@ module.exports = {
         let scriptQuery = `select color from fp_pwd_5.products p group by color;`
         if(request.query.product_id){
             scriptQuery = `select color from fp_pwd_5.products p group by color 
-            where p.product_id = ${db.escape(request.query.product_id)}` //query ambil data ini bikin otomatis nentuin tipe datanya apa
+            where p.product_id = ${db.escape(request.query.product_id)} and hide = 1` 
         }
 
         if(request.query.product_name){
             scriptQuery = `select color from fp_pwd_5.products p group by color
-            where p.product_name = ${db.escape(request.query.product_name)}` //query ambil data ini bikin otomatis nentuin tipe datanya apa
+            where p.product_name = ${db.escape(request.query.product_name)} and hide = 1`
         }
     
         db.query(scriptQuery, (err, result)=> {
@@ -127,15 +127,15 @@ module.exports = {
         if(request.query.category||request.query.color){
             if(request.query.category&&request.query.color){
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%';` 
+                where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}% and hide = 1';` 
 
             } else if (request.query.category){
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}%';` 
+                where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}% and hide = 1';` 
 
             } else if (request.query.color) {
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%';` 
+                where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}% and hide = 1';` 
             }
 
         }
@@ -153,7 +153,24 @@ module.exports = {
         let scriptQuery = `select * from fp_pwd_5.products p 
         join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id, size) ws
         on p.product_id = ws.product_id 
-        where p.product_id = ${request.query.product_id};`
+        where p.product_id = ${request.query.product_id} and hide = 1;`
+
+        db.query(scriptQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+            }
+        })
+    },
+    adminProductList: (request,response) => {
+        // console.log(request.query.product_id)
+        const limit = 5;
+        let scriptQuery = `select * from fp_pwd_5.products p 
+        join (select warehouse_id, product_id, size, user_stock as available_stock from fp_pwd_5.warehouse_stock group by product_id,size,warehouse_id) ws
+        on p.product_id = ws.product_id 
+        where product_name like '%${request.query.product_name}%' and warehouse_id = 1
+        limit ${limit} offset ${request.query.page*limit};`
 
         db.query(scriptQuery, (err, result)=> {
             if (err) {

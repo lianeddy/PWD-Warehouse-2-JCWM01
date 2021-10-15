@@ -44,7 +44,7 @@ export const loginUser = (data) => {
     })
       .then((res) => {
         delete res.data[0].password;
-        console.log(res.data[0]);
+        // console.log(res.data[0]);
 
         dispatch({
           type: "USER_LOGIN",

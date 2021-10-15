@@ -105,10 +105,16 @@ class MyNavbar extends React.Component{
                                 <DropdownMenu right>
                                     <DropdownItem><h4>Profile</h4></DropdownItem>
                                     {
-                                        this.props.userGlobal.auth_status === "user" ?
-                                        null
+                                        this.props.userGlobal.auth_status === "superadmin" ?
+                                        <>
+                                            <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin</h4></Link></DropdownItem>
+                                            <DropdownItem><Link to="/superadmin" className="button-link" ><h4>Super Admin</h4></Link></DropdownItem>
+                                        </>
                                         :
+                                        this.props.userGlobal.auth_status === "admin" ?
                                         <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin</h4></Link></DropdownItem>
+                                        :
+                                        null
                                     }
                                 </DropdownMenu>
                             </UncontrolledDropdown>

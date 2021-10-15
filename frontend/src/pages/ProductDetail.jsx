@@ -28,7 +28,7 @@ class ProductDetail extends React.Component {
 
   fetchproducts = () => {
     // console.log(this.props.match.params.product_id)
-    Axios.get(`${API_URL}/products/get-products-detail?product_id=${this.props.match.params.product_id}`)
+    Axios.get(`${API_URL}/products/detail?product_id=${this.props.match.params.product_id}`)
     .then((result) => {
       if(result.data.length){
         this.setState({productData: result.data})
