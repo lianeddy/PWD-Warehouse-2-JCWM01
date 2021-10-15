@@ -10,10 +10,15 @@ class Admin extends React.Component {
     menu:"products",
     productList:[],
     page: 1,
+    maxPage:0,
+    itemPerPage:5,
+    adminData:[],
+    selectedWarehouse:1,
   }
 
   fetchAdminProduct = () => {
-    Axios.get(`${API_URL}/products/admin-list?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}`)
+    console.log("selected wh product",this.state.selectedWarehouse)
+    Axios.get(`${API_URL}/admin/product-list?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}&warehouse_id=1`)
     .then((result) => {
       this.setState({productList: result.data})
     })
@@ -21,6 +26,40 @@ class Admin extends React.Component {
       alert(err)
     })
   }
+
+  fetchMaxPage = () => {
+    console.log("selected wh maxpage",this.state.selectedWarehouse)
+    Axios.get(`${API_URL}/admin/product-max-page?product_name=${this.props.userGlobal.searchProduct}&warehouse_id=1`)
+    .then((result) => {
+      this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
+      console.log(this.state.maxPage)
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+
+  fetchAdminData = () => {
+    Axios.get(`${API_URL}/admin/data?user_id=2`)
+    .then((result) => {
+      this.setState({adminData: result.data[0]})
+      console.log(this.state.adminData)
+      this.fetchSelectedWarehouse(this.state.adminData)
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+  
+  fetchSelectedWarehouse = (adminData) => {
+    if(adminData.auth_status==="admin"){
+      this.setState({selectedWarehouse:adminData.warehouse_id})
+    }
+    else{
+      this.setState({selectedWarehouse:1})
+    }
+  }
+
  
   inputHandler = (event) => {
     const value = event.target.value;
@@ -30,10 +69,9 @@ class Admin extends React.Component {
   }
 
   renderProducts = ()=>{
-    return this.state.productList.map((val,key) =>{
+    return this.state.productList.map((val) =>{
       return(
         <tr>
-          <td>{key+1}</td>
           <td>{val.product_name}</td>
           <td>Rp. {val.price_buy.toLocaleString()}</td>
           <td>Rp. {val.price_sell.toLocaleString()}</td>
@@ -63,14 +101,27 @@ class Admin extends React.Component {
   }
 
   componentDidMount = () => {
+    this.fetchAdminData()
+    this.fetchMaxPage()
     this.fetchAdminProduct()
+    // this.fetchAdminData()
   }
 
   render(){
     return(
         <div className="admin-page">
           <h2>Hello, {this.props.userGlobal.username}!</h2>
-          <h3>You are an {this.props.userGlobal.auth_status} of warehouse: DKI Jakarta.</h3>
+
+          {
+            this.props.userGlobal.auth_status==="superadmin"?
+            <>
+              <h3>You are a {this.props.userGlobal.auth_status}.</h3>
+              <h3>Please select a warehouse</h3>
+            </>
+            :
+            <h3>You are an {this.props.userGlobal.auth_status} of warehouse: {this.state.adminData.warehouse_name}.</h3>
+          }
+          
 
           <div className="col-10 mt-3">
             <div className="d-flex flex-row justify-content-start">
@@ -86,7 +137,6 @@ class Admin extends React.Component {
                   <table className="table">
                     <thead className="table-light">
                       <tr>
-                        <th>No.</th>
                         <th>Product Name</th>
                         <th>Buying Price</th>
                         <th>Selling Price</th>
@@ -108,7 +158,8 @@ class Admin extends React.Component {
                   </table>
                   <div className="d-flex flex-row justify-content-between align-items-center">
                     <button className="btn-admin" disabled={this.state.page===1} onClick={this.prevPageHandler}>Previous Page</button>
-                    <button className="btn-admin" onClick={this.nextPageHandler}>Next Page</button>
+                    <p>Page {this.state.page} of {this.state.maxPage}</p>
+                    <button className="btn-admin" disabled={this.state.page===this.state.maxPage} onClick={this.nextPageHandler}>Next Page</button>
                   </div>
                 </div>
                 :

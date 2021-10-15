@@ -163,21 +163,4 @@ module.exports = {
             }
         })
     },
-    adminProductList: (request,response) => {
-        // console.log(request.query.product_id)
-        const limit = 5;
-        let scriptQuery = `select * from fp_pwd_5.products p 
-        join (select warehouse_id, product_id, size, user_stock as available_stock from fp_pwd_5.warehouse_stock group by product_id,size,warehouse_id) ws
-        on p.product_id = ws.product_id 
-        where product_name like '%${request.query.product_name}%' and warehouse_id = 1
-        limit ${limit} offset ${request.query.page*limit};`
-
-        db.query(scriptQuery, (err, result)=> {
-            if (err) {
-                return response.status(500).send(err)
-            } else {
-                return response.status(200).send(result)
-            }
-        })
-    },
 }

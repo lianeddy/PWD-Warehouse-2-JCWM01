@@ -64,31 +64,3 @@ export const logoutUser = () => {
     type: "USER_LOGOUT",
   };
 };
-
-//ambil data dari local storage supaya login terus
-export const userKeepLogin = (userData) => {
-  return (dispatch) => {
-    Axios.get(`${API_URL}/users`, {
-      params: {
-        id: userData.id,
-      },
-    })
-      .then((result) => {
-        delete result.data[0].password;
-        localStorage.setItem("userDataEmmerce", JSON.stringify(result.data[0]));
-        dispatch({
-          type: "USER_LOGIN",
-          payload: result.data[0],
-        });
-      })
-      .catch(() => {
-        alert("Terjadi kesalahan pada server.");
-      });
-  };
-};
-
-export const checkStorage = () => {
-  return {
-    type: "CHECK_STORAGE",
-  };
-};

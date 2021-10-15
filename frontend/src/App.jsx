@@ -19,11 +19,16 @@ class App extends React.Component {
       <BrowserRouter>
         <MyNavbar />
         <Switch>
+          {
+            this.props.userGlobal.auth_status==="admin"||this.props.userGlobal.auth_status==="superadmin"?
+            <Route component={Admin} path="/admin" />
+            :
+            null
+          }
           <Route component={Login} path="/login" />
           <Route component={Register} path="/register" />
           <Route component={ProductDetail} path="/products/:product_id" />
           <Route component={Products} path="/products" />
-          <Route component={Admin} path="/admin" />
           <Route component={LandingPage} path="/" />
         
         </Switch>
@@ -34,4 +39,10 @@ class App extends React.Component {
 }
 
 
-export default App;
+const mapStateToProps =(state)=> {
+  return{
+    userGlobal: state.user,
+  }
+  };
+
+  export default connect(mapStateToProps)(App);

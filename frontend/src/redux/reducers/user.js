@@ -6,7 +6,6 @@ const init_state = {
   id: 0,
   errMsg: "",
   searchProduct:"",
-  storageIsChecked: false,
 };
 
 const reducer = (state = init_state, action) => {

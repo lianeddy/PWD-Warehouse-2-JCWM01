@@ -8,6 +8,4 @@ router.get('/color',productsController.getProductsColor)
 router.get('/max-page',productsController.getMaxPage)
 router.get('/detail',productsController.getProductsDetail)
 
-router.get('/admin-list',productsController.adminProductList)
-
 module.exports = router
