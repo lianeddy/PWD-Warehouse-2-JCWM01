@@ -11,16 +11,40 @@ class Admin extends React.Component {
     productList:[],
     page: 1,
     maxPage:0,
-    itemPerPage:5,
+    itemPerPage:10,
     adminData:[],
     selectedWarehouse:1,
+    warehouseList:[]
+  }
+
+  fetchAdminData = () => {
+    Axios.get(`${API_URL}/admin/data?user_id=${this.props.userGlobal.user_id}`)
+    .then((result) => {
+      this.setState({adminData: result.data[0]})
+      // console.log("adminData", this.state.adminData)
+      this.selectWarehouse()
+    
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+
+  selectWarehouse = () => {
+    // console.log("authstatus",this.state.adminData.auth_status)
+  
+    if(this.state.adminData.auth_status==="admin"){
+      
+      this.setState({selectedWarehouse:this.state.adminData.warehouse_id})
+      this.fetchAdminProduct()
+    }
+
   }
 
   fetchAdminProduct = () => {
-    console.log("selected wh product",this.state.selectedWarehouse)
-    Axios.get(`${API_URL}/admin/product-list?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}&warehouse_id=1`)
+    Axios.get(`${API_URL}/admin/product-list?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}&warehouse_id=${this.state.selectedWarehouse}`)
     .then((result) => {
-      this.setState({productList: result.data})
+      this.setState({productList: result.data}, this.fetchMaxPage())
     })
     .catch((err)=>{
       alert(err)
@@ -28,43 +52,19 @@ class Admin extends React.Component {
   }
 
   fetchMaxPage = () => {
-    console.log("selected wh maxpage",this.state.selectedWarehouse)
-    Axios.get(`${API_URL}/admin/product-max-page?product_name=${this.props.userGlobal.searchProduct}&warehouse_id=1`)
+    Axios.get(`${API_URL}/admin/product-max-page?product_name=${this.props.userGlobal.searchProduct}&warehouse_id=${this.state.selectedWarehouse}`)
     .then((result) => {
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
-      console.log(this.state.maxPage)
     })
     .catch((err)=>{
       alert(err)
   })
   }
-
-  fetchAdminData = () => {
-    Axios.get(`${API_URL}/admin/data?user_id=2`)
-    .then((result) => {
-      this.setState({adminData: result.data[0]})
-      console.log(this.state.adminData)
-      this.fetchSelectedWarehouse(this.state.adminData)
-    })
-    .catch((err)=>{
-      alert(err)
-  })
-  }
-  
-  fetchSelectedWarehouse = (adminData) => {
-    if(adminData.auth_status==="admin"){
-      this.setState({selectedWarehouse:adminData.warehouse_id})
-    }
-    else{
-      this.setState({selectedWarehouse:1})
-    }
-  }
-
  
   inputHandler = (event) => {
     const value = event.target.value;
     const name = event.target.name;
-
+    
     this.setState({[name] : value})
   }
 
@@ -80,7 +80,6 @@ class Admin extends React.Component {
           <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
           <td>{val.size.toUpperCase()}</td>
           <td>{val.available_stock}</td>
-          <td>{val.hide}</td>
           <td>
             <button className="btn btn-edit" onClick={()=>this.editToggle(val)}>Edit</button>
           </td>
@@ -100,11 +99,38 @@ class Admin extends React.Component {
     this.setState({page: this.state.page - 1}, this.fetchAdminProduct)
   }
 
+  fetchWarehouseList = () => {
+    Axios.get(`${API_URL}/admin/warehouse`)
+    .then((result) => {
+      this.setState({warehouseList:result.data})
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+
+  renderWarehouse = () => {
+    return this.state.warehouseList.map((val)=> {
+      if(val.warehouse_name!=="superadmin"){
+        return <option value={val.warehouse_id}>{val.warehouse_name}</option>
+      }
+    })
+  }
+
+  warehouseHandler = (event) => {
+    const value = event.target.value;
+
+    this.setState({selectedWarehouse : value},this.fetchAdminProduct)
+    this.setState({page : 1})
+
+  }
+
   componentDidMount = () => {
+    if(this.props.userGlobal.auth_status==="superadmin"){
+      this.fetchAdminProduct()
+    }
     this.fetchAdminData()
-    this.fetchMaxPage()
-    this.fetchAdminProduct()
-    // this.fetchAdminData()
+    this.fetchWarehouseList()
   }
 
   render(){
@@ -116,7 +142,13 @@ class Admin extends React.Component {
             this.props.userGlobal.auth_status==="superadmin"?
             <>
               <h3>You are a {this.props.userGlobal.auth_status}.</h3>
-              <h3>Please select a warehouse</h3>
+              <div className="mt-3 col-4 d-flex flex-row justify-content-start align-items-center">
+                <p className="me-2" >Please select a warehouse</p>
+                <select onChange={this.warehouseHandler} name="selectedWarehouse" className="form-control filter-style">
+                  {this.renderWarehouse()}
+                </select>
+              </div>
+
             </>
             :
             <h3>You are an {this.props.userGlobal.auth_status} of warehouse: {this.state.adminData.warehouse_name}.</h3>
@@ -145,7 +177,6 @@ class Admin extends React.Component {
                         <th>Image</th>
                         <th>Size</th>
                         <th>Stock</th>
-                        <th>Hide?</th>
                         <th colSpan="2">Action</th>
                       </tr>
                     </thead>

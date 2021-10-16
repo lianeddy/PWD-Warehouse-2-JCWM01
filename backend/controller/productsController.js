@@ -81,15 +81,6 @@ module.exports = {
     },
     getProductsCategory: (request,response) => {
         let scriptQuery = `select category from fp_pwd_5.products p group by category;`
-        if(request.query.product_id){
-            scriptQuery = `select category from fp_pwd_5.products p group by category 
-            where p.product_id = ${db.escape(request.query.product_id)} and hide = 1`
-        }
-
-        if(request.query.product_name){
-            scriptQuery = `select category from fp_pwd_5.products p group by category
-            where p.product_name = ${db.escape(request.query.product_name)} and hide = 1` 
-        }
     
         db.query(scriptQuery, (err, result)=> {
             if (err) {
@@ -101,16 +92,7 @@ module.exports = {
     },
     getProductsColor: (request,response) => {
         let scriptQuery = `select color from fp_pwd_5.products p group by color;`
-        if(request.query.product_id){
-            scriptQuery = `select color from fp_pwd_5.products p group by color 
-            where p.product_id = ${db.escape(request.query.product_id)} and hide = 1` 
-        }
 
-        if(request.query.product_name){
-            scriptQuery = `select color from fp_pwd_5.products p group by color
-            where p.product_name = ${db.escape(request.query.product_name)} and hide = 1`
-        }
-    
         db.query(scriptQuery, (err, result)=> {
             if (err) {
                 return response.status(500).send(err)
@@ -121,21 +103,21 @@ module.exports = {
     },
     getMaxPage: (request,response) => {
         let scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-        where product_name like '%${request.query.product_name}%';`
+        where product_name like '%${request.query.product_name}%' and hide = 1;`
 
         
         if(request.query.category||request.query.color){
             if(request.query.category&&request.query.color){
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}% and hide = 1';` 
+                where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
 
             } else if (request.query.category){
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}% and hide = 1';` 
+                where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
 
             } else if (request.query.color) {
                 scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
-                where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}% and hide = 1';` 
+                where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
             }
 
         }
@@ -163,4 +145,5 @@ module.exports = {
             }
         })
     },
+
 }

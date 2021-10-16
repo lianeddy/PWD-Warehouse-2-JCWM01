@@ -16,6 +16,14 @@
     margin:0 !important;
 }
 
+.filter-style{
+    position: relative !important;
+    width:12vw !important;
+    font-family: 'poppins-regular' !important;
+    font-size: 12px !important;
+    border: 0.5px solid lightgrey !important;
+}
+
 thead, td {
     font-family: 'poppins-regular';
     font-size: 12px !important;
@@ -24,18 +32,20 @@ thead, td {
 
 .btn-edit{
     font-family: 'poppins-regular';
-    font-size: 14px !important;
+    font-size: 12px !important;
     margin:0 !important;
     background-color: black !important;
     color: white !important;
+    padding: 3px 6px !important;
 }
 
 .btn-delete{
     font-family: 'poppins-regular';
-    font-size: 14px !important;
+    font-size: 12px !important;
     margin:0 !important;
     background-color: brown !important;
     color: white !important;
+    padding: 3px 6px  !important;
 }
 
 table{
