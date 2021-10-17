@@ -69,3 +69,24 @@ thead, td {
 table{
     margin-top: 16px;
 }
+
+.add-form{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.input-admin{
+    width: 100px !important;
+    height:20px !important;
+    margin:0px !important;
+    background-color: rgb(241, 241, 241);
+    color: black;
+    border: 0px;
+    border-radius: 4px;
+}
+
+th{
+    text-align: center !important;
+}

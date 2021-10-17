@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 
 class Admin extends React.Component {
   state = {
-    menu:"products",
+    menu:"add",
     productList:[],
     page: 1,
     maxPage:0,
@@ -46,7 +46,6 @@ class Admin extends React.Component {
       this.setState({selectedWarehouse:this.state.adminData.warehouse_id})
       this.fetchAdminProduct()
     }
-
   }
 
   fetchAdminProduct = () => {
@@ -76,8 +75,6 @@ class Admin extends React.Component {
     
     this.setState({[name] : value})
   }
-
-
 
   nextPageHandler = () => {
     this.setState({page: this.state.page + 1}, this.fetchAdminProduct)
@@ -173,20 +170,20 @@ class Admin extends React.Component {
         return(
           <tr>
             <td>
-              <input type="text" value={this.state.editName} placeholder={val.product_name} onChange={this.inputHandler} name="editName" />
+              <input className="input-admin" type="text" value={this.state.editName} placeholder={val.product_name} onChange={this.inputHandler} name="editName" />
             </td>
             <td>Rp. {val.price_buy.toLocaleString()}</td>
             <td>
-              <input type="number" value={this.state.editPrice} placeholder={val.price_sell} onChange={this.inputHandler} name="editPrice" />
+              <input className="input-admin" type="number" value={this.state.editPrice} placeholder={val.price_sell} onChange={this.inputHandler} name="editPrice" />
             </td>
             <td>
-              <input type="text" value={this.state.editCategory} placeholder={val.category} onChange={this.inputHandler} name="editCategory" />
+              <input className="input-admin" type="text" value={this.state.editCategory} placeholder={val.category} onChange={this.inputHandler} name="editCategory" />
             </td>
             <td>
-              <input type="text" value={this.state.editColor} placeholder={val.color} onChange={this.inputHandler} name="editColor" />
+              <input className="input-admin" type="text" value={this.state.editColor} placeholder={val.color} onChange={this.inputHandler} name="editColor" />
             </td>
             <td>
-              <input type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" />
+              <input className="input-admin" type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" />
             </td>
             <td>{val.size.toUpperCase()}</td>
             <td>{val.available_stock}</td>
@@ -210,7 +207,7 @@ class Admin extends React.Component {
             <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td>{val.size.toUpperCase()}</td>
             <td>
-              <input type="text" value={this.state.editStock} placeholder={val.available_stock} onChange={this.inputHandler} name="editStock" />
+              <input className="input-admin" type="text" value={this.state.editStock} placeholder={val.available_stock} onChange={this.inputHandler} name="editStock" />
             </td>
             <td colSpan="2">
               <button className="btn btn-save" onClick={this.saveStock} >Save Stock</button>
@@ -281,42 +278,48 @@ class Admin extends React.Component {
 
           <div className="col-10 mt-3">
             <div className="d-flex flex-row justify-content-start">
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="revenue">Warehouse Revenue</button>
             </div>
             <div className="d-flex justify-content-center align-items-center">
               {
+                this.state.menu==="add"?
+                <h1>ADD PRODUCT</h1>
+                :
                 this.state.menu==="products"?
-                <div>
-                  <table className="table">
-                    <thead className="table-light">
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Buying Price</th>
-                        <th>Selling Price</th>
-                        <th>Category</th>
-                        <th>Color</th>
-                        <th>Image</th>
-                        <th>Size</th>
-                        <th>Stock</th>
-                        <th colSpan="3">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.renderProducts()}
-                    </tbody>
-                    <tfoot >
-                        
-                    </tfoot>
-                  </table>
-                  <div className="d-flex flex-row justify-content-between align-items-center">
-                    <button className="btn-admin" disabled={this.state.page===1} onClick={this.prevPageHandler}>Previous Page</button>
-                    <p>Page {this.state.page} of {this.state.maxPage}</p>
-                    <button className="btn-admin" disabled={this.state.page===this.state.maxPage} onClick={this.nextPageHandler}>Next Page</button>
+                <>
+                  <div className="col-12">
+                    <table className="table">
+                      <thead className="table-light">
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Buying Price</th>
+                          <th>Selling Price</th>
+                          <th>Category</th>
+                          <th>Color</th>
+                          <th>Image</th>
+                          <th>Size</th>
+                          <th>Stock</th>
+                          <th colSpan="3">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.renderProducts()}
+                      </tbody>
+                      <tfoot >
+                          
+                      </tfoot>
+                    </table>
+                    <div className="d-flex flex-row justify-content-between align-items-center">
+                      <button className="btn-admin" disabled={this.state.page===1} onClick={this.prevPageHandler}>Previous Page</button>
+                      <p>Page {this.state.page} of {this.state.maxPage}</p>
+                      <button className="btn-admin" disabled={this.state.page===this.state.maxPage} onClick={this.nextPageHandler}>Next Page</button>
+                    </div>
                   </div>
-                </div>
+                </>
                 :
                 this.state.menu==="history"?
                 <h2>HISTORY TABLE</h2>

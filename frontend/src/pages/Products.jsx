@@ -84,6 +84,7 @@ class Products extends React.Component {
   fetchMaxPage = () => {
     Axios.get(`${API_URL}/products/max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
+      console.log(result.data[0].sumProduct)
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
     .catch((err)=>{
