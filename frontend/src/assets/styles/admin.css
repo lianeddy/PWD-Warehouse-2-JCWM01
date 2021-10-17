@@ -48,6 +48,24 @@ thead, td {
     padding: 3px 6px  !important;
 }
 
+.btn-save{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: black !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-cancel{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: rgb(146, 146, 146) !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
 table{
     margin-top: 16px;
 }

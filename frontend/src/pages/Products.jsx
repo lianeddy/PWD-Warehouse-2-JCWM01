@@ -150,7 +150,7 @@ class Products extends React.Component {
 
   }
 
-  clearFilter=()=>{
+  resetFilter=()=>{
     this.setState({searchCategory:""})
     this.setState({searchColor:""})
     this.fetchproducts()
@@ -190,7 +190,7 @@ class Products extends React.Component {
             </div>
             <div>
               <button className="btn btn-dark btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
-              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.clearFilter}><p>Reset Filter</p></button>
+              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.resetFilter}><p>Reset Filter</p></button>
             </div>
           </div>
 
