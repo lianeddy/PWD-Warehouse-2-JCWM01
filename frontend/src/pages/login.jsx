@@ -10,7 +10,7 @@ class Login extends React.Component {
     username: "",
     password:"",
     redirect: false
-    }
+    } 
 
     redirectHandler = () => {
         this.setState({redirect: true})

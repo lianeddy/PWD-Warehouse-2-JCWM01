@@ -9,13 +9,12 @@ app.use(cors());
 app.use(express.json());
 app.use(bearerToken());
 
-const { 
-    productsRouter, 
-    addUserRouter } = require("./routers"); //hubungin dgn router
+const { productsRouter, addUserRouter, adminRouter } = require("./routers"); //hubungin dgn router
 
 app.use("/products", productsRouter); //hubungin routernya juga
 app.use("/register", addUserRouter);
-app.use("/login", addUserRouter); //routernya dibedain
+app.use("/login", addUserRouter);
+app.use("/admin", adminRouter);
 
 app.listen(port, () => console.log(`Server running in port ${port}`));
 //running nya pakai npx nodemon index.js

@@ -20,7 +20,7 @@ class Products extends React.Component {
   }
  
   fetchproducts = () => {
-    Axios.get(`${API_URL}/products/get-products?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}`)
+    Axios.get(`${API_URL}/products/?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({productList: result.data},this.fetchMaxPage())
       //this.setState({page: this.state.page + result.data.length })
@@ -32,7 +32,7 @@ class Products extends React.Component {
   }
 
   fetchCategoryList = () => {
-    Axios.get(`${API_URL}/products/get-products-category`)
+    Axios.get(`${API_URL}/products/category`)
     .then((result) => {
       this.setState({categoryList:result.data})
     })
@@ -57,7 +57,7 @@ class Products extends React.Component {
   }
 
   fetchColorList = () => {
-    Axios.get(`${API_URL}/products/get-products-color`)
+    Axios.get(`${API_URL}/products/color`)
     .then((result) => {
       this.setState({colorList:result.data})
     })
@@ -82,7 +82,7 @@ class Products extends React.Component {
   }
 
   fetchMaxPage = () => {
-    Axios.get(`${API_URL}/products/get-products-max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
+    Axios.get(`${API_URL}/products/max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
@@ -123,7 +123,7 @@ class Products extends React.Component {
     console.log("product_name",this.props.userGlobal.searchProduct)
     this.fetchMaxPage()
 
-    Axios.get(`${API_URL}/products/get-products?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
+    Axios.get(`${API_URL}/products/?page=${this.state.page-1}&sortby=${this.state.sortProduct}&category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
       this.setState({productList: result.data})
     })
@@ -150,7 +150,7 @@ class Products extends React.Component {
 
   }
 
-  clearFilter=()=>{
+  resetFilter=()=>{
     this.setState({searchCategory:""})
     this.setState({searchColor:""})
     this.fetchproducts()
@@ -190,7 +190,7 @@ class Products extends React.Component {
             </div>
             <div>
               <button className="btn btn-dark btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
-              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.clearFilter}><p>Reset Filter</p></button>
+              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.resetFilter}><p>Reset Filter</p></button>
             </div>
           </div>
 

@@ -28,7 +28,7 @@ class ProductDetail extends React.Component {
 
   fetchproducts = () => {
     // console.log(this.props.match.params.product_id)
-    Axios.get(`${API_URL}/products/get-products-detail?product_id=${this.props.match.params.product_id}`)
+    Axios.get(`${API_URL}/products/detail?product_id=${this.props.match.params.product_id}`)
     .then((result) => {
       if(result.data.length){
         this.setState({productData: result.data})
@@ -130,7 +130,7 @@ class ProductDetail extends React.Component {
                   <button onClick={this.fnQuantityUp} disabled={true} className="btn btn-dark btn-sm">
                     +
                   </button>
-                  <p className="warning">Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
+                  <p className="warning ms-2">  Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
 
                 </div>
                 <button disabled={true} className="btn btn-sm btn-dark mt-3 col-6">
@@ -157,7 +157,7 @@ class ProductDetail extends React.Component {
                   </button>
                   {
                     this.state.productQty===this.state.availableStock?
-                    <p className="warning">Sorry, you have reached size {this.state.selectedSize.toUpperCase()} maximum stock.</p>
+                    <p className="warning ms-2">Sorry, you have reached size {this.state.selectedSize.toUpperCase()} maximum stock.</p>
                     : null
                   }
 

@@ -44,7 +44,8 @@ export const loginUser = (data) => {
     })
       .then((res) => {
         delete res.data[0].password;
-        console.log(res.data[0]);
+        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
+        // console.log(res.data[0]);
 
         dispatch({
           type: "USER_LOGIN",
@@ -65,30 +66,4 @@ export const logoutUser = () => {
   };
 };
 
-//ambil data dari local storage supaya login terus
-export const userKeepLogin = (userData) => {
-  return (dispatch) => {
-    Axios.get(`${API_URL}/users`, {
-      params: {
-        id: userData.id,
-      },
-    })
-      .then((result) => {
-        delete result.data[0].password;
-        localStorage.setItem("userDataEmmerce", JSON.stringify(result.data[0]));
-        dispatch({
-          type: "USER_LOGIN",
-          payload: result.data[0],
-        });
-      })
-      .catch(() => {
-        alert("Terjadi kesalahan pada server.");
-      });
-  };
-};
 
-export const checkStorage = () => {
-  return {
-    type: "CHECK_STORAGE",
-  };
-};
