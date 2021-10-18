@@ -278,16 +278,58 @@ class Admin extends React.Component {
 
           <div className="col-10 mt-3">
             <div className="d-flex flex-row justify-content-start">
+              {/* <img src={process.env.PUBLIC_URL + '/logo512.png'} /> */}
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="revenue">Warehouse Revenue</button>
             </div>
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-start align-items-center">
               {
                 this.state.menu==="add"?
-                <h1>ADD PRODUCT</h1>
+                <div className="col-12 add-product-container">
+                  <div>
+                    <h2>ADD PRODUCT</h2>
+                    <form>
+                      <div className="form-group">
+                        <label htmlFor="product_name">Product Name</label>
+                        <input type="text" className="form-control product-input-text" id="product_name" placeholder="Product name"  />
+                      </div>
+                      <div className="d-flex flex-row justify-content-between">
+                        <div className="form-group">
+                          <label htmlFor="price_buy">Price Buy</label>
+                          <input type="number" className="form-control product-input-number" id="price_buy" placeholder="Price buy"  />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="price_sell">Price Sell</label>
+                          <input type="number" className="form-control product-input-number" id="price_sell" placeholder="Price sell"  />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="product_desc">Product Description</label>
+                        <textarea type="text" className="form-control product-input-desc" id="product_desc" placeholder="Product description"  />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="category">Cateogry</label>
+                        <input type="text" className="form-control product-input-text" id="category" placeholder="Category"  />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="color">Color</label>
+                        <input type="text" className="form-control product-input-text" id="color" placeholder="Color"  />
+                      </div>
+                      <div class="form-group">
+                        <label for="product_image">Upload Product Image</label>
+                        <input type="file" class="form-control-file" id="product_image" />
+                      </div>
+                      <button type="submit" class="btn btn-save">Add Product</button>
+                    </form>
+                  </div>
+                  <div className="col-2 imgpreview">
+                    <h6>Image Preview</h6>
+                    <img id="imgpreview" width="100%" />
+                  </div>
+                </div>
                 :
                 this.state.menu==="products"?
                 <>

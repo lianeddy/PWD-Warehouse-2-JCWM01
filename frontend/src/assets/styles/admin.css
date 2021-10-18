@@ -84,9 +84,38 @@ table{
     background-color: rgb(241, 241, 241);
     color: black;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 2px;
+
 }
 
 th{
     text-align: center !important;
+}
+
+.add-product-container{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.product-input-text{
+    width: 400px !important;
+    font-size: 12px !important;
+}
+
+.product-input-number{
+    width: 180px !important;
+    font-size: 12px !important;
+}
+
+.product-input-desc{
+    width: 400px !important;
+    height: 100px !important;
+    font-size: 12px !important;
+}
+
+.imgpreview{
+    margin: 0vw 10vw !important;
 }
