@@ -99,7 +99,7 @@ class ProductDetail extends React.Component {
           <div className="col-6 d-flex justify-content-end">
             <img 
               className="image-card"
-              style={{width:"70%"}}
+              style={{width:"60%"}}
               src={API_URL + '/public' + this.state.shownData.product_image}
               alt="product-image" 
             />

@@ -25,5 +25,5 @@ app.use("/products", productsRouter);
 app.use("/admin", adminRouter);
 app.use('/upload', uploaderRouter)
 
-app.listen(port, () => console.log(`Server running in port ${port}`));
+app.listen(port, () => (`Server running in port ${port}`));
 //running nya pakai npx nodemon index.js

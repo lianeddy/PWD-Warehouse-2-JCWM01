@@ -124,7 +124,8 @@ class Admin extends React.Component {
     this.setState({edit_stock_id:0})
   }
 
-  saveProducts = () =>{
+  saveProducts = (e) =>{
+    e.preventDefault();
     const confirmEdit = window.confirm("If you save your changes on this product, it would change the entire product data on other sizes and warehouses. Continue?")
     if(confirmEdit) {
       Axios.patch(`${API_URL}/admin/edit-product?product_id=${this.state.edit_product_id}&page=${this.state.page-1}&warehouse_id=${this.state.selectedWarehouse}`,{
@@ -132,7 +133,7 @@ class Admin extends React.Component {
         price_sell: this.state.editPrice,
         category: this.state.editCategory,
         color: this.state.editColor,
-        product_image:  this.state.editImageURL
+        // product_image:  this.state.editImageURL
       })
       .then((result) => {
         console.log(result.data)
@@ -143,6 +144,28 @@ class Admin extends React.Component {
       .catch((err)=>{
         console.log(err)
       })
+
+      if (this.state.addFile) {
+        let formData = new FormData() //buat kirim file
+
+        //data yg disertakan pada image
+        let obj = {
+            product_id: this.state.edit_product_id,
+        }
+
+        formData.append('data', JSON.stringify(obj))
+        formData.append('file', this.state.addFile)
+        Axios.patch(`${API_URL}/upload/edit-image`, formData) //sesuai routing
+            .then(res => {
+                // this.getDataAlbum()
+                alert(res.data.message)
+                this.refreshPage()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     } 
   }
 
@@ -183,7 +206,12 @@ class Admin extends React.Component {
               <input className="input-admin" type="text" value={this.state.editColor} placeholder={val.color} onChange={this.inputHandler} name="editColor" />
             </td>
             <td>
-              <input className="input-admin" type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" />
+              <input  ref={elemen => this.edit_product_image = elemen} type="file" className="form-control-file" id="product_image" onChange={this.onBtnEditFile} />
+              <div className="imgpreview-edit-container">
+                    <p>Product Image Preview</p>
+                    <img className="imgpreview-edit" id="imgpreview-edit" width="25%" />
+              </div>
+              {/* <input className="input-admin" type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" /> */}
             </td>
             <td>{val.size.toUpperCase()}</td>
             <td>{val.available_stock}</td>
@@ -204,7 +232,7 @@ class Admin extends React.Component {
             <td>Rp. {val.price_sell.toLocaleString()}</td>
             <td>{val.category}</td>
             <td>{val.color}</td>
-            <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
+            <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td>{val.size.toUpperCase()}</td>
             <td>
               <input className="input-admin" type="text" value={this.state.editStock} placeholder={val.available_stock} onChange={this.inputHandler} name="editStock" />
@@ -226,7 +254,7 @@ class Admin extends React.Component {
             <td>Rp. {val.price_sell.toLocaleString()}</td>
             <td>{val.category}</td>
             <td>{val.color}</td>
-            <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
+            <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td>{val.size.toUpperCase()}</td>
             <td>{val.available_stock}</td>
             <td>
@@ -246,6 +274,10 @@ class Admin extends React.Component {
     })
   }
 
+  refreshPage = ()=>{
+    window.location.reload();
+  }
+
   onBtAdd = (e) => {
     e.preventDefault();
     if (this.state.addFile) {
@@ -260,6 +292,7 @@ class Admin extends React.Component {
             product_desc: this.input_product_desc.value,
             category: this.input_category.value,
             color: this.input_color.value,
+            warehouse_id: this.state.selectedWarehouse,
             size: this.input_size.value
         }
 
@@ -269,6 +302,7 @@ class Admin extends React.Component {
             .then(res => {
                 // this.getDataAlbum()
                 alert(res.data.message)
+                this.refreshPage()
             })
             .catch(err => {
                 console.log(err)
@@ -281,6 +315,16 @@ class Admin extends React.Component {
         this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
         //untuk preview
         let preview = document.getElementById("imgpreview")
+        preview.src = URL.createObjectURL(e.target.files[0])
+    }
+  }
+
+  onBtnEditFile = (e) => {
+    e.preventDefault();
+    if (e.target.files[0]) {
+        this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+        //untuk preview
+        let preview = document.getElementById("imgpreview-edit")
         preview.src = URL.createObjectURL(e.target.files[0])
     }
   }

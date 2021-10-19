@@ -73,7 +73,6 @@ export const userKeepLogin = (data) => {
       .then((res) => {
         delete res.data[0].password;
         localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
-        // console.log(res.data[0]);
 
         dispatch({
           type: "USER_LOGIN",
