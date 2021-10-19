@@ -75,7 +75,7 @@ class Products extends React.Component {
         if(val.color===this.state.searchColor){
           return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second selected"><p>{capital}</p></button></li>
         }else{
-          return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second" style={{color:'lightgrey'}}><p>{capital}</p></button></li>
+          return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second unselected" ><p>{capital}</p></button></li>
         }
       }
     })
