@@ -9,5 +9,7 @@ router.get('/warehouse',adminController.warehouse)
 
 router.patch('/edit-product',adminController.editProduct)
 router.patch('/edit-stock',adminController.editStock)
+router.patch('/hide-product',adminController.hideProduct)
+router.patch('/show-product',adminController.showProduct)
 
 module.exports = router

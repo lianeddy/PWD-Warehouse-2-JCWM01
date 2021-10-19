@@ -120,4 +120,30 @@ module.exports = {
             }
         })
     },
+    hideProduct: (request,response) => {
+        let sqlHide = `Update fp_pwd_5.products set hide = 0 where product_id = ${db.escape(request.query.product_id)};`
+    
+        db.query(sqlHide, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+
+                return response.status(200).send(result)
+                
+            }
+        })
+    },
+    showProduct: (request,response) => {
+        let sqlShow = `Update fp_pwd_5.products set hide = 1 where product_id = ${db.escape(request.query.product_id)};`
+    
+        db.query(sqlShow, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+
+                return response.status(200).send(result)
+                
+            }
+        })
+    },
 }
