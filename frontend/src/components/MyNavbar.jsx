@@ -52,11 +52,11 @@ class MyNavbar extends React.Component{
                     this.props.userGlobal.auth_status === "superadmin" ?
                     null
                     :
-                    <form class="form-inline my-2 my-lg-0 col-4 d-flex align-items-center">
-                        <input class="form-control" name="searchProduct"  onChange={this.inputHandler} type="search" placeholder="Search products..." />
+                    <form className="form-inline my-2 my-lg-0 col-4 d-flex align-items-center">
+                        <input className="form-control" name="searchProduct"  onChange={this.inputHandler} type="search" placeholder="Search products..." />
 
                         <Link  to="/products" >
-                            <button onClick={this.searchProductHandler} class="btn btn-dark ms-2" type="submit"><p>Search</p></button>
+                            <button onClick={this.searchProductHandler} className="btn btn-dark ms-2" type="submit"><p>Search</p></button>
                         </Link> 
 
                     </form>

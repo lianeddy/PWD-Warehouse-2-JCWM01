@@ -246,6 +246,45 @@ class Admin extends React.Component {
     })
   }
 
+  onBtAdd = (e) => {
+    e.preventDefault();
+    if (this.state.addFile) {
+      
+        let formData = new FormData() //buat kirim file
+
+        //data yg disertakan pada image
+        let obj = {
+            product_name: this.input_product_name.value,
+            price_buy: this.input_price_buy.value,
+            price_sell: this.input_price_sell.value,
+            product_desc: this.input_product_desc.value,
+            category: this.input_category.value,
+            color: this.input_color.value,
+            size: this.input_size.value
+        }
+
+        formData.append('data', JSON.stringify(obj))
+        formData.append('file', this.state.addFile)
+        Axios.post(`${API_URL}/upload/add-product`, formData) //sesuai routing
+            .then(res => {
+                // this.getDataAlbum()
+                alert(res.data.message)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+  }
+
+  onBtAddFile = (e) => {
+    if (e.target.files[0]) {
+        this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+        //untuk preview
+        let preview = document.getElementById("imgpreview")
+        preview.src = URL.createObjectURL(e.target.files[0])
+    }
+  }
+
   componentDidMount = () => {
     if(this.props.userGlobal.auth_status==="superadmin"){
       this.fetchAdminProduct()
@@ -278,7 +317,6 @@ class Admin extends React.Component {
 
           <div className="col-10 mt-3">
             <div className="d-flex flex-row justify-content-start">
-              {/* <img src={process.env.PUBLIC_URL + '/logo512.png'} /> */}
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
@@ -294,40 +332,46 @@ class Admin extends React.Component {
                     <form>
                       <div className="form-group">
                         <label htmlFor="product_name">Product Name</label>
-                        <input type="text" className="form-control product-input-text" id="product_name" placeholder="Product name"  />
+                        <input ref={elemen => this.input_product_name = elemen} type="text" className="form-control product-input-text" id="product_name" placeholder="Product name"  />
                       </div>
                       <div className="d-flex flex-row justify-content-between">
                         <div className="form-group">
                           <label htmlFor="price_buy">Price Buy</label>
-                          <input type="number" className="form-control product-input-number" id="price_buy" placeholder="Price buy"  />
+                          <input ref={elemen => this.input_price_buy = elemen} type="number" className="form-control product-input-number" id="price_buy" placeholder="Price buy"  />
                         </div>
                         <div className="form-group">
                           <label htmlFor="price_sell">Price Sell</label>
-                          <input type="number" className="form-control product-input-number" id="price_sell" placeholder="Price sell"  />
+                          <input ref={elemen => this.input_price_sell = elemen} type="number" className="form-control product-input-number" id="price_sell" placeholder="Price sell"  />
                         </div>
                       </div>
                       <div className="form-group">
                         <label htmlFor="product_desc">Product Description</label>
-                        <textarea type="text" className="form-control product-input-desc" id="product_desc" placeholder="Product description"  />
+                        <textarea  ref={elemen => this.input_product_desc = elemen} type="text" className="form-control product-input-desc" id="product_desc" placeholder="Product description"  />
                       </div>
                       <div className="form-group">
                         <label htmlFor="category">Cateogry</label>
-                        <input type="text" className="form-control product-input-text" id="category" placeholder="Category"  />
+                        <input  ref={elemen => this.input_category = elemen} type="text" className="form-control product-input-text" id="category" placeholder="Category"  />
                       </div>
                       <div className="form-group">
                         <label htmlFor="color">Color</label>
-                        <input type="text" className="form-control product-input-text" id="color" placeholder="Color"  />
+                        <input  ref={elemen => this.input_color = elemen} type="text" className="form-control product-input-text" id="color" placeholder="Color"  />
                       </div>
-                      <div class="form-group">
+                      <div className="form-group">
+                        <label for="size">Input sizes (separate with comma)</label>
+                        <small id="sizeHelp1" class="form-text text-muted">Example 1: S,M,L,XL</small>
+                        <small id="sizeHelp2" class="form-text text-muted">Example 2: 37,38,39,40</small>
+                        <input  ref={elemen => this.input_size = elemen} type="text" className="form-control product-input-text" id="size" placeholder="Size, separated with comma" />
+                      </div>
+                      <div className="form-group">
                         <label for="product_image">Upload Product Image</label>
-                        <input type="file" class="form-control-file" id="product_image" />
+                        <input  ref={elemen => this.input_product_image = elemen} type="file" className="form-control-file" id="product_image" onChange={this.onBtAddFile} />
                       </div>
-                      <button type="submit" class="btn btn-save">Add Product</button>
+                      <button onClick={(e)=>this.onBtAdd(e)} className="btn btn-save">Add Product</button>
                     </form>
                   </div>
-                  <div className="col-2 imgpreview">
-                    <h6>Image Preview</h6>
-                    <img id="imgpreview" width="100%" />
+                  <div className="imgpreview-container">
+                    <h4>Product Image Preview</h4>
+                    <img className="imgpreview" id="imgpreview" width="100%" />
                   </div>
                 </div>
                 :

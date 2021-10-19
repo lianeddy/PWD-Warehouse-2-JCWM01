@@ -116,6 +116,13 @@ th{
     font-size: 12px !important;
 }
 
-.imgpreview{
+.imgpreview-container{
     margin: 0vw 10vw !important;
+}
+
+.imgpreview{
+    width: 30vw !important;
+    height: 40vw !important;
+    border: none !important;
+    border-radius: 0px !important;
 }
