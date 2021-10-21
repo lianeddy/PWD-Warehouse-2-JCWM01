@@ -48,6 +48,15 @@ thead, td {
     padding: 3px 6px  !important;
 }
 
+.btn-show{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: grey !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
 .btn-save{
     font-family: 'poppins-regular';
     font-size: 12px !important;

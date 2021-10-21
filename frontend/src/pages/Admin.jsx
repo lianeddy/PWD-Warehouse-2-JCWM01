@@ -187,6 +187,36 @@ class Admin extends React.Component {
     } 
   }
 
+  hideProducts = (val) =>{
+    const confirmEdit = window.confirm("You will only hide this product from user. Continue?")
+    if(confirmEdit) {
+      Axios.patch(`${API_URL}/admin/hide-product?product_id=${val.product_id}`)
+      .then((result) => {
+        console.log(result.data)
+        this.fetchAdminProduct()
+        alert(`Product ${val.product_name} is successfully hidden. User can't see this product anymore.`)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }
+
+  showProducts = (val) =>{
+    const confirmEdit = window.confirm("You will show this product from user. Continue?")
+    if(confirmEdit) {
+      Axios.patch(`${API_URL}/admin/show-product?product_id=${val.product_id}`)
+      .then((result) => {
+        console.log(result.data)
+        this.fetchAdminProduct()
+        alert(`Product ${val.product_name} is successfully shown. User can see this product now.`)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+  }
+
   renderProducts = ()=>{
     return this.state.productList.map((val) =>{
       if(val.warehouse_stock_id===this.state.edit_id){
@@ -263,9 +293,17 @@ class Admin extends React.Component {
             <td>
               <button className="btn btn-edit" onClick={()=>this.editStock(val.warehouse_stock_id)}>Edit Stock</button>
             </td>
-            <td>
-              <button className="btn btn-delete" >Delete</button>
-            </td>
+            {
+              val.hide===1?
+              <td>
+                <button className="btn btn-delete" onClick={()=>this.hideProducts(val)}>Delete</button>
+              </td>
+              :
+              <td>
+                <button className="btn btn-show" onClick={()=>this.showProducts(val)}>Show</button>
+              </td>
+            }
+
           </tr>
         )
       }
