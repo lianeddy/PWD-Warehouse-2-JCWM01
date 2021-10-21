@@ -45,7 +45,6 @@ export const loginUser = (data) => {
       .then((res) => {
         delete res.data[0].password;
         localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
-        // console.log(res.data[0]);
 
         dispatch({
           type: "USER_LOGIN",
@@ -61,6 +60,7 @@ export const loginUser = (data) => {
 
 export const logoutUser = () => {
   localStorage.removeItem("userDataEmmerce");
+  // localStorage.removeItem("cartData");
   return {
     type: "USER_LOGOUT",
   };
@@ -85,8 +85,25 @@ export const userKeepLogin = (data) => {
   }
 }
 
+export const getCartID = (user_id) => {
+  return (dispatch) => {
+    Axios.get(`${API_URL}/cart/id?user_id=${user_id}`)
+    .then((res) => {
+      dispatch({
+        type: "CART_ID",
+        payload: res.data[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+}
+
 export const checkStorage = () => {
   return {
       type: "CHECK_STORAGE"
   }
 }
+
+

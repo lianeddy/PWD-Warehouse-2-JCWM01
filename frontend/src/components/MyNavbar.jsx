@@ -14,7 +14,7 @@ import "../assets/styles/navbar.css"
 
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
-import { searchProduct,logoutUser } from '../redux/actions/user';
+import { searchProduct,logoutUser, getCartID } from '../redux/actions/user';
 
 
 class MyNavbar extends React.Component{
@@ -34,6 +34,10 @@ class MyNavbar extends React.Component{
         this.props.searchProduct(this.state)
     }
 
+    componentDidMount(){
+        this.props.getCartID(this.props.userGlobal.user_id)
+    }
+
     render(){
         return(
 
@@ -42,7 +46,7 @@ class MyNavbar extends React.Component{
                    <img src={logo} alt="home" className="navbar-logo"/>
                 </Link>
                 <div>
-                    
+                    cart id: {this.props.userGlobal.cart_id}
                 </div>
                 {/* search bar */}
                 {
@@ -145,7 +149,8 @@ const mapStateToProps =(state)=> {
 
 const mapDispatchToProps = {
     searchProduct, 
-    logoutUser
+    logoutUser,
+    getCartID
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(MyNavbar);
