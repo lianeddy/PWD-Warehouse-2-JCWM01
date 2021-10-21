@@ -69,3 +69,60 @@ thead, td {
 table{
     margin-top: 16px;
 }
+
+.add-form{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.input-admin{
+    width: 100px !important;
+    height:20px !important;
+    margin:0px !important;
+    background-color: rgb(241, 241, 241);
+    color: black;
+    border: 0px;
+    border-radius: 2px;
+
+}
+
+th{
+    text-align: center !important;
+}
+
+.add-product-container{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.product-input-text{
+    width: 400px !important;
+    font-size: 12px !important;
+}
+
+.product-input-number{
+    width: 180px !important;
+    font-size: 12px !important;
+}
+
+.product-input-desc{
+    width: 400px !important;
+    height: 100px !important;
+    font-size: 12px !important;
+}
+
+.imgpreview-container{
+    margin: 0vw 10vw !important;
+}
+
+.imgpreview{
+    width: 30vw !important;
+    height: 40vw !important;
+    border: none !important;
+    border-radius: 0px !important;
+}

@@ -66,4 +66,27 @@ export const logoutUser = () => {
   };
 };
 
+//ambil data dari local storage supaya login terus, nitip dulu ya soalnya kerefresh terus pas coba upload data
+export const userKeepLogin = (data) => {
+  return (dispatch) =>{
+      Axios.get(API_URL + `/login/keeplogin?username=${data.username}`)
+      .then((res) => {
+        delete res.data[0].password;
+        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
 
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err)=>{
+          alert(err)
+      })
+  }
+}
+
+export const checkStorage = () => {
+  return {
+      type: "CHECK_STORAGE"
+  }
+}

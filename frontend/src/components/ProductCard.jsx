@@ -80,7 +80,7 @@ class ProductCard extends React.Component{
                         <div className="product-card">
 
                             <img 
-                                src={this.props.productData.product_image}
+                                src={API_URL + '/public' + this.props.productData.product_image}
                                 alt="" 
                             />
 

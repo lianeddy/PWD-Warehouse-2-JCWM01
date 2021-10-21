@@ -43,5 +43,19 @@ module.exports = {
             
         })
     },
+    keepLogin: (req,res) => {
+        db.query(`SELECT * FROM user WHERE username = ${db.escape(req.query.username)}`,
+        (err, result) => {
+            if (err) {
+                res.send(err)
+            }
+            if (result.length > 0) {
+                res.send(result)
+            } else {
+                res.send({ message: "Wrong username or password" })
+            }
+            
+        })
+    },
 }
 

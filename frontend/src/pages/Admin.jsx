@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 
 class Admin extends React.Component {
   state = {
-    menu:"products",
+    menu:"add",
     productList:[],
     page: 1,
     maxPage:0,
@@ -46,7 +46,6 @@ class Admin extends React.Component {
       this.setState({selectedWarehouse:this.state.adminData.warehouse_id})
       this.fetchAdminProduct()
     }
-
   }
 
   fetchAdminProduct = () => {
@@ -76,8 +75,6 @@ class Admin extends React.Component {
     
     this.setState({[name] : value})
   }
-
-
 
   nextPageHandler = () => {
     this.setState({page: this.state.page + 1}, this.fetchAdminProduct)
@@ -127,7 +124,8 @@ class Admin extends React.Component {
     this.setState({edit_stock_id:0})
   }
 
-  saveProducts = () =>{
+  saveProducts = (e) =>{
+    e.preventDefault();
     const confirmEdit = window.confirm("If you save your changes on this product, it would change the entire product data on other sizes and warehouses. Continue?")
     if(confirmEdit) {
       Axios.patch(`${API_URL}/admin/edit-product?product_id=${this.state.edit_product_id}&page=${this.state.page-1}&warehouse_id=${this.state.selectedWarehouse}`,{
@@ -135,7 +133,7 @@ class Admin extends React.Component {
         price_sell: this.state.editPrice,
         category: this.state.editCategory,
         color: this.state.editColor,
-        product_image:  this.state.editImageURL
+        // product_image:  this.state.editImageURL
       })
       .then((result) => {
         console.log(result.data)
@@ -146,6 +144,28 @@ class Admin extends React.Component {
       .catch((err)=>{
         console.log(err)
       })
+
+      if (this.state.addFile) {
+        let formData = new FormData() //buat kirim file
+
+        //data yg disertakan pada image
+        let obj = {
+            product_id: this.state.edit_product_id,
+        }
+
+        formData.append('data', JSON.stringify(obj))
+        formData.append('file', this.state.addFile)
+        Axios.patch(`${API_URL}/upload/edit-image`, formData) //sesuai routing
+            .then(res => {
+                // this.getDataAlbum()
+                alert(res.data.message)
+                this.refreshPage()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     } 
   }
 
@@ -173,20 +193,25 @@ class Admin extends React.Component {
         return(
           <tr>
             <td>
-              <input type="text" value={this.state.editName} placeholder={val.product_name} onChange={this.inputHandler} name="editName" />
+              <input className="input-admin" type="text" value={this.state.editName} placeholder={val.product_name} onChange={this.inputHandler} name="editName" />
             </td>
             <td>Rp. {val.price_buy.toLocaleString()}</td>
             <td>
-              <input type="number" value={this.state.editPrice} placeholder={val.price_sell} onChange={this.inputHandler} name="editPrice" />
+              <input className="input-admin" type="number" value={this.state.editPrice} placeholder={val.price_sell} onChange={this.inputHandler} name="editPrice" />
             </td>
             <td>
-              <input type="text" value={this.state.editCategory} placeholder={val.category} onChange={this.inputHandler} name="editCategory" />
+              <input className="input-admin" type="text" value={this.state.editCategory} placeholder={val.category} onChange={this.inputHandler} name="editCategory" />
             </td>
             <td>
-              <input type="text" value={this.state.editColor} placeholder={val.color} onChange={this.inputHandler} name="editColor" />
+              <input className="input-admin" type="text" value={this.state.editColor} placeholder={val.color} onChange={this.inputHandler} name="editColor" />
             </td>
             <td>
-              <input type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" />
+              <input  ref={elemen => this.edit_product_image = elemen} type="file" className="form-control-file" id="product_image" onChange={this.onBtnEditFile} />
+              <div className="imgpreview-edit-container">
+                    <p>Product Image Preview</p>
+                    <img className="imgpreview-edit" id="imgpreview-edit" width="25%" />
+              </div>
+              {/* <input className="input-admin" type="text" value={this.state.editImageURL} placeholder="Image URL" onChange={this.inputHandler} name="editImageURL" /> */}
             </td>
             <td>{val.size.toUpperCase()}</td>
             <td>{val.available_stock}</td>
@@ -207,10 +232,10 @@ class Admin extends React.Component {
             <td>Rp. {val.price_sell.toLocaleString()}</td>
             <td>{val.category}</td>
             <td>{val.color}</td>
-            <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
+            <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td>{val.size.toUpperCase()}</td>
             <td>
-              <input type="text" value={this.state.editStock} placeholder={val.available_stock} onChange={this.inputHandler} name="editStock" />
+              <input className="input-admin" type="text" value={this.state.editStock} placeholder={val.available_stock} onChange={this.inputHandler} name="editStock" />
             </td>
             <td colSpan="2">
               <button className="btn btn-save" onClick={this.saveStock} >Save Stock</button>
@@ -229,7 +254,7 @@ class Admin extends React.Component {
             <td>Rp. {val.price_sell.toLocaleString()}</td>
             <td>{val.category}</td>
             <td>{val.color}</td>
-            <td><img src={val.product_image} className="admin-product-image" alt={val.productName}/></td>
+            <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td>{val.size.toUpperCase()}</td>
             <td>{val.available_stock}</td>
             <td>
@@ -247,6 +272,61 @@ class Admin extends React.Component {
 
       
     })
+  }
+
+  refreshPage = ()=>{
+    window.location.reload();
+  }
+
+  onBtAdd = (e) => {
+    e.preventDefault();
+    if (this.state.addFile) {
+      
+        let formData = new FormData() //buat kirim file
+
+        //data yg disertakan pada image
+        let obj = {
+            product_name: this.input_product_name.value,
+            price_buy: this.input_price_buy.value,
+            price_sell: this.input_price_sell.value,
+            product_desc: this.input_product_desc.value,
+            category: this.input_category.value,
+            color: this.input_color.value,
+            warehouse_id: this.state.selectedWarehouse,
+            size: this.input_size.value
+        }
+
+        formData.append('data', JSON.stringify(obj))
+        formData.append('file', this.state.addFile)
+        Axios.post(`${API_URL}/upload/add-product`, formData) //sesuai routing
+            .then(res => {
+                // this.getDataAlbum()
+                alert(res.data.message)
+                this.refreshPage()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+  }
+
+  onBtAddFile = (e) => {
+    if (e.target.files[0]) {
+        this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+        //untuk preview
+        let preview = document.getElementById("imgpreview")
+        preview.src = URL.createObjectURL(e.target.files[0])
+    }
+  }
+
+  onBtnEditFile = (e) => {
+    e.preventDefault();
+    if (e.target.files[0]) {
+        this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+        //untuk preview
+        let preview = document.getElementById("imgpreview-edit")
+        preview.src = URL.createObjectURL(e.target.files[0])
+    }
   }
 
   componentDidMount = () => {
@@ -281,42 +361,95 @@ class Admin extends React.Component {
 
           <div className="col-10 mt-3">
             <div className="d-flex flex-row justify-content-start">
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="revenue">Warehouse Revenue</button>
             </div>
-            <div className="d-flex justify-content-center align-items-center">
+            <div className="d-flex justify-content-start align-items-center">
               {
-                this.state.menu==="products"?
-                <div>
-                  <table className="table">
-                    <thead className="table-light">
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Buying Price</th>
-                        <th>Selling Price</th>
-                        <th>Category</th>
-                        <th>Color</th>
-                        <th>Image</th>
-                        <th>Size</th>
-                        <th>Stock</th>
-                        <th colSpan="3">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.renderProducts()}
-                    </tbody>
-                    <tfoot >
-                        
-                    </tfoot>
-                  </table>
-                  <div className="d-flex flex-row justify-content-between align-items-center">
-                    <button className="btn-admin" disabled={this.state.page===1} onClick={this.prevPageHandler}>Previous Page</button>
-                    <p>Page {this.state.page} of {this.state.maxPage}</p>
-                    <button className="btn-admin" disabled={this.state.page===this.state.maxPage} onClick={this.nextPageHandler}>Next Page</button>
+                this.state.menu==="add"?
+                <div className="col-12 add-product-container">
+                  <div>
+                    <h2>ADD PRODUCT</h2>
+                    <form>
+                      <div className="form-group">
+                        <label htmlFor="product_name">Product Name</label>
+                        <input ref={elemen => this.input_product_name = elemen} type="text" className="form-control product-input-text" id="product_name" placeholder="Product name"  />
+                      </div>
+                      <div className="d-flex flex-row justify-content-between">
+                        <div className="form-group">
+                          <label htmlFor="price_buy">Price Buy</label>
+                          <input ref={elemen => this.input_price_buy = elemen} type="number" className="form-control product-input-number" id="price_buy" placeholder="Price buy"  />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="price_sell">Price Sell</label>
+                          <input ref={elemen => this.input_price_sell = elemen} type="number" className="form-control product-input-number" id="price_sell" placeholder="Price sell"  />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="product_desc">Product Description</label>
+                        <textarea  ref={elemen => this.input_product_desc = elemen} type="text" className="form-control product-input-desc" id="product_desc" placeholder="Product description"  />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="category">Cateogry</label>
+                        <input  ref={elemen => this.input_category = elemen} type="text" className="form-control product-input-text" id="category" placeholder="Category"  />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="color">Color</label>
+                        <input  ref={elemen => this.input_color = elemen} type="text" className="form-control product-input-text" id="color" placeholder="Color"  />
+                      </div>
+                      <div className="form-group">
+                        <label for="size">Input sizes (separate with comma)</label>
+                        <small id="sizeHelp1" class="form-text text-muted">Example 1: S,M,L,XL</small>
+                        <small id="sizeHelp2" class="form-text text-muted">Example 2: 37,38,39,40</small>
+                        <input  ref={elemen => this.input_size = elemen} type="text" className="form-control product-input-text" id="size" placeholder="Size, separated with comma" />
+                      </div>
+                      <div className="form-group">
+                        <label for="product_image">Upload Product Image</label>
+                        <input  ref={elemen => this.input_product_image = elemen} type="file" className="form-control-file" id="product_image" onChange={this.onBtAddFile} />
+                      </div>
+                      <button onClick={(e)=>this.onBtAdd(e)} className="btn btn-save">Add Product</button>
+                    </form>
+                  </div>
+                  <div className="imgpreview-container">
+                    <h4>Product Image Preview</h4>
+                    <img className="imgpreview" id="imgpreview" width="100%" />
                   </div>
                 </div>
+                :
+                this.state.menu==="products"?
+                <>
+                  <div className="col-12">
+                    <table className="table">
+                      <thead className="table-light">
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Buying Price</th>
+                          <th>Selling Price</th>
+                          <th>Category</th>
+                          <th>Color</th>
+                          <th>Image</th>
+                          <th>Size</th>
+                          <th>Stock</th>
+                          <th colSpan="3">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.renderProducts()}
+                      </tbody>
+                      <tfoot >
+                          
+                      </tfoot>
+                    </table>
+                    <div className="d-flex flex-row justify-content-between align-items-center">
+                      <button className="btn-admin" disabled={this.state.page===1} onClick={this.prevPageHandler}>Previous Page</button>
+                      <p>Page {this.state.page} of {this.state.maxPage}</p>
+                      <button className="btn-admin" disabled={this.state.page===this.state.maxPage} onClick={this.nextPageHandler}>Next Page</button>
+                    </div>
+                  </div>
+                </>
                 :
                 this.state.menu==="history"?
                 <h2>HISTORY TABLE</h2>
