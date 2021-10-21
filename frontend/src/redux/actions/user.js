@@ -34,6 +34,7 @@ export const loginUser = (data) => {
                 password: data.password,
         }) 
         .then((res)=> {
+            alert("Login successful")
             delete res.data[0].password;
             console.log(res.data[0]);
 

@@ -32,12 +32,12 @@ module.exports = {
         db.query(`SELECT * FROM user WHERE username = ? AND password = ?`, [username, password],
         (err, result) => {
             if (err) {
-                res.send(err)
+                return res.send(err)
             }
             if (result.length > 0) {
-                res.send(result)
+                return res.send(result)
             } else {
-                res.send({ message: "Wrong username or password" })
+                return res.send({ message: "Wrong username or password" })
             }
             
         })
