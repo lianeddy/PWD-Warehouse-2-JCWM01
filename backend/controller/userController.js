@@ -3,7 +3,7 @@ const { db } = require('../database')
 
 module.exports = {
 
-    addUser: (req, res) => {
+    registerUser: (req, res) => {
         // console.log(req.body)
         let { username, email, password, fullname, gender, age, auth_status } = req.body
         let insertQuery = `Insert into user (username, email, password, fullname, gender, age, auth_status) values (
@@ -27,7 +27,7 @@ module.exports = {
         }) 
     },
 
-    getUser: (req,res) => {
+    loginUser: (req,res) => {
         let { username, password } = req.body;
         // console.log(username, password)
         db.query(`SELECT * FROM user WHERE username = ? AND password = ?`, [username, password],
@@ -43,6 +43,7 @@ module.exports = {
             
         })
     },
+    
     keepLogin: (req,res) => {
         db.query(`SELECT * FROM user WHERE username = ${db.escape(req.query.username)}`,
         (err, result) => {

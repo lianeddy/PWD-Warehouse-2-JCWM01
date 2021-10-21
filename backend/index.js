@@ -13,15 +13,16 @@ app.use(bearerToken());
 app.use("/public", express.static("public"));
 
 const {
-  productsRouter,
-  addUserRouter,
+  productsRouter, 
+  registerRouter, 
+  loginRouter,
   adminRouter,
   uploaderRouter,
 } = require("./routers"); //hubungin dgn router
 
 //hubungin routernya juga
-app.use("/register", addUserRouter);
-app.use("/login", addUserRouter);
+app.use("/register", registerRouter);
+app.use("/login", loginRouter);
 app.use("/admin", adminRouter);
 app.use("/upload", uploaderRouter);
 app.use("/products", productsRouter);
