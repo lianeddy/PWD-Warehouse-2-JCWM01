@@ -17,9 +17,11 @@ class ProductDetail extends React.Component {
     selectedSize:"",
     availableStock:1,
     disable:false,
+    redirect:false,
 
     cartList:[],
     cartQty:0,
+    cart_id:0
   }
 
   inputHandler = (event) => {
@@ -55,6 +57,17 @@ class ProductDetail extends React.Component {
     .catch((err)=>{
         alert(err)
     })
+  }
+
+  fetchCartID = () => {
+    Axios.get(`${API_URL}/cart/id?user_id=${this.props.userGlobal.user_id}`)
+    .then((res) => {
+      this.setState({cart_id:res.data[0].cart_id})
+     
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   fetchCartQty = () => {
@@ -112,12 +125,12 @@ class ProductDetail extends React.Component {
   componentDidMount(){
     this.fetchproducts()
     this.fetchCartList()
- 
+    this.fetchCartID()
   }
 
   addToCartHandler = () =>{
     Axios.post(`${API_URL}/cart/add`,{
-      cart_id: this.props.userGlobal.cart_id,
+      cart_id: this.state.cart_id,
       product_id: this.props.match.params.product_id,
       size: this.state.selectedSize.toLowerCase(),
       quantity: this.state.productQty,
@@ -125,8 +138,8 @@ class ProductDetail extends React.Component {
     .then(()=> {
       alert("Product added to cart.")
       this.props.getCartData(this.props.userGlobal.user_id)
-      this.setState({productQty:1});
-      <Redirect to="/product" />
+      this.setState({productQty:1,redirect:true});
+
     })
     .catch((err)=>{
       alert(err)
@@ -136,6 +149,9 @@ class ProductDetail extends React.Component {
   }
 
   render(){
+    if(this.state.redirect){
+      return <Redirect to="/products" />
+    }
     return(
       <div className="container">
         {
@@ -157,11 +173,6 @@ class ProductDetail extends React.Component {
               alt="product-image" 
             />
           </div>
-
-          <span>selectedSize: {this.state.selectedSize.toLowerCase()}</span>
-          <span>availableStock: {this.state.availableStock}</span>
-          <span>cartQty: {this.state.cartQty}</span>
-          <span>available now: {this.state.availableStock - this.state.cartQty}</span>
 
           <div className="col-6 d-flex flex-column justify-content-center">
             <h1>{this.state.shownData.product_name}</h1>
@@ -229,9 +240,9 @@ class ProductDetail extends React.Component {
 
 
 
-              <button className="btn btn-light mt-3 col-6">
-                <Link to="/cart">
-                  <p>See Cart</p>
+              <button className="btn btn-light mt-3 col-6 align-items-center">
+                <Link to="/cart" className="link-see-cart">
+                  See Cart
                 </Link>
 
               </button>

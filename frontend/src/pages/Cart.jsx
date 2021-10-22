@@ -5,11 +5,30 @@ import {API_URL} from '../constants/API'
 import {connect} from 'react-redux';
 import {getCartData} from '../redux/actions/cart';
 
+import { getDistance } from 'geolib';
+import { Map, GoogleApiWrapper,Marker  } from 'google-maps-react';
+
+const mapStyles = {
+    width: '20%',
+    height: '40%',
+  };
+
 class Cart extends React.Component {
   state = {
     cartList:[],
     isCheckout:false,
+
     addressLocation:[],
+    lat:0,
+    long:0,
+    distance:0,
+    warehouseData:[],
+    selected_warehouse_id:0,
+    selected_warehouse_name:"",
+    selected_warehouse_distance:0,
+
+    shippingPrice:18000,
+    totalPrice:0,
   }
 
   fetchCartList = () => {
@@ -22,13 +41,27 @@ class Cart extends React.Component {
     })
   }
 
-  fetchAdressLocation = () => {
-    Axios.get(`${API_URL}/login/address?user_id=${this.props.userGlobal.user_id}`)
+  fetchWarehouseData = () => {
+    Axios.get(`${API_URL}/warehouse`)
     .then((res)=> {
-        this.setState({addressLocation:res.data})
+        this.setState({warehouseData:res.data})
+        console.log(this.state.warehouseData)
     })
     .catch((err)=>{
         alert(err)
+    })
+  }
+
+  fetchAdressLocation = () => {
+    Axios.get(`${API_URL}/login/address?user_id=${this.props.userGlobal.user_id}`)
+    .then((res)=> {
+            this.setState({addressLocation:res.data[0]})
+            const sep = res.data[0].user_location.split(",")
+            this.setState({lat:parseFloat(sep[0]),long:parseFloat(sep[1])})
+            this.distanceToWarehouse(this.state.lat,this.state.long)
+    })
+    .catch((err)=>{
+        alert("address not found!")
     })
   }
 
@@ -41,13 +74,54 @@ class Cart extends React.Component {
   }
 
   fnTotalPrice = () => {
-    this.setState({totalPrice: this.subTotalPrice()})
+    this.setState({totalPrice: this.subTotalPrice()+this.state.shippingPrice})
   }
 
   checkoutButton = () => {
     this.setState({isCheckout: true})
     this.fnTotalPrice()
     this.fetchAdressLocation()
+  }
+
+  distanceToWarehouse = (lat,long) => {
+    let distance = 0
+
+    console.log(this.state.warehouseData)
+    this.state.warehouseData.map((val)=>{
+        if(val.warehouse_location!=="superadmin"){
+            let warehouseLoc = val.warehouse_location.split(",")
+
+            if(distance===0){
+                let current_distance = getDistance(
+                    { latitude: lat, longitude: long },
+                    { latitude: parseFloat(warehouseLoc[0]), longitude:parseFloat(warehouseLoc[1]) }
+                )
+                distance = current_distance
+                this.setState({
+                    selected_warehouse_id: val.warehouse_id,
+                    selected_warehouse_name: val.warehouse_name,
+                    selected_warehouse_location: val.warehouse_location,
+                })
+            }
+            else{
+                let current_distance = getDistance(
+                    { latitude: lat, longitude: long },
+                    { latitude: parseFloat(warehouseLoc[0]), longitude:parseFloat(warehouseLoc[1]) }
+                )
+                if (distance>current_distance) {
+                    distance = current_distance
+                    this.setState({
+                        selected_warehouse_id: val.warehouse_id,
+                        selected_warehouse_name: val.warehouse_name,
+                        selected_warehouse_location: val.warehouse_location,
+                    })
+                }
+
+            }
+
+        }
+    })
+
   }
 
   cancelButton = () => {
@@ -107,6 +181,7 @@ class Cart extends React.Component {
     this.props.getCartData(this.props.userGlobal.user_id)
     this.setState({cartList: this.props.cartGlobal.cartList})
     this.fetchCartList()
+    this.fetchWarehouseData()
     
   }
 
@@ -138,7 +213,7 @@ class Cart extends React.Component {
                   <tfoot className="bg-light">
                     <tr>
                       <td colSpan="7">
-                        <button onClick={this.checkoutButton} className="btn btn-checkout">
+                        <button disabled={this.state.cartList.length===0} onClick={this.checkoutButton} className="btn btn-checkout">
                           Checkout
                         </button>
                       </td>
@@ -185,16 +260,34 @@ class Cart extends React.Component {
                   <p>Rp. {this.subTotalPrice().toLocaleString()}</p>
                 </div>
                 <div className="d-flex flex-row my-2 justify-content-between align-items center">
+                  <p className="font-weight-bold">Shipping Price</p>
+                  <p>Rp. {this.state.shippingPrice.toLocaleString()}</p>
+                </div>
+                <div className="d-flex flex-row my-2 justify-content-between align-items center">
                   <p className="font-weight-bold">TOTAL PRICE</p>
                   <p>Rp. {this.state.totalPrice.toLocaleString()}</p>
                 </div>
               </div>
             </div>
-            <div className="d-flex flex-row justify-content-center">
-                <button onClick={this.cancelButton} className="btn btn-cancel my-2">Cancel</button>
-            </div>
+            {
+                this.state.addressLocation ?
+                <>
 
-            <div className="card-header text-center">
+                <div className="d-flex flex-row justify-content-between">
+                    <button onClick={this.cancelButton} className="btn btn-cancel my-2">Cancel</button>
+                    <button className="btn btn-payment my-2">Continue to Payment</button>
+                </div>
+                <div className="d-flex flex-row mt-2 mb-5 justify-content-between align-items center">
+                    <p className="centered-text" >Your products will be delivered from our <u><b>{this.state.selected_warehouse_name}</b></u> warehouse.</p>
+                </div>
+                </>
+                :
+                <p style={{color:"red"}}>Please input address first in profile page before continue.</p>
+            }
+
+
+
+            <div className="mt-5 card-header text-center">
                 <h4>
                   <strong>Recipient</strong>
                 </h4>
@@ -207,21 +300,49 @@ class Cart extends React.Component {
                 <div className="d-flex flex-row my-2 justify-content-between align-items center">
                   <p className="font-weight-bold">Full Name</p>
                   {
-                     this.props.userGlobal.fullName === "" ?
+                     this.props.userGlobal.fullname === "" ?
                      <p>-</p> 
                      :
-                     <p>{this.props.userGlobal.fullName}</p>
+                     <p>{this.props.userGlobal.fullname}</p>
                   }
 
                 </div>
-                <div className="d-flex flex-row my-2 justify-content-between align-items center">
-                  <p className="font-weight-bold">Address</p>
-                  <p>{this.state.addressLocation.user_address}</p>
-                </div>
+                {
+                    this.state.addressLocation ?
+                    <>
+                        <div className="d-flex flex-row my-2 justify-content-between align-items center">
+                            <p className="font-weight-bold">Address</p>
+                        </div>
+                        <div className="d-flex flex-row my-2 justify-content-between align-items center">
+                            <p>{this.state.addressLocation.user_address}</p>
+                        </div>
+                        <div className="d-flex flex-row my-2 justify-content-between align-items center">
+                            <p className="font-weight-bold">Map</p>
+                        </div>
+                        <div className="d-flex flex-row my-2 justify-content-between align-items center">
+                            <Map
+                                google={this.props.google}
+                                zoom={3}
+                                style={mapStyles}
+                                initialCenter={{ 
+                                    lat: -1.2404683671716086,  
+                                    lng: 112.32018875937801
+                                }}
+                                >
+                                <Marker position={{ 
+                                    lat: this.state.lat, 
+                                    lng: this.state.long
+                                    }} 
+                                />
+                            </Map>
+                        </div>
+
+                    </>
+                    :
+                    null
+                }
+                
               </div>
-            </div>
-            <div className="d-flex flex-row justify-content-center">
-                <button onClick={this.cancelButton} className="btn btn-cancel my-2">Cancel</button>
             </div>
 
           </div>
@@ -242,4 +363,9 @@ const mapDispatchToProps = {
     getCartData,
   }
   
-  export default connect(mapStateToProps,mapDispatchToProps)(Cart);
+
+const connector = connect(mapStateToProps, mapDispatchToProps)(Cart);
+
+export default GoogleApiWrapper({
+    apiKey: 'AIzaSyDzMPppyMnGM_KXvislVeOiGAy17Pw6yOM'
+})(connector);

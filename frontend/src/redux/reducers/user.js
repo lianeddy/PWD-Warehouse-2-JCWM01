@@ -1,6 +1,6 @@
 const init_state = {
   username: "",
-  fullName: "",
+  fullname: "",
   email: "",
   auth_status: "",
   user_id: 0,

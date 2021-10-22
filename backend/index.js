@@ -18,7 +18,8 @@ const {
     addUserRouter,
     adminRouter,
     uploaderRouter,
-    cartRouter } = require("./routers"); //hubungin dgn router
+    cartRouter,
+    warehouseRouter } = require("./routers"); //hubungin dgn router
 
 // app.use("/register", addUserRouter);
 app.use("/login", addUserRouter);
@@ -26,6 +27,7 @@ app.use("/products", productsRouter);
 app.use("/admin", adminRouter);
 app.use('/upload', uploaderRouter)
 app.use('/cart', cartRouter)
+app.use('/warehouse', warehouseRouter)
 
 app.listen(port, () => (console.log(`Server running in port ${port}`)));
 //running nya pakai npx nodemon index.js
