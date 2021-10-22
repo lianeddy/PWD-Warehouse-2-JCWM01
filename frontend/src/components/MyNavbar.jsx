@@ -34,10 +34,6 @@ class MyNavbar extends React.Component{
         this.props.searchProduct(this.state)
     }
 
-    componentDidMount(){
-        this.props.getCartID(this.props.userGlobal.user_id)
-    }
-
     render(){
         return(
 
@@ -46,7 +42,7 @@ class MyNavbar extends React.Component{
                    <img src={logo} alt="home" className="navbar-logo"/>
                 </Link>
                 <div>
-                    cart id: {this.props.userGlobal.cart_id}
+                    
                 </div>
                 {/* search bar */}
                 {

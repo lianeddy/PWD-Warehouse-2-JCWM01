@@ -24,6 +24,8 @@ const reducer = (state = init_state, action) => {
         return {...state, storageIsChecked:true}
     case "CART_ID":
       return { ...state, ...action.payload };
+    case "ADDRESS_LOCATION":
+      return { ...state, ...action.payload };
     default:
         return state;
   }

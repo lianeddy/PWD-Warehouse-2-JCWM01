@@ -3,7 +3,8 @@ import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 
 import {connect} from 'react-redux';
-import {userKeepLogin,checkStorage} from './redux/actions/user';
+import {userKeepLogin,checkStorage,getCartID} from './redux/actions/user';
+import {getCartData} from './redux/actions/cart';
 
 import Register from "./pages/register";
 import Login from "./pages/login";
@@ -12,20 +13,26 @@ import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
+import Cart from './pages/Cart'
 
 class App extends React.Component {
   
   componentDidMount(){
-    const userLocalStorage = localStorage.getItem("userDataEmmerce")
-    if (userLocalStorage){
-      //karena tadi dijadiin string, jadiin object lagi
+      const userLocalStorage = localStorage.getItem("userDataEmmerce")
       const userData = JSON.parse(userLocalStorage)
-      this.props.userKeepLogin(userData);
-      console.log(userData.username)
-
-    } else {
-      this.props.checkStorage();
-    }
+  
+      if (userData){
+        this.props.userKeepLogin(userData);
+        this.props.getCartData(userData.user_id)
+        console.log(userData.username)
+  
+        if(userData.auth_status==="user"){
+          this.props.getCartID(userData);
+        }
+  
+      } else {
+        this.props.checkStorage();
+      }
   }
 
   render(){
@@ -44,6 +51,7 @@ class App extends React.Component {
               <Route component={Register} path="/register" />
               <Route component={ProductDetail} path="/products/:product_id" />
               <Route component={Products} path="/products" />
+              <Route component={Cart} path="/cart" />
               <Route component={LandingPage} path="/" />
             
             </Switch>
@@ -63,12 +71,15 @@ class App extends React.Component {
 const mapStateToProps =(state)=> {
   return{
     userGlobal: state.user,
+    cartGlobal: state.cart,
   }
 };
 
 const mapDispatchToProps = {
   userKeepLogin,
   checkStorage,
+  getCartID,
+  getCartData,
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);

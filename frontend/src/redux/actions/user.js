@@ -85,9 +85,9 @@ export const userKeepLogin = (data) => {
   }
 }
 
-export const getCartID = (user_id) => {
+export const getCartID = (data) => {
   return (dispatch) => {
-    Axios.get(`${API_URL}/cart/id?user_id=${user_id}`)
+    Axios.get(`${API_URL}/cart/id?user_id=${data.user_id}`)
     .then((res) => {
       dispatch({
         type: "CART_ID",
