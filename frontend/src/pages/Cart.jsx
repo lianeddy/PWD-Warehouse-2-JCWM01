@@ -23,12 +23,12 @@ class Cart extends React.Component {
     long:0,
     distance:0,
     warehouseData:[],
-    selected_warehouse_id:0,
-    selected_warehouse_name:"",
-    selected_warehouse_distance:0,
+    warehouseList:[],
 
     shippingPrice:18000,
     totalPrice:0,
+
+    transactions_id:0,
   }
 
   fetchCartList = () => {
@@ -45,7 +45,6 @@ class Cart extends React.Component {
     Axios.get(`${API_URL}/warehouse`)
     .then((res)=> {
         this.setState({warehouseData:res.data})
-        console.log(this.state.warehouseData)
     })
     .catch((err)=>{
         alert(err)
@@ -58,7 +57,8 @@ class Cart extends React.Component {
             this.setState({addressLocation:res.data[0]})
             const sep = res.data[0].user_location.split(",")
             this.setState({lat:parseFloat(sep[0]),long:parseFloat(sep[1])})
-            this.distanceToWarehouse(this.state.lat,this.state.long)
+            this.findDistance()
+            this.createRequestStock()
     })
     .catch((err)=>{
         alert("address not found!")
@@ -77,55 +77,84 @@ class Cart extends React.Component {
     this.setState({totalPrice: this.subTotalPrice()+this.state.shippingPrice})
   }
 
+  createTransaction = () => {
+    Axios.post(`${API_URL}/transaction/add`,{
+      user_id: this.props.userGlobal.user_id,
+      cartList: this.state.cartList
+    })
+    .then((res)=> {
+        console.log(res.data[0].transactions_id)
+        this.setState({transactions_id:res.data[0].transactions_id})
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
   checkoutButton = () => {
     this.setState({isCheckout: true})
     this.fnTotalPrice()
+    this.createTransaction()
     this.fetchAdressLocation()
   }
 
-  distanceToWarehouse = (lat,long) => {
-    let distance = 0
-
-    console.log(this.state.warehouseData)
+  findDistance = () => {
+    var warehouseList = []
     this.state.warehouseData.map((val)=>{
-        if(val.warehouse_location!=="superadmin"){
-            let warehouseLoc = val.warehouse_location.split(",")
+      if(val.warehouse_name!=="superadmin"){
+        let warehouseLoc = val.warehouse_location.split(",")
 
-            if(distance===0){
-                let current_distance = getDistance(
-                    { latitude: lat, longitude: long },
-                    { latitude: parseFloat(warehouseLoc[0]), longitude:parseFloat(warehouseLoc[1]) }
-                )
-                distance = current_distance
-                this.setState({
-                    selected_warehouse_id: val.warehouse_id,
-                    selected_warehouse_name: val.warehouse_name,
-                    selected_warehouse_location: val.warehouse_location,
-                })
-            }
-            else{
-                let current_distance = getDistance(
-                    { latitude: lat, longitude: long },
-                    { latitude: parseFloat(warehouseLoc[0]), longitude:parseFloat(warehouseLoc[1]) }
-                )
-                if (distance>current_distance) {
-                    distance = current_distance
-                    this.setState({
-                        selected_warehouse_id: val.warehouse_id,
-                        selected_warehouse_name: val.warehouse_name,
-                        selected_warehouse_location: val.warehouse_location,
-                    })
-                }
-
-            }
-
-        }
+        let distance = getDistance(
+          { latitude: this.state.lat, longitude: this.state.long },
+          { latitude: parseFloat(warehouseLoc[0]), longitude:parseFloat(warehouseLoc[1]) }
+        )
+        warehouseList.push({
+          warehouse_id: val.warehouse_id,
+          warehouse_name: val.warehouse_name,
+          warehouse_location: val.warehouse_location,
+          warehouse_distance: distance,
+        })
+      }
     })
 
+    warehouseList.sort((a,b) => {
+      if(a.warehouse_distance<b.warehouse_distance){
+          return -1
+      } else if(a.warehouse_distance<b.warehouse_distance){
+          return 1
+      }
+    })
+    
+    this.setState({warehouseList: warehouseList})
+  }
+
+  createRequestStock = () => {
+    Axios.post(`${API_URL}/transaction/request`,{
+      transactions_id: this.state.transactions_id,
+      warehouseList: this.state.warehouseList,
+      cartList: this.state.cartList
+    })
+    .then((res)=> {
+        // console.log(res.data[0].transactions_id)
+        // this.setState({transactions_id:res.data[0].transactions_id})
+    })
+    .catch((err)=>{
+        alert(err)
+    })
   }
 
   cancelButton = () => {
-    this.setState({isCheckout: false})
+    Axios.post(`${API_URL}/transaction/cancel?transactions_id=${this.state.transactions_id}`,{
+      cartList:this.state.cartList,
+      warehouseList:this.state.warehouseList
+    })
+    .then((res)=> {
+        console.log(`transaction ${this.state.transactions_id} cancelled by user`)
+        this.setState({isCheckout: false,transactions_id:0})
+    })
+    .catch((err)=>{
+        alert(err)
+    })
   }
 
   renderProducts = ()=>{
@@ -182,7 +211,6 @@ class Cart extends React.Component {
     this.setState({cartList: this.props.cartGlobal.cartList})
     this.fetchCartList()
     this.fetchWarehouseData()
-    
   }
 
   render(){
@@ -278,7 +306,12 @@ class Cart extends React.Component {
                     <button className="btn btn-payment my-2">Continue to Payment</button>
                 </div>
                 <div className="d-flex flex-row mt-2 mb-5 justify-content-between align-items center">
-                    <p className="centered-text" >Your products will be delivered from our <u><b>{this.state.selected_warehouse_name}</b></u> warehouse.</p>
+                  {
+                    this.state.warehouseList[0]?
+                    <p className="centered-text" >Your products will be delivered from our <u><b>{this.state.warehouseList[0].warehouse_name}</b></u> warehouse.</p>
+                    : null
+                  }
+                    
                 </div>
                 </>
                 :

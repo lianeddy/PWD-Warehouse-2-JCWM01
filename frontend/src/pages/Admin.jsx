@@ -203,7 +203,7 @@ class Admin extends React.Component {
   }
 
   showProducts = (val) =>{
-    const confirmEdit = window.confirm("You will show this product from user. Continue?")
+    const confirmEdit = window.confirm("You will show this product to user. Continue?")
     if(confirmEdit) {
       Axios.patch(`${API_URL}/admin/show-product?product_id=${val.product_id}`)
       .then((result) => {
