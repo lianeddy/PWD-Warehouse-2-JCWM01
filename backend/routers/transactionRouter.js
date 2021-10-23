@@ -6,4 +6,6 @@ router.post('/add',transactionController.addTransaction)
 router.post('/cancel',transactionController.cancelTransaction)
 router.post('/request',transactionController.createRequestStock)
 
+router.post('/continue',transactionController.continuePayment)
+
 module.exports = router

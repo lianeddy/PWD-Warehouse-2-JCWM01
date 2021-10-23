@@ -2,6 +2,7 @@ import React from 'react';
 import "../assets/styles/cart.css"
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
+import {Link,Redirect} from 'react-router-dom'
 import {connect} from 'react-redux';
 import {getCartData} from '../redux/actions/cart';
 
@@ -29,6 +30,8 @@ class Cart extends React.Component {
     totalPrice:0,
 
     transactions_id:0,
+
+    redirect:false,
   }
 
   fetchCartList = () => {
@@ -157,7 +160,26 @@ class Cart extends React.Component {
     })
   }
 
+  paymentHandler = () => {
+    console.log(this.state.transactions_id)
+    Axios.post(`${API_URL}/transaction/continue?transactions_id=${this.state.transactions_id}&cart_id=${this.props.userGlobal.cart_id}`,{
+      cartList:this.state.cartList,
+      warehouseList:this.state.warehouseList
+    })
+    .then((res)=> {
+        console.log(`transaction ${this.state.transactions_id} will be paid by user`)
+        this.setState({isCheckout: false,transactions_id:0}, this.setState({redirect:true}))
+
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
   renderProducts = ()=>{
+    if(this.state.redirect){
+      return <Redirect to="/payment" />
+    }
     return this.state.cartList.map((val) =>{
       const totalPrice = val.price_sell*val.quantity
         return(
@@ -303,7 +325,7 @@ class Cart extends React.Component {
 
                 <div className="d-flex flex-row justify-content-between">
                     <button onClick={this.cancelButton} className="btn btn-cancel my-2">Cancel</button>
-                    <button className="btn btn-payment my-2">Continue to Payment</button>
+                    <button onClick={this.paymentHandler} className="btn btn-payment my-2">Continue to Payment</button>
                 </div>
                 <div className="d-flex flex-row mt-2 mb-5 justify-content-between align-items center">
                   {

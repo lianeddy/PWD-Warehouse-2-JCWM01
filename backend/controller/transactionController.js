@@ -8,7 +8,7 @@ module.exports = {
         let currentTime = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 
         //update transactions table
-        let createQuery = `insert into fp_pwd_5.transactions values (null, ${db.escape(currentTime)}, ${db.escape(request.body.user_id)}, ${db.escape(default_status)}, null);`
+        let createQuery = `insert into fp_pwd_5.transactions values (null, ${db.escape(currentTime)}, ${db.escape(request.body.user_id)}, ${db.escape(default_status)}, null, null);`
 
         db.query(createQuery, (err, result)=> {
             if (err) {
@@ -83,11 +83,9 @@ module.exports = {
                             and size = ${db.escape(val.size)}; `
     
                             cartQuery = cartQuery + changeQuery
-                            console.log("cartQuery",cartQuery)
 
                             db.query(cartQuery, (err, result)=> {
                                 if (err) {
-                                    console.log("cartQuery",cartQuery)
                                     return response.status(500).send(err)
                                 } else {
                                     // return response.status(200).send(result)
@@ -115,7 +113,74 @@ module.exports = {
         })
 
     },
+    continuePayment: (request,response) => {
+        //warehouse_stock dengan transaction_id itu harusnya disamain sama user_stock
+        let cartList = request.body.cartList
+        let warehouseList = request.body.warehouseList
+
+        let cartQuery = ``
+        cartList.map((val)=>{
+            for(i=0;i<warehouseList.length;i++){
+                
+                let current_warehouse_id = warehouseList[i].warehouse_id
+
+                let searchQuery = `select user_stock from fp_pwd_5.warehouse_stock 
+                where warehouse_id= ${db.escape(current_warehouse_id)} 
+                and product_id = ${db.escape(val.product_id)}
+                and size = ${db.escape(val.size)};`
+
+                db.query(searchQuery, (err, result)=> {
+                    if (err) {
+                        return response.status(500).send(err)
+                    } else {
+                        if(result[0]){
+                            let user_stock = result[0].user_stock
+    
+                            let changeQuery = `update fp_pwd_5.warehouse_stock set warehouse_stock = ${db.escape(user_stock)}
+                            where warehouse_id= ${db.escape(current_warehouse_id)} 
+                            and product_id = ${db.escape(val.product_id)}
+                            and size = ${db.escape(val.size)}; `
+    
+                            cartQuery = cartQuery + changeQuery
+
+                            db.query(cartQuery, (err, result)=> {
+                                if (err) {
+                                    return response.status(500).send(err)
+                                } else {
+                                    // return response.status(200).send(result)
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+        //cart clear
+        console.log("transactions_id",request.query.transactions_id)
+        let deleteQuery = `delete from fp_pwd_5.cart_items where cart_id = ${db.escape(request.query.cart_id)};`
+
+        db.query(deleteQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                //status berubah jadi waiting_payment
+                const default_status = "waiting_payment"
+                let updateQuery = `update fp_pwd_5.transactions set transaction_status = ${db.escape(default_status)} where transactions_id = ${db.escape(request.query.transactions_id)}`
+
+                db.query(updateQuery, (err, result)=> {
+                    if (err) {
+                        return response.status(500).send(err)
+                    } else {
+                        return response.status(200).send(result)
+                    }
+                })
+            }
+        })
+
+    },
     createRequestStock: (request,response) => {
+
         let cartList = []
         let warehouseList = []
 
@@ -123,7 +188,14 @@ module.exports = {
         warehouseList = request.body.warehouseList
         transactions_id = request.body.transactions_id
 
-        console.log("transactions_id",request.body.transactions_id)
+        let warehouseQuery = `update fp_pwd_5.transactions set warehouse_id = ${db.escape(warehouseList[0].warehouse_id)} where transactions_id = ${db.escape(request.body.transactions_id)} `
+        db.query(warehouseQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                // return response.status(200).send(result)
+            }
+        })
 
         cartList.map((val)=>{
             let i = 0
