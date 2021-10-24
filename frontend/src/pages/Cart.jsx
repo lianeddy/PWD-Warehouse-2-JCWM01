@@ -32,6 +32,7 @@ class Cart extends React.Component {
     transactions_id:0,
 
     redirect:false,
+    redirectNonUser:false,
   }
 
   fetchCartList = () => {
@@ -229,13 +230,21 @@ class Cart extends React.Component {
   }
 
   componentDidMount(){
-    this.props.getCartData(this.props.userGlobal.user_id)
-    this.setState({cartList: this.props.cartGlobal.cartList})
-    this.fetchCartList()
-    this.fetchWarehouseData()
+    if(this.props.userGlobal.auth_status==="user"){
+      this.props.getCartData(this.props.userGlobal.user_id)
+      this.setState({cartList: this.props.cartGlobal.cartList})
+      this.fetchCartList()
+      this.fetchWarehouseData()
+    }else{
+      this.setState({redirectNonUser:true})
+    }
+
   }
 
   render(){
+    if(this.state.redirectNonUser){
+      return <Redirect to="/" />
+    }
     return(
       <div className="p-5 cart-container">
         {

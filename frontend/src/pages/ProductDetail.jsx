@@ -24,6 +24,10 @@ class ProductDetail extends React.Component {
     cart_id:0
   }
 
+  alertHandler = () => {
+    alert("Please login/register to start shopping!")
+  }
+
   inputHandler = (event) => {
     const value = event.target.value;
     const name = event.target.name;
@@ -232,9 +236,19 @@ class ProductDetail extends React.Component {
                   }
 
                 </div>
-                <button onClick={this.addToCartHandler} className="btn btn-sm btn-dark mt-3 col-6">
-                    <p>Add to cart</p>
-                </button>
+                {/* klo bukan user gabisa add to cart, keluarnya alert */}
+                {
+                  this.props.userGlobal.auth_status==="user"?
+                  <button onClick={this.addToCartHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                      <p>Add to cart</p>
+                  </button>
+                  :
+                  <button onClick={this.alertHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                      <p>Add to cart</p>
+                  </button>
+
+                }
+
               </>
             }
 

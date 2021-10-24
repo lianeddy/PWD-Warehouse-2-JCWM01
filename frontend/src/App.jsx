@@ -15,6 +15,7 @@ import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
 import Cart from './pages/Cart'
 import Payment from './pages/Payment'
+import Sales from './pages/SalesReport'
 
 class App extends React.Component {
   
@@ -54,6 +55,7 @@ class App extends React.Component {
               <Route component={Products} path="/products" />
               <Route component={Cart} path="/cart" />
               <Route component={Payment} path="/payment" />
+              <Route component={Sales} path="/sales" />
               <Route component={LandingPage} path="/" />
             
             </Switch>

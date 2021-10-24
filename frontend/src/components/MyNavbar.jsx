@@ -108,12 +108,17 @@ class MyNavbar extends React.Component{
                                     {
                                         this.props.userGlobal.auth_status === "superadmin" ?
                                         <>
-                                            <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin</h4></Link></DropdownItem>
-                                            <DropdownItem><Link to="/superadmin" className="button-link" ><h4>Super Admin</h4></Link></DropdownItem>
+                                            <DropdownItem><Link to="/sales" className="button-link" ><h4>Sales Report</h4></Link></DropdownItem>
+                                            <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin Page</h4></Link></DropdownItem>
+                                            <DropdownItem><Link to="/superadmin" className="button-link" ><h4>Superadmin Page</h4></Link></DropdownItem>
                                         </>
                                         :
                                         this.props.userGlobal.auth_status === "admin" ?
-                                        <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin</h4></Link></DropdownItem>
+                                        <>
+                                            <DropdownItem><Link to="/sales" className="button-link" ><h4>Sales Report</h4></Link></DropdownItem>
+                                            <DropdownItem><Link to="/admin" className="button-link" ><h4>Admin Page</h4></Link></DropdownItem>
+
+                                        </>
                                         :
                                         null
                                     }

@@ -133,11 +133,11 @@ class Products extends React.Component {
   }
 
   nextPageHandler = () => {
-    this.setState({page: this.state.page + 1}, this.fetchproducts)
+    this.setState({page: this.state.page + 1}, this.fetchFilteredProducts)
   }
 
   prevPageHandler = () => {
-    this.setState({page: this.state.page - 1}, this.fetchproducts)
+    this.setState({page: this.state.page - 1}, this.fetchFilteredProducts)
   }
 
   renderProducts = () => {

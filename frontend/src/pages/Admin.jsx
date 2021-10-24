@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductCard from '../components/ProductCard'
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
 import "../assets/styles/admin.css"
@@ -26,6 +25,8 @@ class Admin extends React.Component {
 
     edit_stock_id:0,
     editStock:0,
+
+    transactionData: [],
   }
 
   fetchAdminData = () => {
@@ -33,7 +34,6 @@ class Admin extends React.Component {
     .then((result) => {
       this.setState({adminData: result.data[0]})
       this.selectWarehouse()
-    
     })
     .catch((err)=>{
       alert(err)
@@ -45,7 +45,26 @@ class Admin extends React.Component {
       
       this.setState({selectedWarehouse:this.state.adminData.warehouse_id})
       this.fetchAdminProduct()
+      this.fetchTransactions()
     }
+  }
+
+  fetchTransactions = () => {
+    let warehouse_id = 0
+    if(this.state.adminData.auth_status==="admin"){
+      warehouse_id = this.state.adminData.warehouse_id
+    } else { 
+      warehouse_id = this.state.selectedWarehouse
+    }
+
+    Axios.get(`${API_URL}/admin/transaction?warehouse_id=${warehouse_id}`)
+    .then((result) => {
+      this.setState({transactionData: result.data})
+    
+    })
+    .catch((err)=>{
+      alert(err)
+    })
   }
 
   fetchAdminProduct = () => {
@@ -105,7 +124,7 @@ class Admin extends React.Component {
   warehouseHandler = (event) => {
     const value = event.target.value;
 
-    this.setState({selectedWarehouse : value},this.fetchAdminProduct)
+    this.setState({selectedWarehouse : value},this.fetchTransactions,this.fetchAdminProduct)
     this.setState({page : 1})
 
   }
@@ -312,6 +331,19 @@ class Admin extends React.Component {
     })
   }
 
+  renderTransactions = () => {
+    console.log("this.state.transactionData",this.state.transactionData)
+    return this.state.transactionData.map((val) =>{
+        <tr>
+            <td>{val.time}</td>
+            <td>{val.transactions_id}</td>
+            <td>{val.transactions_status}</td>
+            <td>{val.warehouse_name}</td>
+            <td>{val.username}</td>
+        </tr>
+    })
+  }
+
   refreshPage = ()=>{
     window.location.reload();
   }
@@ -370,6 +402,7 @@ class Admin extends React.Component {
   componentDidMount = () => {
     if(this.props.userGlobal.auth_status==="superadmin"){
       this.fetchAdminProduct()
+      this.fetchTransactions()
     }
     this.fetchAdminData()
     this.fetchWarehouseList()
@@ -383,7 +416,7 @@ class Admin extends React.Component {
           {
             this.props.userGlobal.auth_status==="superadmin"?
             <>
-              <h3>You are a {this.props.userGlobal.auth_status}.</h3>
+              <h3>You are a <u><b>{this.props.userGlobal.auth_status}</b></u>.</h3>
               <div className="mt-3 col-4 d-flex flex-row justify-content-start align-items-center">
                 <p className="me-2" >Please select a warehouse</p>
                 <select onChange={this.warehouseHandler} name="selectedWarehouse" className="form-control filter-style">
@@ -393,7 +426,7 @@ class Admin extends React.Component {
 
             </>
             :
-            <h3>You are an {this.props.userGlobal.auth_status} of warehouse: {this.state.adminData.warehouse_name}.</h3>
+            <h3>You are an {this.props.userGlobal.auth_status} of warehouse: <u><b>{this.state.adminData.warehouse_name}</b></u>.</h3>
           }
           
 
@@ -403,7 +436,6 @@ class Admin extends React.Component {
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="revenue">Warehouse Revenue</button>
             </div>
             <div className="d-flex justify-content-start align-items-center">
               {
@@ -490,13 +522,25 @@ class Admin extends React.Component {
                 </>
                 :
                 this.state.menu==="history"?
-                <h2>HISTORY TABLE</h2>
+                <div className="mt-3">
+                  <table className="table">
+                      <thead className="table-light">
+                          <tr>
+                              <th>Date</th>
+                              <th>Transaction ID</th>
+                              <th>Transaction Status</th>
+                              <th>Warehouse Name</th>
+                              <th>Username</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {this.renderTransactions()}
+                      </tbody>
+                  </table>
+                </div>
                 :
                 this.state.menu==="requests"?
                 <h2>STOCK REQUESTS TABLE</h2>
-                :
-                this.state.menu==="revenue"?
-                <h2>WAREHOUSE REVENUE TABLE</h2>
                 :
                 null
               }
