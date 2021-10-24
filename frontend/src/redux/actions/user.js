@@ -43,13 +43,14 @@ export const loginUser = (data) => {
       password: data.password,
     })
       .then((res) => {
-        delete res.data[0].password;
-        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
-        // console.log(res.data[0]);
+        console.log(`res datalogin is ${res.data.dataLogin}`)
+        delete res.data.dataLogin.password;
+        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data.token))
+        console.log(res.data.dataLogin);
 
         dispatch({
           type: "USER_LOGIN",
-          payload: res.data[0],
+          payload: res.data.dataLogin,
         });
       })
       .catch((err) => {
