@@ -13,7 +13,7 @@ import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
 import userProfile from './pages/userProfile';
-import editProfile from './pages/editProfile';
+import editAddress from './pages/editAddress';
 import VerificationPage from './pages/verification';
 import resetPass from './pages/resetPass';
 
@@ -49,9 +49,9 @@ class App extends React.Component {
               <Route component={ProductDetail} path="/products/:product_id" />
               <Route component={Products} path="/products" />
               <Route component={userProfile} path="/profile" />
-              <Route component={editProfile} path="/profile-edit" />
+              <Route component={editAddress} path="/editAddress" />
+              <Route component={resetPass} path="/resetPassword" />
               <Route component={VerificationPage} path="/auth/:token" />
-              <Route component={resetPass} path="/resetPass" />
               <Route component={LandingPage} path="/" />
               
             

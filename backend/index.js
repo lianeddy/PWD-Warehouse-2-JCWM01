@@ -30,8 +30,8 @@ app.use("/admin", adminRouter);
 app.use("/upload", uploaderRouter);
 app.use("/products", productsRouter);
 app.use("/verification", verificationRouter)
-app.use("/profile-edit", editUserRouter)
-app.use("/resetP", resetRouter)
+app.use("/editAddress", editUserRouter)
+app.use("/resetPass", resetRouter)
 
 app.listen(port, () => `Server running in port ${port}`);
 //running nya pakai npx nodemon index.js

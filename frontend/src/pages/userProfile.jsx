@@ -21,6 +21,10 @@ class UserProfile extends React.Component {
     
     render() {
 
+        if (this.props.userGlobal.username == null){
+            return <Redirect to="/"/>
+        }
+        
         // const { redirect } = this.state;
         // if(redirect) {
         //     return <Redirect to="/"/>
@@ -47,7 +51,8 @@ class UserProfile extends React.Component {
                 </div>
             </div>
             <div className="footer">
-                <Link to="/profile-edit">Modify</Link>
+                <Link to="/editAddress">Modify Address</Link>
+                <Link to="/resetPassword">Modify Password</Link>
             </div>
         </div>
     }

@@ -7,6 +7,7 @@ import "../assets/styles/loginRegister.css"
 
 class ResetPass extends React.Component {
     state = {
+    user_id:this.props.userGlobal.user_id,
     password:"",
     confirmPassword:"",
     state:"email",
@@ -21,13 +22,12 @@ class ResetPass extends React.Component {
         const value = event.target.value;
         const name = event.target.name;
         this.setState({ [name]: value })
-        console.log(this.state)
     }
 
     render() {
-        // if (this.props.userGlobal.username){
-        //     return <Redirect to="/"/>
-        // }
+         if (this.props.userGlobal.user_id === null){
+             return <Redirect to="/"/>
+         }
         
         const { redirect } = this.state;
         if(redirect) {
@@ -55,7 +55,7 @@ class ResetPass extends React.Component {
                 </div>
                 </div>
                 <div className="footer">
-                    <button type="submit" onClick={()=>{this.props.resetPass(this.state)}} className="btn btn-login">Confirm Reset Password
+                    <button type="submit" onClick={()=>{this.props.resetPass(this.state) ; this.redirectHandler()}} className="btn btn-login">Confirm Reset Password
                     </button>
                     </div>
             </div>

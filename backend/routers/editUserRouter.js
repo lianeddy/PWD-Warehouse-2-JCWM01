@@ -2,6 +2,6 @@ const express = require("express");
 const { userController } = require("../controller");
 const router = express.Router();
 
-router.post("/", userController.editProfile);
+router.post("/", userController.editAddress);
 
 module.exports = router;

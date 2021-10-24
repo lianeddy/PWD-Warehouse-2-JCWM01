@@ -107,10 +107,10 @@ module.exports = {
         })
     },
 
-    editProfile: (req,res) => {
-        let { user_id, address, default_address } = req.body
-        console.log(`${req.body}`)
-        let insertQuery = `INSERT into address (user_id, user_address, default_address) values (${db.escape(user_id)},${db.escape(address)},${db.escape(default_address)});`
+    editAddress: (req,res) => {
+        let { user_id, address, user_location, default_address } = req.body
+        console.log(req.body)
+        let insertQuery = `INSERT into address (user_id, user_address, user_location, default_address) values (${db.escape(user_id)},${db.escape(address)},${db.escape(user_location)},${db.escape(default_address)});`
         db.query(insertQuery, (err, result) => {
             console.log(`editing ${insertQuery} is running`)
             if (err) {
@@ -135,11 +135,11 @@ module.exports = {
     },
 
     patchPassword: (req,res) => {
-        let { password, email } = req.body;
+        let { password, email, user_id } = req.body;
         console.log(`req.body detected at ${req.body}`)
         req.body.password = Crypto.createHmac("sha1", "hash123").update(req.body.password).digest("hex");
         const findEmail = `SELECT * FROM user WHERE email = ${db.escape(req.body.email)}`
-        const editPassword = `UPDATE user SET password = ${db.escape(req.body.password)} WHERE email = ${db.escape(req.body.email)}`;        
+        const editPassword = `UPDATE user SET password = ${db.escape(req.body.password)} WHERE user_id = ${db.escape(req.body.user_id)}`;        
         db.query(findEmail, (err)=>{
             if (err) { 
                 return res.status(500).send(err);

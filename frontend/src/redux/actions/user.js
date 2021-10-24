@@ -60,19 +60,21 @@ export const loginUser = (data) => {
   };
 };
 
-export const modifyUserData = (data) => {
+export const modifyUserAddress = (data) => {
   return (dispatch) => {
     console.log(`Delivering changes to ${data.user_id}`)
-    Axios.post(API_URL + "/profile-edit/", {
+    Axios.post(API_URL + "/editAddress/", {
       user_id: data.user_id,
       username: data.username,
       email: data.email,
-      address: data.defAddress,
+      user_location: data.coordinate,
+      address: data.address,
       default_address: 0
     })
       .then((res) => {
         alert("User Profile updated");
         console.log(res.data);
+        
         dispatch({
           type: "USER_LOGIN",
           payload: res.data[0],
@@ -120,17 +122,19 @@ export const checkStorage = () => {
 export const resetPass = (data) => {
   if(data.password == data.confirmPassword){
   return (dispatch) => {
-    Axios.post(API_URL + "/resetP/", {
+    Axios.post(API_URL + "/resetPass/", {
       password: data.password,
-      email: data.email
+      email: data.email,
+      user_id: data.user_id
     })
       .then((res) => {
-        console.log(`${res.data}`)
+        alert("Succesfully changed password")
 
         dispatch({
           type: "USER_LOGIN",
           payload: res.data.dataLogin,
         });
+
       })
       .catch((err) => {
         alert("Login failed");

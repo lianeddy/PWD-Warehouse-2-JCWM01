@@ -8,6 +8,7 @@ const init_state = {
   errMsg: "",
   searchProduct:"",
   profPic:"",
+  address:"",
   defAddress:"",
   storageIsChecked:false,
 };
