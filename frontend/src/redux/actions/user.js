@@ -60,8 +60,29 @@ export const loginUser = (data) => {
   };
 };
 
-export const modifyUserData = () => {
-  
+export const modifyUserData = (data) => {
+  return (dispatch) => {
+    console.log(`Delivering changes to ${data.user_id}`)
+    Axios.post(API_URL + "/profile-edit/", {
+      user_id: data.user_id,
+      username: data.username,
+      email: data.email,
+      address: data.defAddress,
+      default_address: 0
+    })
+      .then((res) => {
+        alert("User Profile updated");
+        console.log(res.data);
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err) => {
+        alert("User profile update failed");
+        console.log(err);
+      });
+  };
 }
 
 export const logoutUser = () => {

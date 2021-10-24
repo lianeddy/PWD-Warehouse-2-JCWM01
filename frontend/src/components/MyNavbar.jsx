@@ -107,7 +107,7 @@ class MyNavbar extends React.Component{
                                     <h4>Hello, {this.props.userGlobal.username}!</h4>
                                 </DropdownToggle>
                                 <DropdownMenu right>
-                                    <DropdownItem><Link to="/userProfile" className="button-link" ><h4>Profile</h4></Link></DropdownItem>
+                                    <DropdownItem><Link to="/profile" className="button-link" ><h4>Profile</h4></Link></DropdownItem>
                                     {
                                         this.props.userGlobal.auth_status === "superadmin" ?
                                         <>

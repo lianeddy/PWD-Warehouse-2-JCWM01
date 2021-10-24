@@ -26,7 +26,7 @@ class Login extends React.Component {
             return <Redirect to="/"/>
         }
 
-        const { redirect } = this.state;
+        const { redirect } = this.state;    
         if(redirect) {
             return <Redirect to="/"/>
         }

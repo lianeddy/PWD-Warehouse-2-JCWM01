@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import { modifyUserData } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import "../assets/styles/loginRegister.css"
@@ -8,11 +8,16 @@ import "../assets/styles/loginRegister.css"
 class editProfile extends React.Component {
     state = {
         username: '',
-        user_id:'',
+        user_id: this.props.userGlobal.user_id,
         defAddress:'',
         fullname:'',
         email:'',
-        profpic:''
+        profpic:'',
+        redirect: false
+    }
+
+    redirectHandler = () => {
+        this.setState({redirect: true})
     }
 
     inputHandler = (event) => {
@@ -22,6 +27,10 @@ class editProfile extends React.Component {
     }
     
     render() {
+        const { redirect } = this.state;
+        if(redirect) {
+            return <Redirect to="/"/>
+        }
 
         return <div className="base-container">
             <div className="header">User Profile</div>
@@ -36,7 +45,7 @@ class editProfile extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="text">Default Address</label>
-                            <input type="text" name="text" onChange={this.inputHandler} placeholder="default addres"></input>                
+                            <input type="text" name="text" onChange={this.inputHandler} placeholder="default address"></input>                
                         </div>
                 <div className='detail'>
                     <label>Your default Address</label>
@@ -44,7 +53,7 @@ class editProfile extends React.Component {
                 </div>
             </div>
             <div className="footer">
-                <Link to>Modify</Link>
+            <button onClick={()=>{this.props.modifyUserData(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Edit Now</button>
             </div>
         </div>
     }

@@ -5,12 +5,12 @@ import "../assets/styles/loginRegister.css"
 
 class UserProfile extends React.Component {
     state = {
-        username: this.userGlobal.state,
-        user_id: this.userGlobal.state,
-        defAddress: this.userGlobal.state,
-        fullname: this.userGlobal.state,
-        email: this.userGlobal.state,
-        profpic:''
+        username: this.props.userGlobal.username,
+        user_id: this.props.userGlobal.user_id,
+        defAddress: this.props.userGlobal.defAddress,
+        fullname: this.props.userGlobal.fullname,
+        email: this.props.userGlobal.email,
+        profpic:this.props.userGlobal.profpic
     }
 
     inputHandler = (event) => {
@@ -29,10 +29,14 @@ class UserProfile extends React.Component {
         return <div className="base-container">
             <div className="header">User Profile</div>
             <div className="content">
+            <div className='detail'>
+                    <label>Your User ID</label>
+                    <div>{this.state.user_id}</div>
+                </div>
                 <div className='detail'>
                     <label>Your Username</label>
                     <div>{this.state.username}</div>
-                </div>
+                </div>  
                 <div className='detail'>
                     <label>Your Email</label>
                     <div>{this.state.email}</div>
@@ -43,7 +47,7 @@ class UserProfile extends React.Component {
                 </div>
             </div>
             <div className="footer">
-                <Link to="/editProfile">Modify</Link>
+                <Link to="/profile-edit">Modify</Link>
             </div>
         </div>
     }
@@ -51,7 +55,7 @@ class UserProfile extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        userGlobal,
+        userGlobal:state.user,
     }
 }
 

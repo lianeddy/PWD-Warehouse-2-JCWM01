@@ -80,7 +80,7 @@ module.exports = {
 
     loginUser: (req,res) => {
         let { username, password } = req.body;
-        console.log(`req.body is set at ${req.body}`)
+        console.log(`logging in into${req.body.username} account'`)
         req.body.password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
         let scriptQuery = `SELECT * FROM user WHERE username = ${db.escape(req.body.username)} AND password = ${db.escape(req.body.password)}`;
         db.query(scriptQuery, (err, result) => {
@@ -88,7 +88,7 @@ module.exports = {
             if (err) {
                 return res.send({err, message: "Wrong username or password"})
             }
-            console.log(`result is ${result[0]}`)
+            console.log(`Creating token for ${result[0].username}`)
             if (result[0]) {  //create token    
                 let { user_id, username, email, verification_status } = result[0]
                 console.log(`result[0] is set for ${result[0].username}`)
@@ -103,6 +103,18 @@ module.exports = {
                 }
             } else {
                 console.log(`result[0] is ${result[0]}`)
+            }
+        })
+    },
+
+    editProfile: (req,res) => {
+        let { user_id, address, default_address } = req.body
+        console.log(`${req.body}`)
+        let insertQuery = `INSERT into address (user_id, user_address, default_address) values (${db.escape(user_id)},${db.escape(address)},${db.escape(default_address)});`
+        db.query(insertQuery, (err, result) => {
+            console.log(`editing ${insertQuery} is running`)
+            if (err) {
+                return res.send({err, message: "Wrong input"})
             }
         })
     },

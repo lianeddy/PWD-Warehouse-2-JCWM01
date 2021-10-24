@@ -1,4 +1,5 @@
 const init_state = {
+  user_id:"",
   username: "",
   fullName: "",
   email: "",
@@ -6,6 +7,8 @@ const init_state = {
   id: 0,
   errMsg: "",
   searchProduct:"",
+  profPic:"",
+  defAddress:"",
   storageIsChecked:false,
 };
 

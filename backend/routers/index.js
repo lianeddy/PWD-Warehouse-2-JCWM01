@@ -5,5 +5,6 @@ const productsRouter = require('./productsRouter')
 const adminRouter = require('./adminRouter')
 const uploaderRouter  = require('./uploaderRouter')
 const verificationRouter = require('./verificationRouter')
+const editUserRouter = require('./editUserRouter')
 
-module.exports = { verificationRouter,  keepLoginRouter, loginRouter, registerRouter, productsRouter, adminRouter, uploaderRouter }
+module.exports = { verificationRouter, editUserRouter, keepLoginRouter, loginRouter, registerRouter, productsRouter, adminRouter, uploaderRouter }
