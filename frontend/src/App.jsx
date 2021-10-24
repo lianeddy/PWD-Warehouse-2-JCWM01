@@ -16,6 +16,7 @@ import userProfile from './pages/userProfile';
 import editAddress from './pages/editAddress';
 import VerificationPage from './pages/verification';
 import resetPass from './pages/resetPass';
+import setDefAddress from './pages/setDefAddress'
 
 class App extends React.Component {
   
@@ -50,6 +51,7 @@ class App extends React.Component {
               <Route component={Products} path="/products" />
               <Route component={userProfile} path="/profile" />
               <Route component={editAddress} path="/editAddress" />
+              <Route component={setDefAddress} path="/setDefAddress" />
               <Route component={resetPass} path="/resetPassword" />
               <Route component={VerificationPage} path="/auth/:token" />
               <Route component={LandingPage} path="/" />

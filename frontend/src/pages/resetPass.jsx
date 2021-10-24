@@ -11,7 +11,8 @@ class ResetPass extends React.Component {
     password:"",
     confirmPassword:"",
     state:"email",
-    redirect: false
+    redirect: false,
+    redirectNonUser: false,
     } 
 
     redirectHandler = () => {
@@ -24,10 +25,19 @@ class ResetPass extends React.Component {
         this.setState({ [name]: value })
     }
 
+    componentDidMount() {
+        if(this.props.userGlobal.auth_status==="user"){
+            console.log("authorized")
+        } else {
+            this.setState({redirectNonUser: true})
+        }
+    }
+
     render() {
-         if (this.props.userGlobal.user_id === null){
-             return <Redirect to="/"/>
-         }
+        const { redirectNonUser } = this.state;
+        if(redirectNonUser) {
+            return <Redirect to="/"/>
+        }
         
         const { redirect } = this.state;
         if(redirect) {

@@ -63,7 +63,7 @@ export const loginUser = (data) => {
 export const modifyUserAddress = (data) => {
   return (dispatch) => {
     console.log(`Delivering changes to ${data.user_id}`)
-    Axios.post(API_URL + "/editAddress/", {
+    Axios.post(API_URL + "/editAddress/add", {
       user_id: data.user_id,
       username: data.username,
       email: data.email,
@@ -77,7 +77,7 @@ export const modifyUserAddress = (data) => {
         
         dispatch({
           type: "USER_LOGIN",
-          payload: res.data[0],
+          payload: res.data,
         });
       })
       .catch((err) => {
@@ -85,6 +85,28 @@ export const modifyUserAddress = (data) => {
         console.log(err);
       });
   };
+}
+
+export const setDefaultAddress = (data) => {
+  return (dispatch) => {
+    Axios.post(API_URL + `/setDefault/`, {
+    user_id: data.user_id,
+    address: data.address,
+    })
+    .then((res)=>{
+      alert("User Profile updated");
+      console.log(res.data);
+      
+      dispatch({
+        type: "USER_LOGIN",
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      alert("User profile update failed");
+      console.log(err);
+    });
+  }
 }
 
 export const logoutUser = () => {
@@ -101,6 +123,23 @@ export const userKeepLogin = (data) => {
       .then((res) => {
         delete res.data[0].password;
         localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
+
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err)=>{
+          alert(err)
+      })
+  }
+}
+
+export const getAddress = (data) => {
+  return (dispatch) =>{
+      Axios.get(API_URL + `/getAddress?username=${data.username}`)
+      .then((res) => {
+        delete res.data[0].password;
 
         dispatch({
           type: "USER_LOGIN",

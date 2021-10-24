@@ -1,4 +1,6 @@
 import React from 'react';
+import Axios from 'react';
+import { API_URL } from "../constants/API";
 import {Redirect, Link} from 'react-router-dom'
 import { connect } from "react-redux";
 import "../assets/styles/loginRegister.css"
@@ -7,7 +9,8 @@ class UserProfile extends React.Component {
     state = {
         username: this.props.userGlobal.username,
         user_id: this.props.userGlobal.user_id,
-        defAddress: this.props.userGlobal.defAddress,
+        defAddress: "",
+        address: this.props.userGlobal.address,
         fullname: this.props.userGlobal.fullname,
         email: this.props.userGlobal.email,
         profpic:this.props.userGlobal.profpic
@@ -49,9 +52,14 @@ class UserProfile extends React.Component {
                     <label>Your default Address</label>
                     <div>{this.state.defAddress}</div>
                 </div>
+                <div className='detail'>
+                    <label>Your address</label>
+                    <div>{this.state.address}</div>
+                </div>
             </div>
             <div className="footer">
                 <Link to="/editAddress">Modify Address</Link>
+                <Link to="/setDefAddress">Set Default Address</Link>
                 <Link to="/resetPassword">Modify Password</Link>
             </div>
         </div>

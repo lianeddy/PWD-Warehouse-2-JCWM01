@@ -22,9 +22,6 @@ class Login extends React.Component {
     }
 
     render() {
-        if (this.props.userGlobal.username){
-            return <Redirect to="/"/>
-        }
 
         const { redirect } = this.state;    
         if(redirect) {

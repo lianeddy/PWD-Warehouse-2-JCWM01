@@ -19,8 +19,9 @@ const {
   adminRouter,
   uploaderRouter,
   verificationRouter,
-  editUserRouter,
+  editAddressRouter,
   resetRouter,
+  setDefaultAddressRouter,
 } = require("./routers"); //hubungin dgn router
 
 //hubungin routernya juga
@@ -30,8 +31,9 @@ app.use("/admin", adminRouter);
 app.use("/upload", uploaderRouter);
 app.use("/products", productsRouter);
 app.use("/verification", verificationRouter)
-app.use("/editAddress", editUserRouter)
+app.use("/editAddress", editAddressRouter)
 app.use("/resetPass", resetRouter)
+app.use("/setDefault", setDefaultAddressRouter)
 
 app.listen(port, () => `Server running in port ${port}`);
 //running nya pakai npx nodemon index.js

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Redirect, Link} from 'react-router-dom'
-import { modifyUserAddress } from "../redux/actions/user";  
+import {Redirect} from 'react-router-dom'
+import { setDefaultAddress } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import "../assets/styles/loginRegister.css"
 
@@ -49,24 +49,18 @@ class editProfile extends React.Component {
         }
 
         return <div className="base-container">
-                <div className="header">User Profile</div>
+                <div className="header">Set Default Address</div>
                         <div className="content">
                             <div className="form-group">
                                     <div className="form-group">
-                                        <label htmlFor="text">Address</label>
+                                        <label htmlFor="text">Please enter one of your current stored address</label>
                                         <input type="text" name="address" onChange={this.inputHandler} placeholder="Address"></input>                
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="text">Location Coordinate</label>
-                                        <input type="text" name="coordinate" onChange={this.inputHandler} placeholder="Coordinate"></input>                
-                                    </div>
                             <div className='detail'>
-                                <label>Your default Address</label>
-                                <div>{this.state.defAddress}</div>
                         </div>
                     </div>
                     <div className="footer">
-                    <button onClick={()=>{this.props.modifyUserAddress(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Edit Now</button>
+                    <button onClick={()=>{this.props.setDefaultAddress(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Edit Now</button>
                 </div>
                 </div>
         </div>
@@ -80,7 +74,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    modifyUserAddress,
+    setDefaultAddress,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(editProfile);

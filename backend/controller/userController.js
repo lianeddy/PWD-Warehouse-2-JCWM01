@@ -109,10 +109,16 @@ module.exports = {
 
     editAddress: (req,res) => {
         let { user_id, address, user_location, default_address } = req.body
-        console.log(req.body)
+        //console.log(req.body)
         let insertQuery = `INSERT into address (user_id, user_address, user_location, default_address) values (${db.escape(user_id)},${db.escape(address)},${db.escape(user_location)},${db.escape(default_address)});`
         db.query(insertQuery, (err, result) => {
-            console.log(`editing ${insertQuery} is running`)
+            console.log(result)
+                if(result) {
+                    db.query(`SELECT user_address FROM address WHERE user_id = ${db.escape(user_id)};`, (err2, results2) => {
+                        if (err2) return res.status(500).send(err2)
+                        return res.status(200).send({ message: 'Change Address', data: results2 })
+                    })
+                }
             if (err) {
                 return res.send({err, message: "Wrong input"})
             }
@@ -121,6 +127,21 @@ module.exports = {
     
     keepLogin: (req,res) => {
         db.query(`SELECT * FROM user WHERE username = ${db.escape(req.query.username)}`,
+        (err, result) => {
+            if (err) {
+                res.send(err)
+            }
+            if (result.length > 0) {
+                res.send(result)
+            } else {
+                res.send({ message: "Wrong username or password" })
+            }
+            
+        })
+    },
+
+    getAllAddress: (req,res) => {
+        db.query(`SELECT * FROM address WHERE user_id = ${db.escape(req.query.user_id)}`,
         (err, result) => {
             if (err) {
                 res.send(err)
@@ -150,6 +171,20 @@ module.exports = {
                 })
             }
         })
+    },
+
+    setDefault: (req,res) => {
+        let { user_id, address } = req.body;
+        //console.log(req.body)
+        const patchQuery = `UPDATE address SET default_address = 1 WHERE user_id = ${db.escape(req.body.user_id)} AND user_address = ${db.escape(req.body.address)}`;        
+        db.query(patchQuery, (err, result)=>{
+             if (result) {
+                  return res.status(200).send("Address default set");
+                } else {
+                    return res.status(500).send(err);
+                }
+            }
+        )
     }
     
 }
