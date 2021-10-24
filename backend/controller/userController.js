@@ -81,7 +81,7 @@ module.exports = {
     loginUser: (req,res) => {
         let { username, password } = req.body;
         console.log(`req.body is set at ${req.body}`)
-        password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
+        req.body.password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
         let scriptQuery = `SELECT * FROM user WHERE username = ${db.escape(req.body.username)} AND password = ${db.escape(req.body.password)}`;
         db.query(scriptQuery, (err, result) => {
             console.log(`${scriptQuery} is running`)
