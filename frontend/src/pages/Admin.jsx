@@ -340,6 +340,9 @@ class Admin extends React.Component {
             <td>{val.transaction_status}</td>
             <td>{val.warehouse_name}</td>
             <td>{val.username}</td>
+            <td>
+              <button>See Details</button>
+            </td>
         </tr>
       )
     })
@@ -534,6 +537,7 @@ class Admin extends React.Component {
                               <th>Transaction Status</th>
                               <th>Warehouse Name</th>
                               <th>Username</th>
+                              <th>Action</th>
                           </tr>
                       </thead>
                       <tbody>
