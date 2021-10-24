@@ -13,6 +13,7 @@ import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
 import VerificationPage from './pages/verification';
+import resetPass from './pages/resetPass';
 
 class App extends React.Component {
   
@@ -46,7 +47,9 @@ class App extends React.Component {
               <Route component={ProductDetail} path="/products/:product_id" />
               <Route component={Products} path="/products" />
               <Route component={VerificationPage} path="/auth/:token" />
+              <Route component={resetPass} path="/resetPass" />
               <Route component={LandingPage} path="/" />
+              
             
             </Switch>
           </BrowserRouter>

@@ -91,3 +91,30 @@ export const checkStorage = () => {
       type: "CHECK_STORAGE"
   }
 }
+
+export const resetPass = (data) => {
+  if(data.password !== data.confirmPassword){
+  return (dispatch) => {
+    Axios.post(API_URL + "/resetP/", {
+      password: data.password,
+    })
+      .then((res) => {
+        console.log(`res datalogin is ${res.data.dataLogin}`)
+        //delete res.data.dataLogin.password;
+        //localStorage.setItem("userDataEmmerce",JSON.stringify(res.data.token))
+        //console.log(res.data.dataLogin);
+
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data.dataLogin,
+        });
+      })
+      .catch((err) => {
+        alert("Login failed");
+        console.log(err);
+      });
+  };
+} else {
+  alert("Password does not match or invalid email")
+}
+}
