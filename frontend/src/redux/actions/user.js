@@ -12,7 +12,7 @@ export const searchProduct = (searchProduct) => {
 
 export const confirmRegBtn = (data) => {
   return (dispatch) => {
-    Axios.post(API_URL + "/register/add-user", {
+    Axios.post(API_URL + "/register/", {
       username: data.username,
       email: data.email,
       password: data.password,
@@ -38,18 +38,19 @@ export const confirmRegBtn = (data) => {
 
 export const loginUser = (data) => {
   return (dispatch) => {
-    Axios.post(API_URL + "/login/get-user", {
+    Axios.post(API_URL + "/login/", {
       username: data.username,
       password: data.password,
     })
       .then((res) => {
-        delete res.data[0].password;
-        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
-        // console.log(res.data[0]);
+        console.log(`res datalogin is ${res.data.dataLogin}`)
+        delete res.data.dataLogin.password;
+        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data.token))
+        console.log(res.data.dataLogin);
 
         dispatch({
           type: "USER_LOGIN",
-          payload: res.data[0],
+          payload: res.data.dataLogin,
         });
       })
       .catch((err) => {
@@ -69,7 +70,7 @@ export const logoutUser = () => {
 //ambil data dari local storage supaya login terus, nitip dulu ya soalnya kerefresh terus pas coba upload data
 export const userKeepLogin = (data) => {
   return (dispatch) =>{
-      Axios.get(API_URL + `/login/keeplogin?username=${data.username}`)
+      Axios.get(API_URL + `/keeplogin?username=${data.username}`)
       .then((res) => {
         delete res.data[0].password;
         localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
