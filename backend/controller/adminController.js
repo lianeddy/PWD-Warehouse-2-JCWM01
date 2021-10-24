@@ -147,8 +147,6 @@ module.exports = {
         })
     },
     salesReport: (request,response) => {
-        
-        console.log("request.query.warehouse_id",request.query.warehouse_id)
 
         if(request.query.warehouse_id){
             let scriptQuery = `SELECT t.transactions_id, t.transaction_status, t.time, t.warehouse_id,
@@ -193,8 +191,6 @@ module.exports = {
 
     },
     getTransactionHistory: (request,response) => {
-        
-        console.log("request.query.warehouse_id",request.query.warehouse_id)
 
         if(request.query.warehouse_id){
             let scriptQuery = `SELECT t.transactions_id, t.transaction_status, t.time, t.user_id, 
@@ -226,5 +222,28 @@ module.exports = {
 
         }     
 
+    },
+    getTransactionItems: (request,response) => {
+        let scriptQuery = `SELECT t.transactions_id, t.transaction_status, t.time, t.warehouse_id, t.payment_proof,
+        w.warehouse_name,
+        p.product_name, p.product_image, p.price_buy, ti.size, ti.quantity, ti.transaction_price,
+        u.user_id, u.username
+        FROM fp_pwd_5.transaction_items ti join fp_pwd_5.transactions t 
+        join fp_pwd_5.products p join fp_pwd_5.user u join fp_pwd_5.warehouse w
+        on t.transactions_id = ti.transactions_id 
+        and p.product_id = ti.product_id
+        and t.user_id = u.user_id
+        and t.warehouse_id = w.warehouse_id
+        where t.transactions_id = ${db.escape(request.query.transactions_id)}
+        order by time;`
+
+        db.query(scriptQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+                
+            }
+        })
     },
 }

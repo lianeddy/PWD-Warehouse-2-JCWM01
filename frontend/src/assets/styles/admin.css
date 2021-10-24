@@ -4,6 +4,12 @@
     object-fit: contain;
 }
 
+.detail-transaction-image{
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
 .admin-page {
     margin-top: 120px;
     padding: 0vw 3vw 0vw 3vw;

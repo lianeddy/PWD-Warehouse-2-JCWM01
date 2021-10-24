@@ -27,6 +27,8 @@ class Admin extends React.Component {
     editStock:0,
 
     transactionData: [],
+    see_detail_id:0,
+    detailTransactions:[],
   }
 
   fetchAdminData = () => {
@@ -126,6 +128,7 @@ class Admin extends React.Component {
 
     this.setState({selectedWarehouse : value},this.fetchTransactions,this.fetchAdminProduct)
     this.setState({page : 1})
+    this.setState({see_detail_id:0})
 
   }
 
@@ -331,21 +334,58 @@ class Admin extends React.Component {
     })
   }
 
+  seeDetailHandler = (val) => {
+    this.setState({see_detail_id: val.transactions_id}, this.fetchTransactionItems)
+
+  }
+
   renderTransactions = () => {
     return this.state.transactionData.map((val) =>{
       return(
         <tr>
             <td>{val.time.slice(0,10)}</td>
             <td>{val.time.slice(11,19)}</td>
-            <td>{val.transaction_status}</td>
+            <td>{val.transaction_status} id: {val.transactions_id}</td>
             <td>{val.warehouse_name}</td>
             <td>{val.username}</td>
             <td>
-              <button>See Details</button>
+              <button onClick={()=>this.seeDetailHandler(val)} >See Details</button>
             </td>
         </tr>
       )
     })
+  }
+
+  fetchTransactionItems = () => {
+    console.log(this.state.see_detail_id)
+    Axios.get(`${API_URL}/admin/transaction-items?transactions_id=${this.state.see_detail_id}`)
+    .then((result) => {
+      this.setState({detailTransactions: result.data})
+      console.log(result.data)
+    
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+  }
+
+  renderTransactionItems = () =>{
+    return this.state.detailTransactions.map((val)=>{
+      return(
+        <tr>
+          <td>{val.product_name}</td>
+          <td><img src={API_URL + '/public' + val.product_image} className="detail-transaction-image" alt={val.product_name}/></td>
+          <td>{val.size.toUpperCase()}</td>
+          <td>{val.quantity}</td>
+          <td>Rp. {val.transaction_price.toLocaleString()}</td>
+          <td>Rp. {(val.quantity*val.transaction_price).toLocaleString()}</td>
+        </tr>
+      )
+    })
+  }
+
+  closeDetailHandler = () => {
+    this.setState({see_detail_id:0})
   }
 
   refreshPage = ()=>{
@@ -527,23 +567,69 @@ class Admin extends React.Component {
                 </>
                 :
                 this.state.menu==="history"?
-                <div className="mt-3">
-                  <h3>Transaction History</h3>
-                  <table className="table">
-                      <thead className="table-light">
-                          <tr>
-                              <th>Date</th>
-                              <th>Time</th>
-                              <th>Transaction Status</th>
-                              <th>Warehouse Name</th>
-                              <th>Username</th>
-                              <th>Action</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {this.renderTransactions()}
-                      </tbody>
-                  </table>
+                <div className="d-flex flex-direction-column justify-content-between align-items-start col-12">
+                  
+                  {
+                    this.state.see_detail_id !==0 ?
+                    <>
+                    <div className="mt-3 col-6">
+                      <h3>Transaction History</h3>
+                      <table className="table">
+                          <thead className="table-light">
+                              <tr>
+                                  <th>Date</th>
+                                  <th>Time</th>
+                                  <th>Transaction Status</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Username</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {this.renderTransactions()}
+                          </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-3 col-5">
+                      <h3>Transaction Details</h3>
+                      <table className="table">
+                        <thead className="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Product Image</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {this.renderTransactionItems()}
+                        </tbody>
+                      </table>
+                      <button onClick={this.closeDetailHandler} className="btn btn-cancel">Close</button>
+                    </div>
+                    </>
+                    :
+                    <div className="mt-3 col-10">
+                      <h3>Transaction History</h3>
+                      <table className="table">
+                          <thead className="table-light">
+                              <tr>
+                                  <th>Date</th>
+                                  <th>Time</th>
+                                  <th>Transaction Status</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Username</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {this.renderTransactions()}
+                          </tbody>
+                      </table>
+                    </div>
+                  }
                 </div>
                 :
                 this.state.menu==="requests"?

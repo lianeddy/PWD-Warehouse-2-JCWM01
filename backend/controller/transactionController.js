@@ -157,7 +157,6 @@ module.exports = {
         })
 
         //cart clear
-        console.log("transactions_id",request.query.transactions_id)
         let deleteQuery = `delete from fp_pwd_5.cart_items where cart_id = ${db.escape(request.query.cart_id)};`
 
         db.query(deleteQuery, (err, result)=> {
