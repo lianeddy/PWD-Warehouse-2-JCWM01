@@ -93,16 +93,14 @@ export const checkStorage = () => {
 }
 
 export const resetPass = (data) => {
-  if(data.password !== data.confirmPassword){
+  if(data.password == data.confirmPassword){
   return (dispatch) => {
     Axios.post(API_URL + "/resetP/", {
       password: data.password,
+      email: data.email
     })
       .then((res) => {
-        console.log(`res datalogin is ${res.data.dataLogin}`)
-        //delete res.data.dataLogin.password;
-        //localStorage.setItem("userDataEmmerce",JSON.stringify(res.data.token))
-        //console.log(res.data.dataLogin);
+        console.log(`${res.data}`)
 
         dispatch({
           type: "USER_LOGIN",
