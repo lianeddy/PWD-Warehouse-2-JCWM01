@@ -12,6 +12,8 @@ import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
+import userProfile from './pages/userProfile';
+import editProfile from './pages/editProfile';
 import VerificationPage from './pages/verification';
 
 class App extends React.Component {
@@ -45,6 +47,8 @@ class App extends React.Component {
               <Route component={Register} path="/register" />
               <Route component={ProductDetail} path="/products/:product_id" />
               <Route component={Products} path="/products" />
+              <Route component={userProfile} path="/profile" />
+              <Route component={editProfile} path="/profile-edit" />
               <Route component={VerificationPage} path="/auth/:token" />
               <Route component={LandingPage} path="/" />
             

@@ -60,6 +60,10 @@ export const loginUser = (data) => {
   };
 };
 
+export const modifyUserData = () => {
+  
+}
+
 export const logoutUser = () => {
   localStorage.removeItem("userDataEmmerce");
   return {

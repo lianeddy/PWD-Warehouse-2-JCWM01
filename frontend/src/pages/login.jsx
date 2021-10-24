@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import "../assets/styles/loginRegister.css"
 
-
 class Login extends React.Component {
     state = {
     username: "",
@@ -32,7 +31,7 @@ class Login extends React.Component {
             return <Redirect to="/"/>
         }
         
-        return <div className=".base-container" ref={this.props.containerRef}>
+        return <div className="base-container" ref={this.props.containerRef}>
                 
                 <div className="content">
                 <div className="header">LOGIN</div>
