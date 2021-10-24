@@ -133,5 +133,24 @@ module.exports = {
             
         })
     },
+
+    patchPassword: (req,res) => {
+        let { password, email } = req.body;
+        console.log(`req.body detected at ${req.body}`)
+        req.body.password = Crypto.createHmac("sha1", "hash123").update(req.body.password).digest("hex");
+        const findEmail = `SELECT * FROM user WHERE email = ${db.escape(req.body.email)}`
+        const editPassword = `UPDATE user SET password = ${db.escape(req.body.password)} WHERE email = ${db.escape(req.body.email)}`;        
+        db.query(findEmail, (err)=>{
+            if (err) { 
+                return res.status(500).send(err);
+            } if (req.body.email) {
+                db.query(editPassword, (err) => {
+                  if (err) return res.status(500).send(err);
+                  return res.status(200).send("password changed");
+                })
+            }
+        })
+    }
+    
 }
 

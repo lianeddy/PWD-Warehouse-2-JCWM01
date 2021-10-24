@@ -20,6 +20,7 @@ const {
   uploaderRouter,
   verificationRouter,
   editUserRouter,
+  resetRouter,
 } = require("./routers"); //hubungin dgn router
 
 //hubungin routernya juga
@@ -30,6 +31,7 @@ app.use("/upload", uploaderRouter);
 app.use("/products", productsRouter);
 app.use("/verification", verificationRouter)
 app.use("/profile-edit", editUserRouter)
+app.use("/resetP", resetRouter)
 
 app.listen(port, () => `Server running in port ${port}`);
 //running nya pakai npx nodemon index.js

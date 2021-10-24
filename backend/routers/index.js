@@ -8,3 +8,6 @@ const verificationRouter = require('./verificationRouter')
 const editUserRouter = require('./editUserRouter')
 
 module.exports = { verificationRouter, editUserRouter, keepLoginRouter, loginRouter, registerRouter, productsRouter, adminRouter, uploaderRouter }
+const resetRouter = require('./resetRouter')
+
+module.exports = { resetRouter, verificationRouter,  keepLoginRouter, loginRouter, registerRouter, productsRouter, adminRouter, uploaderRouter }

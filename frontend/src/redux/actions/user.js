@@ -116,3 +116,28 @@ export const checkStorage = () => {
       type: "CHECK_STORAGE"
   }
 }
+
+export const resetPass = (data) => {
+  if(data.password == data.confirmPassword){
+  return (dispatch) => {
+    Axios.post(API_URL + "/resetP/", {
+      password: data.password,
+      email: data.email
+    })
+      .then((res) => {
+        console.log(`${res.data}`)
+
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data.dataLogin,
+        });
+      })
+      .catch((err) => {
+        alert("Login failed");
+        console.log(err);
+      });
+  };
+} else {
+  alert("Password does not match or invalid email")
+}
+}

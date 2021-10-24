@@ -49,6 +49,7 @@ class Login extends React.Component {
                 </div>
                 <div className="footer">
                     <h6>Don't have Annett's account? Create <Link to="/register">here</Link></h6>
+                    <h6>forget your password? Click <Link to="/resetPass">here</Link></h6>
                     <button onClick={()=>{this.props.loginUser(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Login</button>
                 </div>
             </div>
