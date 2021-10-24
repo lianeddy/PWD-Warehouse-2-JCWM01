@@ -69,27 +69,6 @@ class SalesReport extends React.Component {
                 
             }
 
-            <div className="col-12">
-                <table className="table">
-                    <thead className="table-light">
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Username</th>
-                            <th>Warehouse Name</th>
-                            <th>Product Name</th>
-                            <th>Product Image</th>
-                            <th>Size</th>
-                            <th>Quantity</th>
-                            <th>Buying Price</th>
-                            <th>Selling Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderSalesReport()}
-                    </tbody>
-                </table>
-            </div>
         </div>
      
     )
