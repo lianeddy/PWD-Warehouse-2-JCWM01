@@ -34,19 +34,20 @@ class SalesReport extends React.Component {
     renderSalesReport = () => {
         console.log(this.state.salesData)
         return this.state.salesData.map((val) =>{
-            <tr>
-                <td>{val.time}</td>
-                <td>{val.transactions_id}</td>
-                <td>{val.username}</td>
-                <td>{val.warehouse_name}</td>
-                <td>{val.product_name}</td>
-                <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.product_name}/></td>
-                <td>{val.size}</td>
-                <td>{val.quantity}</td>
-                <td>Rp. {val.price_buy.toLocaleString()}</td>
-                <td>Rp. {val.transaction_price.toLocaleString()}</td>
-                <td>Rp. {(val.quantity*(val.transaction_price-val.price_buy)).toLocaleString()}</td>
-            </tr>
+            return(
+                <tr>
+                    <td>{val.time.slice(0,10)}</td>
+                    <td>{val.time.slice(11,19)}</td>
+                    <td>{val.username}</td>
+                    <td>{val.warehouse_name}</td>
+                    <td>{val.product_name}</td>
+                    <td><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.product_name}/></td>
+                    <td>{val.size.toUpperCase()}</td>
+                    <td>{val.quantity}</td>
+                    <td>Rp. {val.price_buy.toLocaleString()}</td>
+                    <td>Rp. {val.transaction_price.toLocaleString()}</td>
+                </tr>
+            )
         })
     }
 
@@ -73,7 +74,7 @@ class SalesReport extends React.Component {
                     <thead className="table-light">
                         <tr>
                             <th>Date</th>
-                            <th>Transaction ID</th>
+                            <th>Time</th>
                             <th>Username</th>
                             <th>Warehouse Name</th>
                             <th>Product Name</th>
@@ -82,7 +83,6 @@ class SalesReport extends React.Component {
                             <th>Quantity</th>
                             <th>Buying Price</th>
                             <th>Selling Price</th>
-                            <th>Revenue</th>
                         </tr>
                     </thead>
                     <tbody>

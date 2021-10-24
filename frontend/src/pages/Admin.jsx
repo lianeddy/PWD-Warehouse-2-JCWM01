@@ -332,15 +332,16 @@ class Admin extends React.Component {
   }
 
   renderTransactions = () => {
-    console.log("this.state.transactionData",this.state.transactionData)
     return this.state.transactionData.map((val) =>{
+      return(
         <tr>
-            <td>{val.time}</td>
-            <td>{val.transactions_id}</td>
-            <td>{val.transactions_status}</td>
+            <td>{val.time.slice(0,10)}</td>
+            <td>{val.time.slice(11,19)}</td>
+            <td>{val.transaction_status}</td>
             <td>{val.warehouse_name}</td>
             <td>{val.username}</td>
         </tr>
+      )
     })
   }
 
@@ -491,6 +492,7 @@ class Admin extends React.Component {
                 :
                 this.state.menu==="products"?
                 <>
+
                   <div className="col-12">
                     <table className="table">
                       <thead className="table-light">
@@ -523,11 +525,12 @@ class Admin extends React.Component {
                 :
                 this.state.menu==="history"?
                 <div className="mt-3">
+                  <h3>Transaction History</h3>
                   <table className="table">
                       <thead className="table-light">
                           <tr>
                               <th>Date</th>
-                              <th>Transaction ID</th>
+                              <th>Time</th>
                               <th>Transaction Status</th>
                               <th>Warehouse Name</th>
                               <th>Username</th>
