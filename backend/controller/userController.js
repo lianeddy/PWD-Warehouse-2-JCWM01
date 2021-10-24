@@ -89,7 +89,7 @@ module.exports = {
                 return res.send({err, message: "Wrong username or password"})
             }
             console.log(`result is ${result[0]}`)
-            if (result[0]) {  //create token
+            if (result[0]) {  //create token    
                 let { user_id, username, email, verification_status } = result[0]
                 console.log(`result[0] is set for ${result[0].username}`)
                 let token = createToken({ user_id, username, email, verification_status })
