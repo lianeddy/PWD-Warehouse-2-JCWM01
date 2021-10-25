@@ -33,29 +33,25 @@ class UserProfile extends React.Component {
         //     return <Redirect to="/"/>
         // }
 
-        return <div className="base-container">
-            <div className="header">User Profile</div>
+        return <div className=".base-container">
             <div className="content">
-            <div className='detail'>
-                    <label>Your User ID</label>
-                    <div>{this.state.user_id}</div>
+            <div className="header">User Profile</div>
+            <div class="container">
+                <div class="column">
+                    <div class="row">
+                        <div>Your Username: {this.state.username}</div>
+                    </div>
+                    <div class="row">
+                        <div>Your Email: {this.state.email}</div>
+                    </div>
+                    <div class="row">
+                        <div>Your default Address: {this.state.defAddress}</div>
+                    </div>
+                    <div class="row">
+                        <div>Your address: {this.state.address}</div>
+                    </div>
                 </div>
-                <div className='detail'>
-                    <label>Your Username</label>
-                    <div>{this.state.username}</div>
-                </div>  
-                <div className='detail'>
-                    <label>Your Email</label>
-                    <div>{this.state.email}</div>
-                </div>
-                <div className='detail'>
-                    <label>Your default Address</label>
-                    <div>{this.state.defAddress}</div>
-                </div>
-                <div className='detail'>
-                    <label>Your address</label>
-                    <div>{this.state.address}</div>
-                </div>
+            </div>
             </div>
             <div className="footer">
                 <Link to="/editAddress">Modify Address</Link>

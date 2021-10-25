@@ -49,8 +49,8 @@ class editProfile extends React.Component {
         }
 
         return <div className="base-container">
-                <div className="header">Set Default Address</div>
-                        <div className="content">
+                    <div className="content">
+                        <div className="header">Set Default Address</div>
                             <div className="form-group">
                                     <div className="form-group">
                                         <label htmlFor="text">Please enter one of your current stored address</label>

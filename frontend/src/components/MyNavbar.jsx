@@ -91,6 +91,7 @@ class MyNavbar extends React.Component{
                                     <Link to="/login">
                                         <button className="button">Log in</button>
                                     </Link>
+                                    <div>  |  </div>
                                     <Link to="/register">
                                         <button className="button">Register</button>
                                     </Link>

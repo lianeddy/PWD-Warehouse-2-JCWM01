@@ -49,8 +49,8 @@ class editProfile extends React.Component {
         }
 
         return <div className="base-container">
-                <div className="header">User Profile</div>
-                        <div className="content">
+                    <div className="content">
+                        <div className="header">Edit Address</div>
                             <div className="form-group">
                                     <div className="form-group">
                                         <label htmlFor="text">Address</label>
