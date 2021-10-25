@@ -24,7 +24,7 @@
 }
 
 .unselected{
-    color:lightgrey;
+    color:lightgrey !important;
 }
 
 select{

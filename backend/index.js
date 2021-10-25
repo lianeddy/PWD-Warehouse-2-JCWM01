@@ -13,8 +13,8 @@ app.use(bearerToken());
 app.use("/public", express.static("public"));
 
 const {
-  productsRouter, 
-  registerRouter, 
+  productsRouter,
+  registerRouter,
   loginRouter,
   adminRouter,
   uploaderRouter,
@@ -22,18 +22,26 @@ const {
   editAddressRouter,
   resetRouter,
   setDefaultAddressRouter,
+  cartRouter,
+  warehouseRouter,
+  addUserRouter,
+  transactionRouter,
 } = require("./routers"); //hubungin dgn router
 
 //hubungin routernya juga
+app.use("/login", addUserRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/admin", adminRouter);
 app.use("/upload", uploaderRouter);
 app.use("/products", productsRouter);
-app.use("/verification", verificationRouter)
-app.use("/editAddress", editAddressRouter)
-app.use("/resetPass", resetRouter)
-app.use("/setDefault", setDefaultAddressRouter)
+app.use("/verification", verificationRouter);
+app.use("/editAddress", editAddressRouter);
+app.use("/resetPass", resetRouter);
+app.use("/setDefault", setDefaultAddressRouter);
+app.use("/cart", cartRouter);
+app.use("/transaction", transactionRouter);
+app.use("/warehouse", warehouseRouter);
 
 app.listen(port, () => `Server running in port ${port}`);
 //running nya pakai npx nodemon index.js

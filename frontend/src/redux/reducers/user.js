@@ -1,16 +1,17 @@
 const init_state = {
   user_id:"",
   username: "",
-  fullName: "",
+  fullname: "",
   email: "",
   auth_status: "",
-  id: 0,
+  user_id: 0,
   errMsg: "",
   searchProduct:"",
   profPic:"",
   address:"",
   defAddress:"",
   storageIsChecked:false,
+  cart_id: 0,
 };
 
 const reducer = (state = init_state, action) => {
@@ -25,6 +26,10 @@ const reducer = (state = init_state, action) => {
         return {...init_state,storageIsChecked:true};
     case "CHECK_STORAGE":
         return {...state, storageIsChecked:true}
+    case "CART_ID":
+      return { ...state, ...action.payload };
+    case "ADDRESS_LOCATION":
+      return { ...state, ...action.payload };
     default:
         return state;
   }

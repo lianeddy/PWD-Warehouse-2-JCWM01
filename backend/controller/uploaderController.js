@@ -37,7 +37,7 @@ module.exports = {
                 //ini untuk ke table warehouse_stock
                 //ambil dulu product_id nya
                 let scriptQuery = `select product_id from fp_pwd_5.products where product_name = ${db.escape(data.product_name)};`
-                let sizeArray = data.size.split(",") 
+                let sizeArray = data.size.toLowerCase().split(",") 
 
                 let product_id = ""
 

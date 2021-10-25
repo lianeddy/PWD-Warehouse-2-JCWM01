@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductCard from '../components/ProductCard'
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
 import "../assets/styles/admin.css"
@@ -26,6 +25,13 @@ class Admin extends React.Component {
 
     edit_stock_id:0,
     editStock:0,
+
+    transactionData: [],
+    see_detail_id:0,
+    detailTransactions:[],
+    subTotalPrice:0,
+    totalPrice:0,
+    shippingPrice:18000,
   }
 
   fetchAdminData = () => {
@@ -33,7 +39,6 @@ class Admin extends React.Component {
     .then((result) => {
       this.setState({adminData: result.data[0]})
       this.selectWarehouse()
-    
     })
     .catch((err)=>{
       alert(err)
@@ -45,7 +50,26 @@ class Admin extends React.Component {
       
       this.setState({selectedWarehouse:this.state.adminData.warehouse_id})
       this.fetchAdminProduct()
+      this.fetchTransactions()
     }
+  }
+
+  fetchTransactions = () => {
+    let warehouse_id = 0
+    if(this.state.adminData.auth_status==="admin"){
+      warehouse_id = this.state.adminData.warehouse_id
+    } else { 
+      warehouse_id = this.state.selectedWarehouse
+    }
+
+    Axios.get(`${API_URL}/admin/transaction?warehouse_id=${warehouse_id}`)
+    .then((result) => {
+      this.setState({transactionData: result.data})
+    
+    })
+    .catch((err)=>{
+      alert(err)
+    })
   }
 
   fetchAdminProduct = () => {
@@ -105,8 +129,9 @@ class Admin extends React.Component {
   warehouseHandler = (event) => {
     const value = event.target.value;
 
-    this.setState({selectedWarehouse : value},this.fetchAdminProduct)
+    this.setState({selectedWarehouse : value},this.fetchTransactions,this.fetchAdminProduct)
     this.setState({page : 1})
+    this.setState({see_detail_id:0})
 
   }
 
@@ -203,7 +228,7 @@ class Admin extends React.Component {
   }
 
   showProducts = (val) =>{
-    const confirmEdit = window.confirm("You will show this product from user. Continue?")
+    const confirmEdit = window.confirm("You will show this product to user. Continue?")
     if(confirmEdit) {
       Axios.patch(`${API_URL}/admin/show-product?product_id=${val.product_id}`)
       .then((result) => {
@@ -312,6 +337,69 @@ class Admin extends React.Component {
     })
   }
 
+  seeDetailHandler = (val) => {
+    this.setState({see_detail_id: val.transactions_id}, this.fetchTransactionItems)
+
+  }
+
+  renderTransactions = () => {
+    return this.state.transactionData.map((val) =>{
+      return(
+        <tr>
+            <td>{val.time.slice(0,10)}</td>
+            <td>{val.time.slice(11,19)}</td>
+            <td>{val.username}</td>
+            <td>{val.warehouse_name}</td>
+            <td>{val.transaction_status}</td>
+            <td>
+              <button onClick={()=>this.seeDetailHandler(val)} >See Details</button>
+            </td>
+        </tr>
+      )
+    })
+  }
+
+  fetchTransactionItems = () => {
+    console.log(this.state.see_detail_id)
+    Axios.get(`${API_URL}/admin/transaction-items?transactions_id=${this.state.see_detail_id}`)
+    .then((result) => {
+      this.setState({detailTransactions: result.data})
+      console.log(result.data)
+      this.totalPrice()
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+  }
+
+  renderTransactionItems = () =>{
+    return this.state.detailTransactions.map((val)=>{
+      return(
+        <tr>
+          <td>{val.product_name}</td>
+          <td><img src={API_URL + '/public' + val.product_image} className="detail-transaction-image" alt={val.product_name}/></td>
+          <td>{val.size.toUpperCase()}</td>
+          <td>{val.quantity}</td>
+          <td>Rp. {val.transaction_price.toLocaleString()}</td>
+          <td>Rp. {(val.quantity*val.transaction_price).toLocaleString()}</td>
+        </tr>
+      )
+    })
+  }
+
+  totalPrice = () => {
+    let subTotalPrice = 0
+    this.state.detailTransactions.map((val)=> {
+      subTotalPrice = subTotalPrice + val.transaction_price*val.quantity
+    })
+    
+    this.setState({subTotalPrice:subTotalPrice, totalPrice: subTotalPrice+this.state.shippingPrice})
+  }
+
+  closeDetailHandler = () => {
+    this.setState({see_detail_id:0})
+  }
+
   refreshPage = ()=>{
     window.location.reload();
   }
@@ -370,6 +458,7 @@ class Admin extends React.Component {
   componentDidMount = () => {
     if(this.props.userGlobal.auth_status==="superadmin"){
       this.fetchAdminProduct()
+      this.fetchTransactions()
     }
     this.fetchAdminData()
     this.fetchWarehouseList()
@@ -383,7 +472,7 @@ class Admin extends React.Component {
           {
             this.props.userGlobal.auth_status==="superadmin"?
             <>
-              <h3>You are a {this.props.userGlobal.auth_status}.</h3>
+              <h3>You are a <u><b>{this.props.userGlobal.auth_status}</b></u>.</h3>
               <div className="mt-3 col-4 d-flex flex-row justify-content-start align-items-center">
                 <p className="me-2" >Please select a warehouse</p>
                 <select onChange={this.warehouseHandler} name="selectedWarehouse" className="form-control filter-style">
@@ -393,17 +482,16 @@ class Admin extends React.Component {
 
             </>
             :
-            <h3>You are an {this.props.userGlobal.auth_status} of warehouse: {this.state.adminData.warehouse_name}.</h3>
+            <h3>You are an {this.props.userGlobal.auth_status} of warehouse: <u><b>{this.state.adminData.warehouse_name}</b></u>.</h3>
           }
           
 
-          <div className="col-10 mt-3">
+          <div className="col-12 mt-3">
             <div className="d-flex flex-row justify-content-start">
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">User Transaction</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="revenue">Warehouse Revenue</button>
             </div>
             <div className="d-flex justify-content-start align-items-center">
               {
@@ -459,6 +547,7 @@ class Admin extends React.Component {
                 :
                 this.state.menu==="products"?
                 <>
+
                   <div className="col-12">
                     <table className="table">
                       <thead className="table-light">
@@ -490,13 +579,92 @@ class Admin extends React.Component {
                 </>
                 :
                 this.state.menu==="history"?
-                <h2>HISTORY TABLE</h2>
+                <div className="d-flex flex-direction-column justify-content-between align-items-start col-12">
+                  
+                  {
+                    this.state.see_detail_id !==0 ?
+                    <>
+                    <div className="mt-3 col-6">
+                      <h3>USER TRANSACTION HISTORY</h3>
+                      <table className="table">
+                          <thead className="table-light">
+                              <tr>
+                                  <th>Date</th>
+                                  <th>Time</th>
+                                  <th>Username</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Transaction Status</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {this.renderTransactions()}
+                          </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-3 col-5">
+                      <h3>Transaction Details</h3>
+                      <table className="table">
+                        <thead className="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Product Image</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {this.renderTransactionItems()}
+                        </tbody>
+                      </table>
+                      <div className="col-12 d-flex flex-column justify-content-end align-items-end">
+                        <div className="col-12 d-flex flex-row justify-content-between">
+                          <div className="col-6"></div>
+                          <div className="col-6 d-flex flex-column justify-content-between">
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <p className="font-weight-bold">Subtotal Price</p>
+                              <p>Rp. {this.state.subTotalPrice.toLocaleString()}</p>
+                            </div>
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <p className="font-weight-bold">Shipping Price</p>
+                              <p>Rp. {this.state.shippingPrice.toLocaleString()}</p>
+                            </div>
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <h3 className="font-weight-bold">TOTAL PRICE</h3>
+                              <p>Rp. {this.state.totalPrice.toLocaleString()}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <button onClick={this.closeDetailHandler} className="mt-2 btn btn-cancel col-2">Close</button>
+                      </div>
+                    </div>
+                    </>
+                    :
+                    <div className="mt-3 col-6">
+                      <h3>USER TRANSACTION HISTORY</h3>
+                      <table className="table">
+                          <thead className="table-light">
+                              <tr>
+                                  <th>Date</th>
+                                  <th>Time</th>
+                                  <th>Username</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Transaction Status</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {this.renderTransactions()}
+                          </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
                 :
                 this.state.menu==="requests"?
                 <h2>STOCK REQUESTS TABLE</h2>
-                :
-                this.state.menu==="revenue"?
-                <h2>WAREHOUSE REVENUE TABLE</h2>
                 :
                 null
               }
