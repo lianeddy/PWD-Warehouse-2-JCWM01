@@ -120,6 +120,19 @@ module.exports = {
             res.status(500).send(err)
         }
     },
+
+    getAlbum: (req,res)  => {
+        let {user_id} =req.body;
+        let sqlGet =`SELECT * from user where user_id = ${db.escape(user_id)}`
+        db.query(sqlGet, (err, result) =>{
+            if(err) {
+                return res.status(500).send(err)
+            } else {
+                return res.status(200).send(result)
+            }
+        })
+    },
+
     addProfPic: (req, res) => {
         try { //ini promise kayak then
             let path = '/images'

@@ -80,7 +80,7 @@ module.exports = {
 
     loginUser: (req,res) => {
         let { username, password } = req.body;
-        console.log(`logging in into${req.body.username} account'`)
+        console.log(`logging in into ${req.body.username} account'`)
         req.body.password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
         let scriptQuery = `SELECT * FROM user WHERE username = ${db.escape(req.body.username)} AND password = ${db.escape(req.body.password)}`;
         db.query(scriptQuery, (err, result) => {
@@ -88,10 +88,10 @@ module.exports = {
             if (err) {
                 return res.send({err, message: "Wrong username or password"})
             }
-            console.log(`Creating token for ${result[0].username}`)
+            //console.log(`Creating token for ${result[0].username}`)
             if (result[0]) {  //create token    
                 let { user_id, username, email, verification_status } = result[0]
-                console.log(`result[0] is set for ${result[0].username}`)
+                //console.log(`result[0] is set for ${result[0].username}`)
                 let token = createToken({ user_id, username, email, verification_status })
                 console.log("Create Token successful")
                 if(verification_status !== "verified") {
@@ -185,6 +185,18 @@ module.exports = {
     },
     
     getAddress: (req,response) => {
+        let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 0 and user_id = ${db.escape(req.query.user_id)};`
+        db.query(scriptQuery, (err, res) => {
+            if (err) {
+                return response.send(err)
+            } else {
+                return response.status(200).send(res)
+            }
+            
+        })
+    },
+
+    getDefaultAddress: (req,response) => {
         let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 1 and user_id = ${db.escape(req.query.user_id)};`
         db.query(scriptQuery, (err, res) => {
             if (err) {

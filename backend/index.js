@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(bearerToken());
 app.use("/public", express.static("public"));
+app.use(express.static('public'))
 
 const {
   productsRouter,
