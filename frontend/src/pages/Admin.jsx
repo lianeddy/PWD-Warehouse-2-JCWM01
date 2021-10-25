@@ -73,6 +73,7 @@ class Admin extends React.Component {
   }
 
   fetchAdminProduct = () => {
+    console.log(this.state.selectedWarehouse)
     Axios.get(`${API_URL}/admin/product-list?page=${this.state.page-1}&product_name=${this.props.userGlobal.searchProduct}&warehouse_id=${this.state.selectedWarehouse}`)
     .then((result) => {
       this.setState({productList: result.data}, this.fetchMaxPage())
@@ -129,11 +130,16 @@ class Admin extends React.Component {
   warehouseHandler = (event) => {
     const value = event.target.value;
 
-    this.setState({selectedWarehouse : value},this.fetchTransactions,this.fetchAdminProduct)
+    this.setState({selectedWarehouse : value},this.fetchForSuperadmin)
     this.setState({page : 1})
     this.setState({see_detail_id:0})
 
   }
+
+  fetchForSuperadmin = () => {
+    this.fetchTransactions();
+    this.fetchAdminProduct();
+  };
 
   editProducts = (val) =>{
     this.setState({edit_id:val.warehouse_stock_id})
@@ -487,6 +493,7 @@ class Admin extends React.Component {
           
 
           <div className="col-12 mt-3">
+            <h3>{this.state.selectedWarehouse}</h3>
             <div className="d-flex flex-row justify-content-start">
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
