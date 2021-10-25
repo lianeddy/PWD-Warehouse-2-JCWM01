@@ -18,9 +18,20 @@ class UserProfile extends React.Component {
         datAlbum: [],
     }
 
-    // componentDidMount() {
-    //     this.getDataAlbum() 
-    // }
+    componentDidMount() {
+        this.getAddress() 
+    }
+
+    getAddress = () => {
+        Axios.get(API_URL + `/keeplogin/address?user_id=${this.props.userGlobal.user_id}`)
+        .then((res) => {
+           this.setState({address:res.data[0]})
+           console.log(this.state.address)
+        })
+        .catch((err) => {
+            alert(err);
+        });
+    }
 
     // getDataAlbum = () => {
     //     Axios.get(API_URL + '/album/get')
@@ -93,7 +104,7 @@ class UserProfile extends React.Component {
                                     <label htmlFor="title">Title</label>
                                     <input type="text" className="form-control" id="title"  aria-describedby="emailHelp" ref={elemen => this.inputTitle = elemen} />
                                 </div>
-                                <img src={API_URL + '/public/images/IMG1635143785016.jpg'} className="admin-product-image"/>
+                                {/* <img src={API_URL + '/public/images/IMG1635143785016.jpg'} className="admin-product-image"/> */}
                                 <div className="form-group">
                                     <label htmlFor="img">Image</label>
                                     <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.onBtAddFile} ref={elemen => this.inputImage = elemen} />
@@ -109,10 +120,10 @@ class UserProfile extends React.Component {
                         <div readonly className="form-control-plaintext">Your Email: {this.state.email}</div>
                     </div>
                     <div class="row">
-                        <div readonly className="form-control-plaintext">Your default Address: {this.state.defAddress}</div>
+                        <div readonly className="form-control-plaintext">Your default Address: {this.state.address.user_address}</div>
                     </div>
                     <div class="row">
-                        <div readonly className="form-control-plaintext">Your address: {this.state.address}</div>
+                        <div readonly className="form-control-plaintext">Your address: {this.state.address.user_address}</div>
                     </div>
                 </div>
             </div>
@@ -132,9 +143,5 @@ const mapStateToProps = (state) => {
         userGlobal:state.user,
     }
 }
-
-// const mapDispatchToProps = {
-//     loginUser,
-// }
 
 export default connect(mapStateToProps)(UserProfile);
