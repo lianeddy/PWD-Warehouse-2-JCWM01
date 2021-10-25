@@ -4,6 +4,6 @@ const { uploaderController } = require('../controller/index') //hubungin dengan 
 
 router.post('/add-product',uploaderController.addProduct)
 router.patch('/edit-image',uploaderController.editImage)
-
+router.post('/add-profile-picture',uploaderController.addProfPic)
 
 module.exports = router
