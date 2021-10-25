@@ -53,7 +53,7 @@ export const loginUser = (data) => {
       .then((res) => {
         console.log(`res datalogin is ${res.data.dataLogin}`);
         delete res.data.dataLogin.password;
-        localStorage.setItem("userDataEmmerce", JSON.stringify(res.data.token));
+        localStorage.setItem("userDataEmmerce", res.data.token);
         console.log(res.data.dataLogin);
 
         dispatch({
@@ -128,10 +128,16 @@ export const logoutUser = () => {
 //ambil data dari local storage supaya login terus, nitip dulu ya soalnya kerefresh terus pas coba upload data
 export const userKeepLogin = (data) => {
   return (dispatch) => {
-    Axios.get(API_URL + `/keeplogin?username=${data.username}`)
+    console.log(data)
+    Axios.get(API_URL + `/keeplogin/keeplogin`, {
+      headers: {
+        "Authorization": `Bearer ${data}`
+      }
+    })
       .then((res) => {
-        delete res.data[0].password;
-        localStorage.setItem("userDataEmmerce", JSON.stringify(res.data[0]));
+        console.log(res)
+        // delete res.data[0].password;
+        // localStorage.setItem("userDataEmmerce", JSON.stringify(res.data[0]));
 
         dispatch({
           type: "USER_LOGIN",

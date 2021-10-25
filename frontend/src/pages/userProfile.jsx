@@ -18,19 +18,19 @@ class UserProfile extends React.Component {
         datAlbum: [],
     }
 
-    componentDidMount() {
-        this.getDataAlbum() 
-    }
+    // componentDidMount() {
+    //     this.getDataAlbum() 
+    // }
 
-    getDataAlbum = () => {
-        Axios.get(API_URL + '/album/get')
-            .then(res => {
-                this.setState({ datAlbum: res.data })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+    // getDataAlbum = () => {
+    //     Axios.get(API_URL + '/album/get')
+    //         .then(res => {
+    //             this.setState({ datAlbum: res.data })
+    //         })
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // }
 
     inputHandler = (event) => {
         const value = event.target.value;
@@ -51,7 +51,7 @@ class UserProfile extends React.Component {
             formData.append('file', this.state.addFile);
             Axios.post(`${API_URL}/upload/add-profile-picture`,formData)
                 .then(res => {
-                    this.getDataAlbum()
+                    // this.getDataAlbum()
                     alert(res.data.message)
                 })
                 .catch(err => {
@@ -93,7 +93,7 @@ class UserProfile extends React.Component {
                                     <label htmlFor="title">Title</label>
                                     <input type="text" className="form-control" id="title"  aria-describedby="emailHelp" ref={elemen => this.inputTitle = elemen} />
                                 </div>
-                                <img src={API_URL + '/public/images/IMG1635143785016.jpg'} className="admin-product-image" alt={val.productName}/>
+                                <img src={API_URL + '/public/images/IMG1635143785016.jpg'} className="admin-product-image"/>
                                 <div className="form-group">
                                     <label htmlFor="img">Image</label>
                                     <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.onBtAddFile} ref={elemen => this.inputImage = elemen} />

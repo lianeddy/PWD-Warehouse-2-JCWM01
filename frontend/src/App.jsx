@@ -25,15 +25,15 @@ import Sales from "./pages/SalesReport";
 class App extends React.Component {
   componentDidMount() {
     const userLocalStorage = localStorage.getItem("userDataEmmerce");
-    const userData = JSON.parse(userLocalStorage);
+    // const userData = JSON.parse(userLocalStorage);
 
-    if (userData) {
-      this.props.userKeepLogin(userData);
-      this.props.getCartData(userData.user_id);
-      console.log(userData.username);
+    if (userLocalStorage) {
+      this.props.userKeepLogin(userLocalStorage);
+      this.props.getCartData(this.props.userGlobal.user_id);
+      // console.log(userData.username);
 
-      if (userData.auth_status === "user") {
-        this.props.getCartID(userData);
+      if (this.props.userGlobal.auth_status === "user") {
+        this.props.getCartID(this.props.userGlobal);
       }
     } else {
       this.props.checkStorage();

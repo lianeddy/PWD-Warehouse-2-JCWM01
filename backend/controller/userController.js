@@ -126,16 +126,13 @@ module.exports = {
     },
     
     keepLogin: (req,res) => {
-        db.query(`SELECT * FROM user WHERE username = ${db.escape(req.query.username)}`,
+        db.query(`SELECT * FROM user WHERE user_id = ${req.user.user_id}`,
         (err, result) => {
             if (err) {
-                res.send(err)
+                return res.send(err)
             }
-            if (result.length > 0) {
-                res.send(result)
-            } else {
-                res.send({ message: "Wrong username or password" })
-            }
+            console.log(req.user)
+            return res.send(result)
             
         })
     },
@@ -185,7 +182,7 @@ module.exports = {
                 }
             }
         )
-    }
+    },
     
     getAddress: (req,response) => {
         let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 1 and user_id = ${db.escape(req.query.user_id)};`

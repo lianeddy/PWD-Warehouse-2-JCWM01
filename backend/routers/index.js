@@ -12,6 +12,7 @@ const setDefaultAddressRouter = require("./setDefaultAddressRouter");
 const cartRouter = require("./cartRouter");
 const warehouseRouter = require("./warehouseRouter");
 const transactionRouter = require("./transactionRouter");
+const addUserRouter = require('./addUserRouter')
 
 module.exports = {
   setDefaultAddressRouter,
@@ -28,4 +29,5 @@ module.exports = {
   cartRouter,
   warehouseRouter,
   transactionRouter,
+  addUserRouter
 };

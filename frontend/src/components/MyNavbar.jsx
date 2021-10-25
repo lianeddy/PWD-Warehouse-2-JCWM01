@@ -86,6 +86,7 @@ class MyNavbar extends React.Component{
                                 <Link to="/" className="link">
                                     <button onClick={this.props.logoutUser} className="button">Log out</button>
                                 </Link>
+                            </div>
                                 :
                                 <div className="d-flex justify-content-between align-items-center flex-direction-row">
                                     <Link to="/login">
@@ -96,8 +97,8 @@ class MyNavbar extends React.Component{
                                         <button className="button">Register</button>
                                     </Link>
                                 </div>
-                            }
-                        </div>
+                        }
+
                     </div>
                     <div className="col-5">
 

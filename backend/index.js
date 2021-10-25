@@ -29,7 +29,7 @@ const {
 } = require("./routers"); //hubungin dgn router
 
 //hubungin routernya juga
-app.use("/login", addUserRouter);
+app.use("/keeplogin", addUserRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/admin", adminRouter);
