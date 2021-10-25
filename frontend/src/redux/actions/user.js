@@ -73,11 +73,11 @@ export const modifyUserAddress = (data) => {
     })
       .then((res) => {
         alert("User Profile updated");
-        console.log(res.data);
+        console.log(res.data.data);
         
         dispatch({
           type: "USER_LOGIN",
-          payload: res.data,
+          payload: res.data.data.address,
         });
       })
       .catch((err) => {
