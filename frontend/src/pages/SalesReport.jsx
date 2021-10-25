@@ -286,7 +286,7 @@ class SalesReport extends React.Component {
 
             <div className="d-flex flex-row justify-content-around mx-2 mt-3">
                 <div className="col-3">
-                <h2>TOP THREE PRODUCTS</h2>
+                <h2>TOP 3 PRODUCTS</h2>
                     <table className="table">
                         <thead className="table-light">
                             <tr>
@@ -315,7 +315,7 @@ class SalesReport extends React.Component {
             </div>
             <div className="col-12 mt-5">
                 {
-                    this.props.userGlobal.auth_status==="superadmin"?
+                    this.state.selectedWarehouse===0?
                     <h2>LIST OF <u><b>ALL</b></u> PRODUCTS SOLD</h2>
                     :
                     <h2>LIST OF PRODUCTS SOLD <u><b>IN THIS WAREHOUSE</b></u></h2>
