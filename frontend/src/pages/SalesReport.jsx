@@ -4,6 +4,17 @@ import Axios from 'axios'
 import {API_URL} from '../constants/API'
 import { connect } from 'react-redux'
 import {Link,Redirect} from 'react-router-dom'
+import { Line } from 'react-chartjs-2';
+
+const options = {
+    scales: {
+        y: {
+        beginAtZero: true,
+        }
+    },
+    outerWidth:50,
+    outerHeight:50,
+};
 
 class SalesReport extends React.Component {
     state = {
@@ -17,6 +28,18 @@ class SalesReport extends React.Component {
         topThree:[],
 
         transMonth : [],
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label:"Number of Transactions per Month in 2021",
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 142, 44, 1)',
+                    borderColor: 'rgba(255, 152, 63, 0.42)',
+                },
+            ],
+        }
     }
 
     selectWarehouse = () => {
@@ -128,6 +151,19 @@ class SalesReport extends React.Component {
 
     fetchTimeList = () => {
         console.log(this.state.selectedWarehouse)
+        this.setState({data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label:"Number of Transactions per Month in 2021",
+                    data: [],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 142, 44, 1)',
+                    borderColor: 'rgba(255, 152, 63, 0.42)',
+                },
+            ],
+        }})
+
         Axios.get(`${API_URL}/admin/time-transaction?warehouse_id=${this.state.selectedWarehouse}`)
         .then((result) => {
             let transactionTimeList = []
@@ -199,6 +235,15 @@ class SalesReport extends React.Component {
 
             this.setState({transMonth: transMonth})  
             console.log(this.state.transMonth)
+
+            //bikin array data, ambil dari transMonth transactions nya aja
+            let data = this.state.data
+            transMonth.map((val)=>{
+                data.datasets[0].data.push(val.transactions)
+            })
+
+            console.log("data",data)
+            this.setState({data:data})
         })
         .catch((err)=>{
             alert(err)
@@ -239,10 +284,9 @@ class SalesReport extends React.Component {
                 
             }
 
-            selected warehouse: {this.state.selectedWarehouse}
-            <div>
-                <h2>TOP THREE PRODUCTS</h2>
+            <div className="d-flex flex-row justify-content-around mx-2 mt-3">
                 <div className="col-3">
+                <h2>TOP THREE PRODUCTS</h2>
                     <table className="table">
                         <thead className="table-light">
                             <tr>
@@ -256,6 +300,17 @@ class SalesReport extends React.Component {
                             {this.renderTopThree()}
                         </tbody>
                     </table>
+                </div>
+                <div className="col-6">
+                <h2>TRANSACTIONS PER MONTH</h2>
+                    {
+                        this.state.data.datasets[0].data.length!==0?
+                        <>
+                            <Line data={this.state.data} options={options} />
+                        </>
+                        :
+                        null
+                    }
                 </div>
             </div>
             <div className="col-12 mt-5">
