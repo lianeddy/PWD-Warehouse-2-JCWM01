@@ -80,6 +80,81 @@ module.exports = {
             res.status(500).send(err)
         }
     },
+
+    editImage: (req, res) => {
+        try { //ini promise kayak then
+            let path = '/images'
+            const upload = uploader(path, 'IMG').fields([{ name: 'file' }])
+
+            upload(req, res, (err) => {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send(err)
+                }
+
+                const { file } = req.files
+                const filepath = file ? path + '/' + file[0].filename : null
+
+                //json parse
+                let data = JSON.parse(req.body.data)
+                data.image = filepath
+
+                //simpan datanya ke database, image = lokasi+nama image ini untuk update aja
+                let sqlEdit = `Update fp_pwd_5.products set 
+                                product_image = ${db.escape(filepath)}
+                                where product_id = ${db.escape(data.product_id)}`
+                db.query(sqlEdit, (err, results) => {
+                    if (err) {
+                        console.log(err)
+                        fs.unlinkSync('./public' + filepath) //ini kalo error pas simpen img (network/apapun pokonya gagal), the entire file bakal dihapus
+                        res.status(500).send(err)
+                    }
+                    else{
+                        res.status(200).send({ message: "Image changed." })
+                    }
+                })
+
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send(err)
+        }
+    },
+    addProfPic: (req, res) => {
+        try { //ini promise kayak then
+            let path = '/images'
+            const upload = uploader(path, 'IMG').fields([{ name: 'file' }])
+
+            upload(req, res, (err) => {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send(err)
+                }
+
+                const { file } = req.files
+                const filepath = file ? path + '/' + file[0].filename : null
+
+                let data = JSON.parse(req.body.data)
+                data.image = filepath
+
+                let sqlInsert = `Update fp_pwd_5.user set pic_title=${db.escape(data.title)}, pic_location=${db.escape(filepath)} WHERE user_id = ${db.escape(data.user_id)};`
+                db.query(sqlInsert , (err, results) => {
+                    if (err) {
+                        console.log(err)
+                        fs.unlinkSync('./public' + filepath)
+                        res.status(500).send(err)
+                    } else {
+                        res.status(200).send({ dataPicture:results, message: "Image saved." })
+                    }
+                })
+
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send(err)
+        }
+    },
+
     editImage: (req, res) => {
         try { //ini promise kayak then
             let path = '/images'

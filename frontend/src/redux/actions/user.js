@@ -36,6 +36,14 @@ export const confirmRegBtn = (data) => {
   };
 };
 
+export const getAlbum = (data) => {
+  console.log('action',data)
+  return {
+      type: 'GET_ALBUM',
+      payload: data
+  }
+};
+
 export const loginUser = (data) => {
   return (dispatch) => {
     Axios.post(API_URL + "/login/", {
