@@ -3,7 +3,8 @@ import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css'
 
 import {connect} from 'react-redux';
-import {userKeepLogin,checkStorage} from './redux/actions/user';
+import {userKeepLogin,checkStorage,getCartID} from './redux/actions/user';
+import {getCartData} from './redux/actions/cart';
 
 import Register from "./pages/register";
 import Login from "./pages/login";
@@ -14,20 +15,28 @@ import MyNavbar from './components/MyNavbar';
 import Admin from './pages/Admin'
 import VerificationPage from './pages/verification';
 import resetPass from './pages/resetPass';
+import Cart from './pages/Cart'
+import Payment from './pages/Payment'
+import Sales from './pages/SalesReport'
 
 class App extends React.Component {
   
   componentDidMount(){
-    const userLocalStorage = localStorage.getItem("userDataEmmerce")
-    if (userLocalStorage){
-      //karena tadi dijadiin string, jadiin object lagi
+      const userLocalStorage = localStorage.getItem("userDataEmmerce")
       const userData = JSON.parse(userLocalStorage)
-      this.props.userKeepLogin(userData);
-      console.log(userData.username)
-
-    } else {
-      this.props.checkStorage();
-    }
+  
+      if (userData){
+        this.props.userKeepLogin(userData);
+        this.props.getCartData(userData.user_id)
+        console.log(userData.username)
+  
+        if(userData.auth_status==="user"){
+          this.props.getCartID(userData);
+        }
+  
+      } else {
+        this.props.checkStorage();
+      }
   }
 
   render(){
@@ -48,6 +57,9 @@ class App extends React.Component {
               <Route component={Products} path="/products" />
               <Route component={VerificationPage} path="/auth/:token" />
               <Route component={resetPass} path="/resetPass" />
+              <Route component={Cart} path="/cart" />
+              <Route component={Payment} path="/payment" />
+              <Route component={Sales} path="/sales" />
               <Route component={LandingPage} path="/" />
               
             
@@ -68,12 +80,15 @@ class App extends React.Component {
 const mapStateToProps =(state)=> {
   return{
     userGlobal: state.user,
+    cartGlobal: state.cart,
   }
 };
 
 const mapDispatchToProps = {
   userKeepLogin,
   checkStorage,
+  getCartID,
+  getCartData,
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);

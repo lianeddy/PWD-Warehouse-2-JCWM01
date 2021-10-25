@@ -2,6 +2,8 @@ const { db } = require('../database');
 const Crypto = require('crypto');
 const { createToken }= require('../helper/createToken')
 const transporter = require('../helper/nodemailer')
+const { request } = require('express')
+
 
 module.exports = {
 
@@ -140,5 +142,16 @@ module.exports = {
         })
     }
     
+    getAddress: (req,response) => {
+        let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 1 and user_id = ${db.escape(req.query.user_id)};`
+        db.query(scriptQuery, (err, res) => {
+            if (err) {
+                return response.send(err)
+            } else {
+                return response.status(200).send(res)
+            }
+            
+        })
+    },
 }
 

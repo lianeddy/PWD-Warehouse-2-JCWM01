@@ -44,10 +44,9 @@ export const loginUser = (data) => {
     })
       .then((res) => {
         console.log(`res datalogin is ${res.data.dataLogin}`)
-        delete res.data.dataLogin.password;
-        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data.token))
         console.log(res.data.dataLogin);
-
+        delete res.data[0].password;
+        localStorage.setItem("userDataEmmerce",JSON.stringify(res.data[0]))
         dispatch({
           type: "USER_LOGIN",
           payload: res.data.dataLogin,
@@ -62,6 +61,7 @@ export const loginUser = (data) => {
 
 export const logoutUser = () => {
   localStorage.removeItem("userDataEmmerce");
+  // localStorage.removeItem("cartData");
   return {
     type: "USER_LOGOUT",
   };
@@ -83,6 +83,21 @@ export const userKeepLogin = (data) => {
       .catch((err)=>{
           alert(err)
       })
+  }
+}
+
+export const getCartID = (data) => {
+  return (dispatch) => {
+    Axios.get(`${API_URL}/cart/id?user_id=${data.user_id}`)
+    .then((res) => {
+      dispatch({
+        type: "CART_ID",
+        payload: res.data[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 }
 
@@ -116,3 +131,4 @@ export const resetPass = (data) => {
   alert("Password does not match or invalid email")
 }
 }
+

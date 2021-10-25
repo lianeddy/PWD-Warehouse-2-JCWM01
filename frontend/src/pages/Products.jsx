@@ -75,7 +75,7 @@ class Products extends React.Component {
         if(val.color===this.state.searchColor){
           return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second selected"><p>{capital}</p></button></li>
         }else{
-          return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second" style={{color:'lightgrey'}}><p>{capital}</p></button></li>
+          return <li><button onClick={()=>this.colorHandler(val.color)} className="button-second unselected" ><p>{capital}</p></button></li>
         }
       }
     })
@@ -84,7 +84,6 @@ class Products extends React.Component {
   fetchMaxPage = () => {
     Axios.get(`${API_URL}/products/max-page?category=${this.state.searchCategory}&color=${this.state.searchColor}&product_name=${this.props.userGlobal.searchProduct}`)
     .then((result) => {
-      console.log(result.data[0].sumProduct)
       this.setState({maxPage: Math.ceil((result.data[0].sumProduct)/this.state.itemPerPage)})
     })
     .catch((err)=>{
@@ -134,11 +133,11 @@ class Products extends React.Component {
   }
 
   nextPageHandler = () => {
-    this.setState({page: this.state.page + 1}, this.fetchproducts)
+    this.setState({page: this.state.page + 1}, this.fetchFilteredProducts)
   }
 
   prevPageHandler = () => {
-    this.setState({page: this.state.page - 1}, this.fetchproducts)
+    this.setState({page: this.state.page - 1}, this.fetchFilteredProducts)
   }
 
   renderProducts = () => {
