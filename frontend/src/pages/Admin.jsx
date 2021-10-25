@@ -29,6 +29,9 @@ class Admin extends React.Component {
     transactionData: [],
     see_detail_id:0,
     detailTransactions:[],
+    subTotalPrice:0,
+    totalPrice:0,
+    shippingPrice:18000,
   }
 
   fetchAdminData = () => {
@@ -345,9 +348,9 @@ class Admin extends React.Component {
         <tr>
             <td>{val.time.slice(0,10)}</td>
             <td>{val.time.slice(11,19)}</td>
-            <td>{val.transaction_status} id: {val.transactions_id}</td>
-            <td>{val.warehouse_name}</td>
             <td>{val.username}</td>
+            <td>{val.warehouse_name}</td>
+            <td>{val.transaction_status}</td>
             <td>
               <button onClick={()=>this.seeDetailHandler(val)} >See Details</button>
             </td>
@@ -362,7 +365,7 @@ class Admin extends React.Component {
     .then((result) => {
       this.setState({detailTransactions: result.data})
       console.log(result.data)
-    
+      this.totalPrice()
     })
     .catch((err)=>{
       alert(err)
@@ -382,6 +385,15 @@ class Admin extends React.Component {
         </tr>
       )
     })
+  }
+
+  totalPrice = () => {
+    let subTotalPrice = 0
+    this.state.detailTransactions.map((val)=> {
+      subTotalPrice = subTotalPrice + val.transaction_price*val.quantity
+    })
+    
+    this.setState({subTotalPrice:subTotalPrice, totalPrice: subTotalPrice+this.state.shippingPrice})
   }
 
   closeDetailHandler = () => {
@@ -474,11 +486,11 @@ class Admin extends React.Component {
           }
           
 
-          <div className="col-10 mt-3">
+          <div className="col-12 mt-3">
             <div className="d-flex flex-row justify-content-start">
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
-              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">Transaction History</button>
+              <button className="btn-admin" name="menu" onClick={this.inputHandler} value="history">User Transaction</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="requests">Stock Requests</button>
             </div>
             <div className="d-flex justify-content-start align-items-center">
@@ -573,15 +585,15 @@ class Admin extends React.Component {
                     this.state.see_detail_id !==0 ?
                     <>
                     <div className="mt-3 col-6">
-                      <h3>Transaction History</h3>
+                      <h3>USER TRANSACTION HISTORY</h3>
                       <table className="table">
                           <thead className="table-light">
                               <tr>
                                   <th>Date</th>
                                   <th>Time</th>
-                                  <th>Transaction Status</th>
-                                  <th>Warehouse Name</th>
                                   <th>Username</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Transaction Status</th>
                                   <th>Action</th>
                               </tr>
                           </thead>
@@ -607,20 +619,39 @@ class Admin extends React.Component {
                           {this.renderTransactionItems()}
                         </tbody>
                       </table>
-                      <button onClick={this.closeDetailHandler} className="btn btn-cancel">Close</button>
+                      <div className="col-12 d-flex flex-column justify-content-end align-items-end">
+                        <div className="col-12 d-flex flex-row justify-content-between">
+                          <div className="col-6"></div>
+                          <div className="col-6 d-flex flex-column justify-content-between">
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <p className="font-weight-bold">Subtotal Price</p>
+                              <p>Rp. {this.state.subTotalPrice.toLocaleString()}</p>
+                            </div>
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <p className="font-weight-bold">Shipping Price</p>
+                              <p>Rp. {this.state.shippingPrice.toLocaleString()}</p>
+                            </div>
+                            <div className="d-flex flex-row my-1 justify-content-between">
+                              <h3 className="font-weight-bold">TOTAL PRICE</h3>
+                              <p>Rp. {this.state.totalPrice.toLocaleString()}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <button onClick={this.closeDetailHandler} className="mt-2 btn btn-cancel col-2">Close</button>
+                      </div>
                     </div>
                     </>
                     :
-                    <div className="mt-3 col-10">
-                      <h3>Transaction History</h3>
+                    <div className="mt-3 col-6">
+                      <h3>USER TRANSACTION HISTORY</h3>
                       <table className="table">
                           <thead className="table-light">
                               <tr>
                                   <th>Date</th>
                                   <th>Time</th>
-                                  <th>Transaction Status</th>
-                                  <th>Warehouse Name</th>
                                   <th>Username</th>
+                                  <th>Warehouse Name</th>
+                                  <th>Transaction Status</th>
                                   <th>Action</th>
                               </tr>
                           </thead>

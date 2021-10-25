@@ -25,7 +25,7 @@ class ProductDetail extends React.Component {
   }
 
   alertHandler = () => {
-    alert("Please login/register to start shopping!")
+    alert("Please login/register as user to start shopping!")
   }
 
   inputHandler = (event) => {
