@@ -1,0 +1,101 @@
+.cart-container{
+    margin-top: 100px;
+}
+
+.admin-product-image{
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+thead, td {
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+}
+
+.btn-delete{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: brown !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-qty{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    background-color: grey !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-checkout{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: black !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-payment{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    background-color: black !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.centered-text{
+    text-align: center;
+}
+
+.btn-cancel{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    background-color: rgb(146, 146, 146) !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+table{
+    margin-top: 16px;
+}
+
+h1{
+    font-family: 'poppins-regular';
+    font-size: 36px !important;
+}
+
+h2{
+    font-family: 'poppins-regular';
+    font-size: 24px !important;
+}
+
+h3{
+    font-family: 'poppins-regular';
+    font-size: 18px !important;
+}
+
+h4{
+    font-family: 'poppins-regular';
+    font-size: 14px !important;
+    margin:0 !important;
+}
+
+form{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+}
+
+p{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin: 0px !important;
+}
+
+.font-weight-bold{
+    font-weight: 800 !important;
+}

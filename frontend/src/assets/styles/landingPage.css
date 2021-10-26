@@ -27,19 +27,19 @@ img{
 }
 
 .btn-basic{
-    color: white;
-    background-color: black;
-    transition: transform .2s;
-    padding: 10px;
+    color: white !important;
+    background-color: black !important;
+    transition: transform .2s !important;
+    padding: 10px !important;
 }
 
 .btn-basic:hover{
-    color: white;
-    background-color: black;
-    padding: 10px;
-    transform: scale(1.06);
-    animation:ease-in-out;
-    text-decoration: none;
+    color: white !important;
+    background-color: black !important;
+    padding: 10px !important;
+    transform: scale(1.06) !important;
+    animation:ease-in-out !important;
+    text-decoration: none !important;
 }
 
 .big-logo {
@@ -48,27 +48,34 @@ img{
 
 h1{
     font-family: 'poppins-regular';
-    font-size: 36vw;
+    font-size: 36px !important;
 }
 
 h2{
     font-family: 'poppins-regular';
-    font-size: 24vw;
+    font-size: 24px !important;
 }
 
 h3{
     font-family: 'poppins-regular';
-    font-size: 18vw;
+    font-size: 18px !important;
 }
 
 h4{
     font-family: 'poppins-regular';
-    font-size: 14vw;
+    font-size: 14px !important;
+    margin:0 !important;
+}
+
+form{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
 }
 
 p{
     font-family: 'poppins-regular';
-    font-size: 12vw;
+    font-size: 12px !important;
+    margin: 0px !important;
 }
 
 .box{
@@ -76,6 +83,10 @@ p{
     box-shadow: 0px 8px 16px rgba(92, 107, 192, 0.2);
     border-radius: 5px;
     margin-top: 150px;
+}
+
+.payment-container{
+    margin-top: 150px
 }
 
 /* .container{

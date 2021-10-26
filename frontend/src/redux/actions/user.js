@@ -1,113 +1,206 @@
-import Axios from 'axios';
-import {API_URL} from '../../constants/API'
-
+import Axios from "axios";
+import { API_URL } from "../../constants/API";
 
 export const searchProduct = (searchProduct) => {
-    return (dispatch) => {
+  return (dispatch) => {
+    dispatch({
+      type: "SEARCH_PRODUCT",
+      payload: searchProduct,
+    });
+  };
+};
+
+export const confirmRegBtn = (data) => {
+  return (dispatch) => {
+    Axios.post(API_URL + "/register/", {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      fullname: data.fullname,
+      gender: data.gender,
+      age: data.age,
+      auth_status: "user",
+    })
+      .then((res) => {
+        alert("Registration successful");
+        console.log(res.data);
         dispatch({
-            type: "SEARCH_PRODUCT",
-            payload: searchProduct
-        })
-}
-}
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err) => {
+        alert("Registration failed");
+        console.log(err);
+      });
+  };
+};
 
-export const registerUser = ({fullName,username,email,password}) => {
-    return (dispatch) => {
-        Axios.post(`${API_URL}/users`,{
-            fullName,
-            username,
-            email,
-            password,
-            role:"user",
-        })
-        .then((result)=> {
-            delete result.data.password
-            
-            dispatch({
-                type: "USER_LOGIN",
-                payload: result.data
-            })
-            alert("User berhasil ditambahkan.")
-        })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
-        })
-}
-}
+export const loginUser = (data) => {
+  return (dispatch) => {
+    Axios.post(API_URL + "/login/", {
+      username: data.username,
+      password: data.password,
+    })
+      .then((res) => {
+        console.log(`res datalogin is ${res.data.dataLogin}`);
+        delete res.data.dataLogin.password;
+        localStorage.setItem("userDataEmmerce", res.data.token);
+        console.log(res.data.dataLogin);
 
-export const loginUser = ({username,password}) => {
-    return (dispatch) => {
-        Axios.get(`${API_URL}/users`,{
-            params: {
-              username,
-            }
-        })
-        .then((result)=> {
-            if (result.data.length !== 0){
-                if (password===result.data[0].password){
-                    delete result.data[0].password
-                    //biar gak ilang terus
-                    localStorage.setItem("userDataEmmerce",JSON.stringify(result.data[0]))
-                    dispatch({
-                        type: "USER_LOGIN",
-                        payload: result.data[0]
-                    })
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data.dataLogin,
+        });
+      })
+      .catch((err) => {
+        alert("Login failed");
+        console.log(err);
+      });
+  };
+};
 
-                   } else{
-                    //wrong password
-                    dispatch({
-                        type: "USER_ERROR",
-                        payload: "Password salah, mohon masukkan kembali."
-                    })
-                   }
+export const modifyUserAddress = (data) => {
+  return (dispatch) => {
+    console.log(`Delivering changes to ${data.user_id}`);
+    Axios.post(API_URL + "/editAddress/add", {
+      user_id: data.user_id,
+      username: data.username,
+      email: data.email,
+      user_location: data.coordinate,
+      address: data.address,
+      default_address: 0,
+    })
+      .then((res) => {
+        alert("User Profile updated");
+        console.log(res.data.data);
 
-            } else {
-                //wrong username
-                dispatch({
-                    type: "USER_ERROR",
-                    payload: "Username salah, mohon masukkan kembali."
-                })
-            }
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data.data.address,
+        });
+      })
+      .catch((err) => {
+        alert("User profile update failed");
+        console.log(err);
+      });
+  };
+};
 
+export const setDefaultAddress = (data) => {
+  return (dispatch) => {
+    Axios.post(API_URL + `/setDefault/`, {
+      user_id: data.user_id,
+      address: data.address,
+    })
+      .then((res) => {
+        alert("User Profile updated");
+        console.log(res.data);
 
-        })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
-        })
-}
-}
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        alert("User profile update failed");
+        console.log(err);
+      });
+  };
+};
 
 export const logoutUser = () => {
-    localStorage.removeItem("userDataEmmerce");
-    return {
-        type: "USER_LOGOUT"
-    }
-}
+  localStorage.removeItem("userDataEmmerce");
+  // localStorage.removeItem("cartData");
+  return {
+    type: "USER_LOGOUT",
+  };
+};
 
-//ambil data dari local storage supaya login terus
-export const userKeepLogin = (userData) => {
-    return (dispatch) =>{
-        Axios.get(`${API_URL}/users`,{
-            params: {
-                id: userData.id
-            }
-        })
-        .then((result) => {
-            delete result.data[0].password
-            localStorage.setItem("userDataEmmerce",JSON.stringify(result.data[0]))
-            dispatch({
-                type: "USER_LOGIN",
-                payload: result.data[0]
-            })
-        })
-        .catch(()=>{
-            alert("Terjadi kesalahan pada server.")
-        })
-    }
-}
+//ambil data dari local storage supaya login terus, nitip dulu ya soalnya kerefresh terus pas coba upload data
+export const userKeepLogin = (data) => {
+  return (dispatch) => {
+    Axios.get(API_URL + `/keeplogin/keeplogin`, {
+      headers: {
+        "Authorization": `Bearer ${data}`
+      }
+    })
+      .then((res) => {
+        console.log(res)
+        // delete res.data[0].password;
+        // localStorage.setItem("userDataEmmerce", JSON.stringify(res.data[0]));
+
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+};
+
+export const getAddress = (data) => {
+  return (dispatch) => {
+    Axios.get(API_URL + `/getAddress?username=${data.username}`)
+      .then((res) => {
+        delete res.data[0].password;
+
+        dispatch({
+          type: "USER_LOGIN",
+          payload: res.data[0],
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+};
+
+export const getCartID = (data) => {
+  return (dispatch) => {
+    Axios.get(`${API_URL}/cart/id?user_id=${data.user_id}`)
+      .then((res) => {
+        dispatch({
+          type: "CART_ID",
+          payload: res.data[0],
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 export const checkStorage = () => {
-    return {
-        type: "CHECK_STORAGE"
-    }
-}
+  return {
+    type: "CHECK_STORAGE",
+  };
+};
+
+export const resetPass = (data) => {
+  if (data.password == data.confirmPassword) {
+    return (dispatch) => {
+      Axios.post(API_URL + "/resetPass/", {
+        password: data.password,
+        email: data.email,
+        user_id: data.user_id,
+      })
+        .then((res) => {
+          alert("Succesfully changed password");
+
+          dispatch({
+            type: "USER_LOGIN",
+            payload: res.data.dataLogin,
+          });
+        })
+        .catch((err) => {
+          alert("Login failed");
+          console.log(err);
+        });
+    };
+  } else {
+    alert("Password does not match or invalid email");
+  }
+};

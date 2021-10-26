@@ -1,0 +1,121 @@
+@font-face { font-family: poppins-regular; src: url('../fonts/Poppins-Regular.ttf'); } 
+
+
+.base-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+    padding: 20px 20px;
+}
+
+.header {
+    font-size: 48px;
+    font-family: 'poppins-regular';
+    font-weight: 700;
+    align-items: center;
+}
+
+.form {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px;
+    font-family: 'poppins-regular';
+    font-weight: 200;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.gender-group {
+    margin-bottom: 1rem;
+}
+
+.radiocontainer {
+    display: inline-grid;
+    grid-auto-flow: dense;
+    align-items: center;
+  }
+  
+  .radiocontainer label {
+    grid-column: 2;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+
+  .radiocontainer .radiolabelfem {
+    padding-left: 0.4rem;
+  }
+
+.label {
+    font-size: 24px;
+    background-color: #DDDDDD !important;
+}
+
+.row{
+    flex-direction: row;
+}
+
+.input {
+    margin-top: 6px;
+    min-width: 18em;
+    height: 37px;
+    font-size: 18px;
+    font-family: 'poppins-regular';
+    font-weight: 200;
+    background-color: #f3f3f3;
+    border: 0;
+    border-radius: 4px;
+    margin-bottom: 1px;
+    transition: all 250ms ease-in-out;
+}
+
+.input:focus {
+    outline: none;
+    box-shadow: 0px 0px 12px 0.8px #0e81ce96;
+}
+
+.btn-login{
+    color: white!important;
+    font-family: 'poppins-regular'!important;
+    font-weight: 700!important;
+    background-color: black!important;
+    border: none;
+    padding: 10px!important;
+}
+
+.btn-login:hover{
+    color: black !important;
+    font-family: 'poppins-regular'!important;
+    font-weight: 700;
+    background-color: #FF4D00!important;
+    border: none;
+    text-decoration:darkslategrey!important;
+    padding: 10px!important;
+}
+
+.footer{
+    margin: 1rem 2rem 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+
+.footer h6 {
+    padding: 1rem;
+}

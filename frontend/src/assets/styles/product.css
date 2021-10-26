@@ -24,7 +24,7 @@
 }
 
 .unselected{
-    color:lightgrey;
+    color:lightgrey !important;
 }
 
 select{
@@ -66,26 +66,32 @@ select{
 
 h1{
     font-family: 'poppins-regular';
-    font-size: 36px;
+    font-size: 36px !important;
 }
 
 h2{
     font-family: 'poppins-regular';
-    font-size: 24px;
+    font-size: 24px !important;
 }
 
 h3{
     font-family: 'poppins-regular';
-    font-size: 18px;
+    font-size: 18px !important;
 }
 
 h4{
     font-family: 'poppins-regular';
-    font-size: 14px;
+    font-size: 14px !important;
+    margin:0 !important;
+}
+
+form{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
 }
 
 p{
     font-family: 'poppins-regular';
-    font-size: 12px;
-    margin:0px;
+    font-size: 12px !important;
+    margin: 0px !important;
 }

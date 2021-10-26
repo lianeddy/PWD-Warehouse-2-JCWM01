@@ -2,8 +2,9 @@ import React from 'react';
 import Axios from 'axios'
 import {API_URL} from '../constants/API'
 import "../assets/styles/productDetail.css"
-import {Redirect} from 'react-router-dom';
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
+import { connect } from 'react-redux';
+import {getCartData} from '../redux/actions/cart';
 
 
 class ProductDetail extends React.Component {
@@ -15,20 +16,27 @@ class ProductDetail extends React.Component {
     productQty: 1,
     selectedSize:"",
     availableStock:1,
-    disable:false
+    disable:false,
+    redirect:false,
+
+    cartList:[],
+    cartQty:0,
+    cart_id:0
+  }
+
+  alertHandler = () => {
+    alert("Please login/register as user to start shopping!")
   }
 
   inputHandler = (event) => {
     const value = event.target.value;
     const name = event.target.name;
 
-    //name dikasi kurung siku soalnya dia variabel
     this.setState({[name] : value.toUpperCase()})
   }
 
   fetchproducts = () => {
-    // console.log(this.props.match.params.product_id)
-    Axios.get(`${API_URL}/get-products-detail?product_id=${this.props.match.params.product_id}`)
+    Axios.get(`${API_URL}/products/detail?product_id=${this.props.match.params.product_id}`)
     .then((result) => {
       if(result.data.length){
         this.setState({productData: result.data})
@@ -44,15 +52,49 @@ class ProductDetail extends React.Component {
   })
   } 
 
+  fetchCartList = () => {
+    Axios.get(`${API_URL}/cart/get?user_id=${this.props.userGlobal.user_id}`)
+    .then((res)=> {
+        this.setState({cartList:res.data})
+        this.fetchCartQty()
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
+  fetchCartID = () => {
+    Axios.get(`${API_URL}/cart/id?user_id=${this.props.userGlobal.user_id}`)
+    .then((res) => {
+      this.setState({cart_id:res.data[0].cart_id})
+     
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  fetchCartQty = () => {
+    this.state.cartList.map((val)=>{
+      if(val.product_id == this.props.match.params.product_id){
+        console.log("product match")
+        if(val.size == this.state.selectedSize.toLowerCase()){
+          console.log("size match");
+          this.setState({cartQty:val.quantity})
+        }
+        else{
+          this.setState({cartQty:0})
+        }
+      }
+    })
+  }
+
   availableStock = (event) => {
-    // console.log(event.target.value)
     this.setState({productQty:1})
     this.state.productData.map((val)=>{
       if (val.size === event.target.value){
-        this.setState({selectedSize: val.size.toUpperCase()}) //ini buat nanti add to cart aja
-        this.setState({availableStock: val.available_stock}) //ini buat nanti add to cart aja
- 
-        console.log("size:",val.size," stock:",val.available_stock)
+        this.setState({selectedSize: val.size.toUpperCase()}) 
+        this.setState({availableStock: val.available_stock}) 
       }
     })
   }
@@ -60,7 +102,6 @@ class ProductDetail extends React.Component {
   renderSize = () => {
     return this.state.productData.map((val)=> {
       const capital = val.size.toUpperCase();
-      // console.log("stock",this.state.availableStock)
       return <option value={val.size}>{capital}</option>
     })
   }
@@ -78,11 +119,43 @@ class ProductDetail extends React.Component {
     return toInt.toLocaleString()
   }
 
+  componentDidUpdate(prevProps,prevState){
+    if (prevState.selectedSize !== this.state.selectedSize)
+    {
+      this.fetchCartList()
+    }
+  }
+
   componentDidMount(){
     this.fetchproducts()
+    this.fetchCartList()
+    this.fetchCartID()
+  }
+
+  addToCartHandler = () =>{
+    Axios.post(`${API_URL}/cart/add`,{
+      cart_id: this.state.cart_id,
+      product_id: this.props.match.params.product_id,
+      size: this.state.selectedSize.toLowerCase(),
+      quantity: this.state.productQty,
+    })
+    .then(()=> {
+      alert("Product added to cart.")
+      this.props.getCartData(this.props.userGlobal.user_id)
+      this.setState({productQty:1,redirect:true});
+
+    })
+    .catch((err)=>{
+      alert(err)
+    })
+
+
   }
 
   render(){
+    if(this.state.redirect){
+      return <Redirect to="/products" />
+    }
     return(
       <div className="container">
         {
@@ -99,11 +172,12 @@ class ProductDetail extends React.Component {
           <div className="col-6 d-flex justify-content-end">
             <img 
               className="image-card"
-              style={{width:"70%"}}
-              src={this.state.shownData.product_image}
+              style={{width:"60%"}}
+              src={API_URL + '/public' + this.state.shownData.product_image}
               alt="product-image" 
             />
           </div>
+
           <div className="col-6 d-flex flex-column justify-content-center">
             <h1>{this.state.shownData.product_name}</h1>
             <h2>Rp. {this.kasihTitik(this.state.shownData.price_sell)}</h2>
@@ -112,7 +186,7 @@ class ProductDetail extends React.Component {
             </h4>
 
             {
-              this.state.availableStock === 0 ?
+              this.state.availableStock -  this.state.cartQty === 0 ?
               <>
                 <div className="d-flex flex-row align-items-center mt-3">
                   <div className="mx-2 col-3 d-flex flex-row align-items-center justify-content-start">
@@ -130,7 +204,7 @@ class ProductDetail extends React.Component {
                   <button onClick={this.fnQuantityUp} disabled={true} className="btn btn-dark btn-sm">
                     +
                   </button>
-                  <p className="warning">Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
+                  <p className="warning ms-2">  Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
 
                 </div>
                 <button disabled={true} className="btn btn-sm btn-dark mt-3 col-6">
@@ -152,26 +226,39 @@ class ProductDetail extends React.Component {
                   <div className="mx-4">
                     <h4>{this.state.productQty}</h4>
                   </div>
-                  <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock} className="btn btn-dark btn-sm">
+                  <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock -  this.state.cartQty} className="btn btn-dark btn-sm">
                     +
                   </button>
                   {
-                    this.state.productQty===this.state.availableStock?
-                    <p className="warning">Sorry, you have reached size {this.state.selectedSize.toUpperCase()} maximum stock.</p>
+                    this.state.productQty===this.state.availableStock -  this.state.cartQty?
+                    <p className="warning ms-2">Sorry, you have reached size {this.state.selectedSize.toUpperCase()} maximum stock.</p>
                     : null
                   }
 
                 </div>
-                <button className="btn btn-sm btn-dark mt-3 col-6">
-                    <p>Add to cart</p>
-                </button>
+                {/* klo bukan user gabisa add to cart, keluarnya alert */}
+                {
+                  this.props.userGlobal.auth_status==="user"?
+                  <button onClick={this.addToCartHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                      <p>Add to cart</p>
+                  </button>
+                  :
+                  <button onClick={this.alertHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                      <p>Add to cart</p>
+                  </button>
+
+                }
+
               </>
             }
 
 
 
-              <button className="btn btn-light mt-3 col-6">
-                <p>See Cart</p>
+              <button className="btn btn-light mt-3 col-6 align-items-center">
+                <Link to="/cart" className="link-see-cart">
+                  See Cart
+                </Link>
+
               </button>
           </div>
         </div>
@@ -181,4 +268,14 @@ class ProductDetail extends React.Component {
   }
 }
 
-export default ProductDetail;
+const mapStateToProps =(state)=> {
+  return{
+      userGlobal: state.user,
+  }
+};
+
+const mapDispatchToProps = {
+  getCartData,
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ProductDetail);

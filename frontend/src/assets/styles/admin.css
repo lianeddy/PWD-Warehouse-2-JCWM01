@@ -3,3 +3,141 @@
     height: 100px;
     object-fit: contain;
 }
+
+.detail-transaction-image{
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+}
+
+.admin-page {
+    margin-top: 120px;
+    padding: 0vw 3vw 0vw 3vw;
+    margin-bottom: 3vw;
+}
+
+.btn-admin{
+    font-family: 'poppins-regular';
+    font-size: 14px !important;
+    margin:0 !important;
+}
+
+.filter-style{
+    position: relative !important;
+    width:12vw !important;
+    font-family: 'poppins-regular' !important;
+    font-size: 12px !important;
+    border: 0.5px solid lightgrey !important;
+}
+
+thead, td {
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+}
+
+.btn-edit{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: black !important;
+    color: white !important;
+    padding: 3px 6px !important;
+}
+
+.btn-delete{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: brown !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-show{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: grey !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-save{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: black !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+.btn-cancel{
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+    background-color: rgb(146, 146, 146) !important;
+    color: white !important;
+    padding: 3px 6px  !important;
+}
+
+table{
+    margin-top: 16px;
+}
+
+.add-form{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.input-admin{
+    width: 100px !important;
+    height:20px !important;
+    margin:0px !important;
+    background-color: rgb(241, 241, 241);
+    color: black;
+    border: 0px;
+    border-radius: 2px;
+
+}
+
+th,td{
+    text-align: center !important;
+}
+
+.add-product-container{
+    margin-top: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.product-input-text{
+    width: 400px !important;
+    font-size: 12px !important;
+}
+
+.product-input-number{
+    width: 180px !important;
+    font-size: 12px !important;
+}
+
+.product-input-desc{
+    width: 400px !important;
+    height: 100px !important;
+    font-size: 12px !important;
+}
+
+.imgpreview-container{
+    margin: 0vw 10vw !important;
+}
+
+.imgpreview{
+    width: 30vw !important;
+    height: 40vw !important;
+    border: none !important;
+    border-radius: 0px !important;
+}
