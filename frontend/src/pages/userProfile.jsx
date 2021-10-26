@@ -16,27 +16,28 @@ class UserProfile extends React.Component {
         address: [],
         fullname: this.props.userGlobal.fullname,
         email: this.props.userGlobal.email,
-        profpic:this.props.userGlobal.profpic,
-        dataAlbum: [],
+        pic_location:this.props.userGlobal.pic_location,
+        userAlbum: [],
         redirect: false,
         redirectNonUser: false,
     }
 
     componentDidMount() {
-        if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="admin"){
+        if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="superadmin" || this.props.userGlobal.auth_status==="admin"){
             console.log("authorized")
         } else {
             this.setState({redirectNonUser: true})
         }
         this.getAddress() 
         this.getDefaultAddress() 
+        this.getDataAlbum()
     }
 
     getAddress = () => {
         Axios.get(API_URL + `/keeplogin/address?user_id=${this.props.userGlobal.user_id}`)
         .then((res) => {
            this.setState({address:res.data[0]})
-           console.log(this.state.address)
+
         })
         .catch((err) => {
             alert(err);
@@ -47,7 +48,7 @@ class UserProfile extends React.Component {
         Axios.get(API_URL + `/keeplogin/defAddress?user_id=${this.props.userGlobal.user_id}`)
         .then((res) => {
            this.setState({defAddress:res.data[0]})
-           console.log(this.state.defAddress)
+
         })
         .catch((err) => {
             alert(err);
@@ -57,7 +58,8 @@ class UserProfile extends React.Component {
     getDataAlbum = () => {
         Axios.get(API_URL + '/upload/getAlbum')
             .then((res) => {
-                this.setState({ dataAlbum: res.data })
+                console.log(this.state.user_id)
+                this.setState({ userAlbum: res.data })
             })
             .catch((err) => {
                 console.log(err)
@@ -101,13 +103,15 @@ class UserProfile extends React.Component {
     }
 
     printCard = () => {
-        let { dataAlbum } = this.state
-        return dataAlbum.map((item, index) => {
-            return <Card title={item.pic_title} image={API_URL + item.profpic} />
+        let { userAlbum } = this.state
+        return userAlbum.map((item, index) => {
+            return <Card title={item.pic_title} image={API_URL + item.pic_location} />
         })
     }
     
     render() {
+        console.log(this.props.userGlobal)
+        console.log(this.state.userAlbum)
 
         const { redirectNonUser } = this.state;
         if(redirectNonUser) {
@@ -142,6 +146,7 @@ class UserProfile extends React.Component {
                 </div>
                 <div class="col-md-3 p-4 bg-light text-white text-left">
                     <div class="row">
+                    <img src={API_URL + this.state.pic_location}  alt="user-profile-picture" />
                     {this.printCard()}
                     </div>
                     <div class="row">
@@ -151,10 +156,10 @@ class UserProfile extends React.Component {
                         <div readonly className="form-control-plaintext">Your Email: {this.state.email}</div>
                     </div>
                     <div class="row">
-                        <div readonly className="form-control-plaintext">Your default Address: {this.state.address.user_address}</div>
+                        <div readonly className="form-control-plaintext">Your default Address: {this.state.address ? this.state.address.user_address : null}</div>
                     </div>
                     <div class="row">
-                        <div readonly className="form-control-plaintext">Your address: {this.state.defAddress.user_address}</div>
+                        <div readonly className="form-control-plaintext">Your address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
                     </div>
                 </div>
             </div>

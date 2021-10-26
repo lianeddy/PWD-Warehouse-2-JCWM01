@@ -26,7 +26,7 @@ class ResetPass extends React.Component {
     }
 
     componentDidMount() {
-        if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="admin"){
+        if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="superadmin" || this.props.userGlobal.auth_status==="admin"){
             console.log("authorized")
         } else {
             this.setState({redirectNonUser: true})

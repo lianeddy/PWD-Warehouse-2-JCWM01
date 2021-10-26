@@ -125,6 +125,7 @@ module.exports = {
         let {user_id} =req.body;
         let sqlGet =`SELECT * from user where user_id = ${db.escape(user_id)}`
         db.query(sqlGet, (err, result) =>{
+            console.log(result)
             if(err) {
                 return res.status(500).send(err)
             } else {
