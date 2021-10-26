@@ -53,7 +53,7 @@ class editProfile extends React.Component {
                         <div className="header">Set Default Address</div>
                             <div className="form-group">
                                     <div className="form-group">
-                                        <label htmlFor="text">Please enter one of your current stored address</label>
+                                        <label htmlFor="text">Please enter one of your stored address that you want to set as non default address</label>
                                         <input type="text" name="address" onChange={this.inputHandler} placeholder="Address"></input>                
                                     </div>
                             <div className='detail'>

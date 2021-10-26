@@ -173,7 +173,7 @@ module.exports = {
     setDefault: (req,res) => {
         let { user_id, address } = req.body;
         //console.log(req.body)
-        const patchQuery = `UPDATE address SET default_address = 1 WHERE user_id = ${db.escape(req.body.user_id)} AND user_address = ${db.escape(req.body.address)}`;        
+        const patchQuery = `UPDATE address SET default_address = 0 WHERE user_id = ${db.escape(req.body.user_id)}; UPDATE address SET default_address = 1 WHERE user_id = ${db.escape(req.body.user_id)} AND user_address = ${db.escape(req.body.address)}`;        
         db.query(patchQuery, (err, result)=>{
              if (result) {
                   return res.status(200).send("Address default set");
