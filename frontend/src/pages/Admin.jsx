@@ -493,7 +493,6 @@ class Admin extends React.Component {
           
 
           <div className="col-12 mt-3">
-            <h3>{this.state.selectedWarehouse}</h3>
             <div className="d-flex flex-row justify-content-start">
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="add">Add Product</button>
               <button className="btn-admin" name="menu" onClick={this.inputHandler} value="products">Products List</button>
