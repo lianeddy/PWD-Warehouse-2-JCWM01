@@ -19,7 +19,6 @@ const reducer = (state = init_state, action) => {
     case "SEARCH_PRODUCT":
       return { ...state, ...action.payload };
       case "USER_LOGIN":
-        console.log({ ...state,...action.payload })
         return {...state,...action.payload, storageIsChecked:true}
     case "USER_ERROR":
         return {...state, errMsg: action.payload}

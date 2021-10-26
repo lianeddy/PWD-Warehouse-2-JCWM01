@@ -36,14 +36,6 @@ export const confirmRegBtn = (data) => {
   };
 };
 
-export const getAlbum = (data) => {
-  console.log('action',data)
-  return {
-      type: 'GET_ALBUM',
-      payload: data
-  }
-};
-
 export const loginUser = (data) => {
   return (dispatch) => {
     Axios.post(API_URL + "/login/", {
@@ -128,7 +120,6 @@ export const logoutUser = () => {
 //ambil data dari local storage supaya login terus, nitip dulu ya soalnya kerefresh terus pas coba upload data
 export const userKeepLogin = (data) => {
   return (dispatch) => {
-    console.log(data)
     Axios.get(API_URL + `/keeplogin/keeplogin`, {
       headers: {
         "Authorization": `Bearer ${data}`

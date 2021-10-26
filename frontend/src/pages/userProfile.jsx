@@ -3,9 +3,8 @@ import Axios from 'axios';
 import { API_URL } from "../constants/API";
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import { getAlbum } from '../redux/actions/user'
 import "../assets/styles/loginRegister.css"
-import Card from '../components/card'
+
 
 class UserProfile extends React.Component {
     state = {
@@ -17,7 +16,6 @@ class UserProfile extends React.Component {
         fullname: this.props.userGlobal.fullname,
         email: this.props.userGlobal.email,
         pic_location:this.props.userGlobal.pic_location,
-        userAlbum: [],
         redirect: false,
         redirectNonUser: false,
     }
@@ -30,14 +28,12 @@ class UserProfile extends React.Component {
         }
         this.getAddress() 
         this.getDefaultAddress() 
-        this.getDataAlbum()
     }
 
     getAddress = () => {
         Axios.get(API_URL + `/keeplogin/address?user_id=${this.props.userGlobal.user_id}`)
         .then((res) => {
            this.setState({address:res.data[0]})
-
         })
         .catch((err) => {
             alert(err);
@@ -48,22 +44,10 @@ class UserProfile extends React.Component {
         Axios.get(API_URL + `/keeplogin/defAddress?user_id=${this.props.userGlobal.user_id}`)
         .then((res) => {
            this.setState({defAddress:res.data[0]})
-
         })
         .catch((err) => {
             alert(err);
         });
-    }
-
-    getDataAlbum = () => {
-        Axios.get(API_URL + '/upload/getAlbum')
-            .then((res) => {
-                console.log(this.state.user_id)
-                this.setState({ userAlbum: res.data })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
     }
 
     inputHandler = (event) => {
@@ -85,7 +69,6 @@ class UserProfile extends React.Component {
             formData.append('file', this.state.addFile);
             Axios.post(`${API_URL}/upload/add-profile-picture`,formData)
                 .then(res => {
-                    this.getDataAlbum()
                     alert(res.data.message)
                 })
                 .catch(err => {
@@ -101,18 +84,8 @@ class UserProfile extends React.Component {
             preview.src = URL.createObjectURL(e.target.files[0])
         }
     }
-
-    printCard = () => {
-        let { userAlbum } = this.state
-        return userAlbum.map((item, index) => {
-            return <Card title={item.pic_title} image={API_URL + item.pic_location} />
-        })
-    }
     
     render() {
-        console.log(this.props.userGlobal)
-        console.log(this.state.userAlbum)
-
         const { redirectNonUser } = this.state;
         if(redirectNonUser) {
             return <Redirect to="/"/>
@@ -126,12 +99,12 @@ class UserProfile extends React.Component {
         return <div className=".base-container">
             <div className="content">
             <div className="header">User Profile</div>
-            <div class="container">
+            <div className="container">
             <div className="d-flex justify-content-center">
                 <div className="col-md-3 p-4 bg-dark text-white text-left">
-                    <di className="col-md-3">
+                    <div className="col-md-3">
                         <img id="imgpreview" width="100%" />
-                    </di>
+                    </div>
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="title">Title</label>
@@ -144,22 +117,21 @@ class UserProfile extends React.Component {
                             </form>
                             <button type="button" className="btn btn-primary float-right" onClick={this.onBtAdd}>Add Data</button>
                 </div>
-                <div class="col-md-3 p-4 bg-light text-white text-left">
-                    <div class="row">
+                <div className="col-md-3 p-4 bg-light text-white text-left">
+                    <div className="row">
                     <img src={API_URL + this.state.pic_location}  alt="user-profile-picture" />
-                    {this.printCard()}
                     </div>
-                    <div class="row">
-                        <div readonly className="form-control-plaintext">Your Username: {this.state.username}</div>
+                    <div className="row">
+                        <div readOnly className="form-control-plaintext">Your Username: {this.state.username}</div>
                     </div>
-                    <div class="row">
-                        <div readonly className="form-control-plaintext">Your Email: {this.state.email}</div>
+                    <div className="row">
+                        <div readOnly className="form-control-plaintext">Your Email: {this.state.email}</div>
                     </div>
-                    <div class="row">
-                        <div readonly className="form-control-plaintext">Your default Address: {this.state.address ? this.state.address.user_address : null}</div>
+                    <div className="row">
+                        <div readOnly className="form-control-plaintext">Your default Address: {this.state.address ? this.state.address.user_address : null}</div>
                     </div>
-                    <div class="row">
-                        <div readonly className="form-control-plaintext">Your address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
+                    <div className="row">
+                        <div readOnly className="form-control-plaintext">Your address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
                     </div>
                 </div>
             </div>
@@ -175,11 +147,9 @@ class UserProfile extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('check', state.albumReducer.dataAlbum)
     return {
         userGlobal:state.user,
-        dataAlbum: state.albumReducer.dataAlbum
     }
 }
 
-export default connect(mapStateToProps, { getAlbum })(UserProfile);
+export default connect(mapStateToProps)(UserProfile);
