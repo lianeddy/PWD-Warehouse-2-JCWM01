@@ -6,8 +6,8 @@ const transporter = require('../helper/nodemailer')
 module.exports = {
 
     registerUser: (req, res) => {
-        console.log("Connecting to register API success")
         let { username, email, password, fullname, gender, age, auth_status } = req.body
+        console.log(`Connecting to register API success, user email is ${req.body.email}`)
         password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
         let insertQuery = `Insert into user (username, email, password, fullname, gender, age, auth_status) values (
         ${db.escape(username)},
@@ -46,8 +46,8 @@ module.exports = {
 
                     //Email verification format
                     let mail = { 
-                        from:`Annett's admin <kevinnp28@gmail.com`,
-                        to: `${email}`,
+                        from:`Annett's admin <outerhaven67@gmail.com>`,
+                        to: `${req.body.email}`,
                         subject: 'Account Verification',
                         html:`<a href='http://localhost:3000/auth/${token}'>Click here to verify your account!</a>`
                     }
@@ -71,7 +71,7 @@ module.exports = {
 
     //Verification middleware
     verifyUser:(req, res) =>{
-        let updateQuery = `Update user set verification_status = 'verified' where user_id =${req.user.user_id}`
+        let updateQuery = `Update user set verification_status = 'verified' where user_id = ${req.user.user_id};`
         db.query(updateQuery,(err,results)=>{
             if(err){
                 console.log(err)

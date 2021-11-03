@@ -23,7 +23,7 @@ export const confirmRegBtn = (data) => {
     })
       .then((res) => {
         alert("Registration successful");
-        console.log(res.data);
+        console.log(`data registered for processing ${res.data}`);
         dispatch({
           type: "USER_LOGIN",
           payload: res.data[0],
