@@ -28,7 +28,10 @@ module.exports = {
             console.log("Success Processing register API")
 
             if(results.insertId) {
-                let sqlGet =`SELECT * from user where user_id = ${results.insertId}`
+                //REVISI jadinya pas register harus tambah cart yaa karena pas login cart nya dipanggil
+                let sqlGet =`insert into cart values (null, ${results.insertId});
+                SELECT * from user where user_id = ${results.insertId};`
+                
                 db.query(sqlGet, (err2, results2)=> {
                     if(err2) {
                         console.log(err2)
@@ -82,8 +85,10 @@ module.exports = {
         let { username, password } = req.body;
         console.log(`logging in into ${req.body.username} account'`)
         req.body.password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
-        let scriptQuery = `SELECT * FROM user WHERE username = ${db.escape(req.body.username)} AND password = ${db.escape(req.body.password)}`;
-        db.query(scriptQuery, (err, result) => {
+        //REVISI supaya ambil cart_id (bikin error ketika delete items in cart)
+        let scriptQuery = `SELECT * FROM user u join (select * from cart) c
+        on u.user_id = c.user_id WHERE u.username = ${db.escape(req.body.username)} AND u.password = ${db.escape(req.body.password)}`;
+       db.query(scriptQuery, (err, result) => {
             console.log(`${scriptQuery} is running`)
             if (err) {
                 return res.send({err, message: "Wrong username or password"})
@@ -126,7 +131,9 @@ module.exports = {
     },
     
     keepLogin: (req,res) => {
-        db.query(`SELECT * FROM user WHERE user_id = ${req.user.user_id}`,
+        //REVISI supaya ambil cart_id (bikin error ketika delete items in cart)
+        db.query(`SELECT * FROM user u join (select * from cart) c
+        on u.user_id = c.user_id WHERE u.user_id = ${req.user.user_id}`,
         (err, result) => {
             if (err) {
                 return res.send(err)

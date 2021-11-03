@@ -62,6 +62,7 @@ class Cart extends React.Component {
             const sep = res.data[0].user_location.split(",")
             this.setState({lat:parseFloat(sep[0]),long:parseFloat(sep[1])})
             this.findDistance()
+            this.createTransaction()
             this.createRequestStock()
     })
     .catch((err)=>{
@@ -98,7 +99,6 @@ class Cart extends React.Component {
   checkoutButton = () => {
     this.setState({isCheckout: true})
     this.fnTotalPrice()
-    this.createTransaction()
     this.fetchAdressLocation()
   }
 
