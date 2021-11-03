@@ -180,7 +180,10 @@ class Cart extends React.Component {
 
   renderProducts = ()=>{
     if(this.state.redirect){
-      return <Redirect to="/payment" />
+      return <Redirect to={{
+        pathname: '/payment',
+        state: { transactions_id: this.state.transactions_id }
+    }} />
     }
     return this.state.cartList.map((val) =>{
       const totalPrice = val.price_sell*val.quantity
