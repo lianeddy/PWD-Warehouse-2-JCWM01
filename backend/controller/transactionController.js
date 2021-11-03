@@ -340,7 +340,7 @@ module.exports = {
     },
     payHandler: (request,response) => {
         //ganti status di transactions jadi "paid"
-        let payQuery = `update transactions set transaction_status = "paid" where transactions_id = ${db.escape(request.query.transactions_id)};`
+        let payQuery = `update transactions set transaction_status = "paid" where transactions_id = ${db.escape(request.body.transactions_id)};`
 
         db.query(payQuery, (err, result)=> {
             if (err) {
