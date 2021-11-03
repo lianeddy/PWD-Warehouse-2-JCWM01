@@ -7,8 +7,13 @@ module.exports = {
         var now = new Date();
         let currentTime = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+' '+now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 
+        let warehouseList = []
+        warehouseList = request.body.warehouseList
+        console.log(warehouseList)
+
         //update transactions table
-        let createQuery = `insert into fp_pwd_5.transactions values (null, ${db.escape(currentTime)}, ${db.escape(request.body.user_id)}, ${db.escape(default_status)}, null, null);`
+        //REVISI update warehouse_id
+        let createQuery = `insert into transactions values (null, ${db.escape(currentTime)}, ${db.escape(request.body.user_id)}, ${db.escape(default_status)}, null, ${db.escape(warehouseList[0].warehouse_id)});`
 
         db.query(createQuery, (err, result)=> {
             if (err) {
