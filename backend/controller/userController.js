@@ -192,7 +192,7 @@ module.exports = {
     },
     
     getAddress: (req,response) => {
-        let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 0 and user_id = ${db.escape(req.query.user_id)};`
+        let scriptQuery = `select user_id, user_address, user_location from address where default_address= 0 and user_id = ${db.escape(req.query.user_id)};`
         db.query(scriptQuery, (err, res) => {
             if (err) {
                 return response.send(err)
@@ -204,7 +204,7 @@ module.exports = {
     },
 
     getDefaultAddress: (req,response) => {
-        let scriptQuery = `select user_id, user_address, user_location from fp_pwd_5.address where default_address= 1 and user_id = ${db.escape(req.query.user_id)};`
+        let scriptQuery = `select user_id, user_address, user_location from address where default_address= 1 and user_id = ${db.escape(req.query.user_id)};`
         db.query(scriptQuery, (err, res) => {
             if (err) {
                 return response.send(err)

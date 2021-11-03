@@ -6,8 +6,8 @@ module.exports = {
         const limit = 8;
         console.log(request.query.product_name)
 
-        let scriptQuery = `select * from fp_pwd_5.products p 
-        join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+        let scriptQuery = `select * from products p 
+        join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id) ws
         on p.product_id = ws.product_id 
         where product_name like '%${request.query.product_name}%' and hide = 1
         limit ${limit} offset ${request.query.page*limit};`
@@ -32,8 +32,8 @@ module.exports = {
                 sort = ""
         }
 
-        scriptQuery = `select * from fp_pwd_5.products p 
-        join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+        scriptQuery = `select * from products p 
+        join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id) ws
         on p.product_id = ws.product_id 
         where product_name like '%${request.query.product_name}%' and hide = 1
         ${sort}
@@ -44,24 +44,24 @@ module.exports = {
             const color = request.query.color
 
             if(request.query.category&&request.query.color){
-                scriptQuery = `select * from fp_pwd_5.products p 
-                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                scriptQuery = `select * from products p 
+                join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
                 where category = ${db.escape(category)} and color = ${db.escape(color)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
                 limit ${limit} offset ${request.query.page*limit};`
 
             } else if (request.query.category){
-                scriptQuery = `select * from fp_pwd_5.products p 
-                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                scriptQuery = `select * from products p 
+                join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
                 where category = ${db.escape(category)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
                 limit ${limit} offset ${request.query.page*limit};`
 
             } else if (request.query.color) {
-                scriptQuery = `select * from fp_pwd_5.products p 
-                join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id) ws
+                scriptQuery = `select * from products p 
+                join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id) ws
                 on p.product_id = ws.product_id 
                 where color = ${db.escape(color)} and product_name like '%${request.query.product_name}%' and hide = 1
                 ${sort}
@@ -80,7 +80,7 @@ module.exports = {
         })
     },
     getProductsCategory: (request,response) => {
-        let scriptQuery = `select category from fp_pwd_5.products p group by category;`
+        let scriptQuery = `select category from products p group by category;`
     
         db.query(scriptQuery, (err, result)=> {
             if (err) {
@@ -91,7 +91,7 @@ module.exports = {
         })
     },
     getProductsColor: (request,response) => {
-        let scriptQuery = `select color from fp_pwd_5.products p group by color;`
+        let scriptQuery = `select color from products p group by color;`
 
         db.query(scriptQuery, (err, result)=> {
             if (err) {
@@ -102,21 +102,21 @@ module.exports = {
         })
     },
     getMaxPage: (request,response) => {
-        let scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+        let scriptQuery = `select count(product_id) as sumProduct from products
         where product_name like '%${request.query.product_name}%' and hide = 1;`
 
         
         if(request.query.category||request.query.color){
             if(request.query.category&&request.query.color){
-                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                scriptQuery = `select count(product_id) as sumProduct from products
                 where category = ${db.escape(request.query.category)} and color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
 
             } else if (request.query.category){
-                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                scriptQuery = `select count(product_id) as sumProduct from products
                 where category = ${db.escape(request.query.category)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
 
             } else if (request.query.color) {
-                scriptQuery = `select count(product_id) as sumProduct from fp_pwd_5.products
+                scriptQuery = `select count(product_id) as sumProduct from products
                 where color = ${db.escape(request.query.color)} and product_name like '%${request.query.product_name}%' and hide = 1;` 
             }
 
@@ -132,8 +132,8 @@ module.exports = {
     },
     getProductsDetail: (request,response) => {
         // console.log(request.query.product_id)
-        let scriptQuery = `select * from fp_pwd_5.products p 
-        join (select product_id, size, sum(user_stock) as available_stock from fp_pwd_5.warehouse_stock group by product_id, size) ws
+        let scriptQuery = `select * from products p 
+        join (select product_id, size, sum(user_stock) as available_stock from warehouse_stock group by product_id, size) ws
         on p.product_id = ws.product_id 
         where p.product_id = ${request.query.product_id} and hide = 1;`
 
