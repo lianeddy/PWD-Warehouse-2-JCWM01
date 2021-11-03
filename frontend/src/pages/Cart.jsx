@@ -85,7 +85,8 @@ class Cart extends React.Component {
   createTransaction = () => {
     Axios.post(`${API_URL}/transaction/add`,{
       user_id: this.props.userGlobal.user_id,
-      cartList: this.state.cartList
+      cartList: this.state.cartList,
+      warehouseList: this.state.warehouseList
     })
     .then((res)=> {
         console.log(res.data[0].transactions_id)
