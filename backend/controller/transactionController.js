@@ -34,15 +34,15 @@ module.exports = {
                     }
                 })
 
-                let createItemsQuery = `insert into fp_pwd_5.transaction_items values ${cartQuery}`
+                let createItemsQuery = `insert into transaction_items values ${cartQuery}`
 
                 db.query(createItemsQuery, (err, result)=> {
                     if (err) {
                         return response.status(500).send(err)
                     } 
                     else {
-                        let scriptQuery = `select * from fp_pwd_5.transactions t join
-                        fp_pwd_5.transaction_items ti on t.transactions_id = ti.transactions_id 
+                        let scriptQuery = `select * from transactions t join
+                        transaction_items ti on t.transactions_id = ti.transactions_id 
                         where t.transactions_id = ${db.escape(transactions_id)}`
         
                         db.query(scriptQuery, (err, result)=> {
@@ -70,7 +70,7 @@ module.exports = {
                 
                 let current_warehouse_id = warehouseList[i].warehouse_id
 
-                let searchQuery = `select warehouse_stock from fp_pwd_5.warehouse_stock 
+                let searchQuery = `select warehouse_stock from warehouse_stock 
                 where warehouse_id= ${db.escape(current_warehouse_id)} 
                 and product_id = ${db.escape(val.product_id)}
                 and size = ${db.escape(val.size)};`
@@ -82,7 +82,7 @@ module.exports = {
                         if(result[0]){
                             let warehouse_stock = result[0].warehouse_stock
     
-                            let changeQuery = `update fp_pwd_5.warehouse_stock set user_stock = ${db.escape(warehouse_stock)}
+                            let changeQuery = `update warehouse_stock set user_stock = ${db.escape(warehouse_stock)}
                             where warehouse_id= ${db.escape(current_warehouse_id)} 
                             and product_id = ${db.escape(val.product_id)}
                             and size = ${db.escape(val.size)}; `
@@ -103,10 +103,10 @@ module.exports = {
         })
 
         // delete request dengan transaction_id tsb di request_table
-        let requestQuery = `delete from fp_pwd_5.request where transactions_id = ${db.escape(request.query.transactions_id)};`
+        let requestQuery = `delete from request where transactions_id = ${db.escape(request.query.transactions_id)};`
 
         //ganti status di transactions jadi "user_cancelled"
-        let transactionQuery = `update fp_pwd_5.transactions set transaction_status = "user_cancelled" where transactions_id = ${db.escape(request.query.transactions_id)};`
+        let transactionQuery = `update transactions set transaction_status = "user_cancelled" where transactions_id = ${db.escape(request.query.transactions_id)};`
 
         let scriptQuery = `${requestQuery}`+`${transactionQuery}`
         db.query(scriptQuery, (err, result)=> {
@@ -129,7 +129,7 @@ module.exports = {
                 
                 let current_warehouse_id = warehouseList[i].warehouse_id
 
-                let searchQuery = `select user_stock from fp_pwd_5.warehouse_stock 
+                let searchQuery = `select user_stock from warehouse_stock 
                 where warehouse_id= ${db.escape(current_warehouse_id)} 
                 and product_id = ${db.escape(val.product_id)}
                 and size = ${db.escape(val.size)};`
@@ -141,7 +141,7 @@ module.exports = {
                         if(result[0]){
                             let user_stock = result[0].user_stock
     
-                            let changeQuery = `update fp_pwd_5.warehouse_stock set warehouse_stock = ${db.escape(user_stock)}
+                            let changeQuery = `update warehouse_stock set warehouse_stock = ${db.escape(user_stock)}
                             where warehouse_id= ${db.escape(current_warehouse_id)} 
                             and product_id = ${db.escape(val.product_id)}
                             and size = ${db.escape(val.size)}; `
@@ -162,7 +162,7 @@ module.exports = {
         })
 
         //cart clear
-        let deleteQuery = `delete from fp_pwd_5.cart_items where cart_id = ${db.escape(request.query.cart_id)};`
+        let deleteQuery = `delete from cart_items where cart_id = ${db.escape(request.query.cart_id)};`
 
         db.query(deleteQuery, (err, result)=> {
             if (err) {
@@ -170,7 +170,7 @@ module.exports = {
             } else {
                 //status berubah jadi waiting_payment
                 const default_status = "waiting_payment"
-                let updateQuery = `update fp_pwd_5.transactions set transaction_status = ${db.escape(default_status)} where transactions_id = ${db.escape(request.query.transactions_id)}`
+                let updateQuery = `update transactions set transaction_status = ${db.escape(default_status)} where transactions_id = ${db.escape(request.query.transactions_id)}`
 
                 db.query(updateQuery, (err, result)=> {
                     if (err) {
@@ -192,7 +192,7 @@ module.exports = {
         warehouseList = request.body.warehouseList
         transactions_id = request.body.transactions_id
 
-        let warehouseQuery = `update fp_pwd_5.transactions set warehouse_id = ${db.escape(warehouseList[0].warehouse_id)} where transactions_id = ${db.escape(request.body.transactions_id)} `
+        let warehouseQuery = `update transactions set warehouse_id = ${db.escape(warehouseList[0].warehouse_id)} where transactions_id = ${db.escape(request.body.transactions_id)} `
         db.query(warehouseQuery, (err, result)=> {
             if (err) {
                 return response.status(500).send(err)
@@ -206,7 +206,7 @@ module.exports = {
             let neededStock = 0
 
             while (i < warehouseList.length){
-                let checkQuery = `select user_stock from fp_pwd_5.warehouse_stock 
+                let checkQuery = `select user_stock from warehouse_stock 
                 where product_id = ${db.escape(val.product_id)} 
                 and size = ${db.escape(val.size)}
                 and warehouse_id = ${db.escape(warehouseList[i].warehouse_id)}`
@@ -241,7 +241,7 @@ module.exports = {
                                     if(first_warehouse_name===current_warehouse_name){ //kalo warehouse pertama cuma ambil(bukan request)
                                         //kurangi user_stock di warehouse ini dengan needed stock
 
-                                        let minQuery = `update fp_pwd_5.warehouse_stock set user_stock = ${db.escape(user_stock-neededStock)} 
+                                        let minQuery = `update warehouse_stock set user_stock = ${db.escape(user_stock-neededStock)} 
                                         where warehouse_id = ${db.escape(current_warehouse_id)}
                                         and product_id = ${db.escape(val.product_id)}
                                         and size = ${db.escape(val.size)};`
@@ -260,12 +260,12 @@ module.exports = {
                                         //kurangi user_stock pada table warehouse_stock di warehouse ini dengan needed stock
                                         //bawahnya untuk update request table dengan (null,val.product_id,val.size,first_warehouse_name,current_warehouse_name,neededStock,"unconfirmed")
 
-                                        let minQuery = `update fp_pwd_5.warehouse_stock set user_stock = ${db.escape(user_stock-neededStock)} 
+                                        let minQuery = `update warehouse_stock set user_stock = ${db.escape(user_stock-neededStock)} 
                                         where warehouse_id = ${db.escape(current_warehouse_id)}
                                         and product_id = ${db.escape(val.product_id)}
                                         and size = ${db.escape(val.size)};
                                         
-                                        insert into fp_pwd_5.request value 
+                                        insert into request value 
                                                 (null,${db.escape(val.product_id)},${db.escape(val.size)},${db.escape(first_warehouse_id)},${db.escape(current_warehouse_id)},
                                                 ${db.escape(neededStock)},${db.escape(default_status)},${db.escape(transactions_id)});`
                                         
@@ -291,7 +291,7 @@ module.exports = {
                                 if(neededStock!==0){
                                     if(first_warehouse_name===current_warehouse_name){ //kalo warehouse pertama cuma ambil(bukan request)
                                         //kurangi user_stock di warehouse ini dengan useer_stock alias dibikin 0
-                                        let minQuery = `update fp_pwd_5.warehouse_stock set user_stock = ${db.escape(user_stock-user_stock)} 
+                                        let minQuery = `update warehouse_stock set user_stock = ${db.escape(user_stock-user_stock)} 
                                         where warehouse_id = ${db.escape(current_warehouse_id)}
                                         and product_id = ${db.escape(val.product_id)}
                                         and size = ${db.escape(val.size)};`
@@ -308,12 +308,12 @@ module.exports = {
                                         const default_status = "unconfirmed"
                                         //kurangi user_stock di warehouse ini dengan useer_stock alias dibikin 0
                                         //bawahnya untuk update request table dengan (null,val.product_id,val.size,first_warehouse_name,current_warehouse_name,user_stock,"unconfirmed")
-                                        let minQuery = `update fp_pwd_5.warehouse_stock set user_stock = ${db.escape(user_stock-user_stock)} 
+                                        let minQuery = `update warehouse_stock set user_stock = ${db.escape(user_stock-user_stock)} 
                                         where warehouse_id = ${db.escape(current_warehouse_id)}
                                         and product_id = ${db.escape(val.product_id)}
                                         and size = ${db.escape(val.size)};
                                         
-                                        insert into fp_pwd_5.request value 
+                                        insert into request value 
                                                 (null,${db.escape(val.product_id)},${db.escape(val.size)},${db.escape(first_warehouse_id)},${db.escape(current_warehouse_id)},
                                                 ${db.escape(user_stock)},${db.escape(default_status)},${db.escape(transactions_id)});`
 

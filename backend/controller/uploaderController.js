@@ -22,7 +22,7 @@ module.exports = {
                 data.image = filepath
 
                 //simpan datanya ke database, image = lokasi+nama image ini untuk product table
-                let sqlInsert = `Insert into fp_pwd_5.products values 
+                let sqlInsert = `Insert into products values 
                                 (null,${db.escape(data.product_name)},${db.escape(data.price_buy)},${db.escape(data.price_sell)},
                                 ${db.escape(data.product_desc)},${db.escape(data.category)},${db.escape(data.color)},
                                 ${db.escape(filepath)},1)`
@@ -36,7 +36,7 @@ module.exports = {
 
                 //ini untuk ke table warehouse_stock
                 //ambil dulu product_id nya
-                let scriptQuery = `select product_id from fp_pwd_5.products where product_name = ${db.escape(data.product_name)};`
+                let scriptQuery = `select product_id from products where product_name = ${db.escape(data.product_name)};`
                 let sizeArray = data.size.toLowerCase().split(",") 
 
                 let product_id = ""
@@ -59,7 +59,7 @@ module.exports = {
                             }
                         })
 
-                        let sqlInsertStock = `Insert into fp_pwd_5.warehouse_stock values ${sizeQuery}`
+                        let sqlInsertStock = `Insert into warehouse_stock values ${sizeQuery}`
 
                         db.query(sqlInsertStock, (err, results) => {
                             if (err) {
@@ -100,7 +100,7 @@ module.exports = {
                 data.image = filepath
 
                 //simpan datanya ke database, image = lokasi+nama image ini untuk update aja
-                let sqlEdit = `Update fp_pwd_5.products set 
+                let sqlEdit = `Update products set 
                                 product_image = ${db.escape(filepath)}
                                 where product_id = ${db.escape(data.product_id)}`
                 db.query(sqlEdit, (err, results) => {
@@ -151,7 +151,7 @@ module.exports = {
                 let data = JSON.parse(req.body.data)
                 data.image = filepath
 
-                let sqlInsert = `Update fp_pwd_5.user set pic_title=${db.escape(data.title)}, pic_location=${db.escape(filepath)} WHERE user_id = ${db.escape(data.user_id)};`
+                let sqlInsert = `Update user set pic_title=${db.escape(data.title)}, pic_location=${db.escape(filepath)} WHERE user_id = ${db.escape(data.user_id)};`
                 db.query(sqlInsert , (err, results) => {
                     if (err) {
                         console.log(err)
@@ -188,7 +188,7 @@ module.exports = {
                 data.image = filepath
 
                 //simpan datanya ke database, image = lokasi+nama image ini untuk update aja
-                let sqlEdit = `Update fp_pwd_5.products set 
+                let sqlEdit = `Update products set 
                                 product_image = ${db.escape(filepath)}
                                 where product_id = ${db.escape(data.product_id)}`
                 db.query(sqlEdit, (err, results) => {

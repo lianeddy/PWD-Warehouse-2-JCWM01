@@ -2,7 +2,7 @@ const {db} = require('../database') //akses file (baca/tulis)
 
 module.exports = {
     getCartID: (request,response) => {
-        let scriptQuery = `select * from fp_pwd_5.cart where user_id = ${db.escape(request.query.user_id)};`
+        let scriptQuery = `select * from cart where user_id = ${db.escape(request.query.user_id)};`
 
         db.query(scriptQuery, (err, result)=> {
             if (err) {
@@ -12,7 +12,7 @@ module.exports = {
                     return response.status(200).send(result)
                 }
                 else { //kalo cart id nya blm ada
-                    let createQuery = `insert into fp_pwd_5.cart values (null,${db.escape(request.query.user_id)})`
+                    let createQuery = `insert into cart values (null,${db.escape(request.query.user_id)})`
                     db.query(createQuery, (err, result)=> {
                         if (err) {
                             return response.status(500).send(err)
@@ -33,7 +33,7 @@ module.exports = {
     },
     addCartItems: (request,response) => {
         //cek dulu ada gak barangnya di cart
-        let checkQuery = `select * from fp_pwd_5.cart_items where cart_id = ${db.escape(request.body.cart_id)} and product_id = ${db.escape(request.body.product_id)}
+        let checkQuery = `select * from cart_items where cart_id = ${db.escape(request.body.cart_id)} and product_id = ${db.escape(request.body.product_id)}
         and size = ${db.escape(request.body.size)}` 
 
         db.query(checkQuery, (err, result)=> {
@@ -43,7 +43,7 @@ module.exports = {
                 console.log(result[0])
                 if(result[0]){ //kalo ada, update aja qty nya
                     console.log("produk sudah ada")
-                    let updateQuery = `update fp_pwd_5.cart_items set quantity=${db.escape(result[0].quantity+request.body.quantity)} 
+                    let updateQuery = `update cart_items set quantity=${db.escape(result[0].quantity+request.body.quantity)} 
                     where cart_id = ${db.escape(request.body.cart_id)} and product_id = ${db.escape(request.body.product_id)}
                     and size = ${db.escape(request.body.size)};`
 
@@ -56,7 +56,7 @@ module.exports = {
                     })
                 }
                 else{
-                    let scriptQuery = `insert into fp_pwd_5.cart_items values (null,${db.escape(request.body.cart_id)},
+                    let scriptQuery = `insert into cart_items values (null,${db.escape(request.body.cart_id)},
                     ${db.escape(request.body.product_id)},${db.escape(request.body.size)},${db.escape(request.body.quantity)});`
 
                     db.query(scriptQuery, (err, result)=> {
@@ -78,7 +78,7 @@ module.exports = {
         ci.product_id as product_id, ci.size as size, ci.quantity as quantity,
         p.product_name as product_name, p.price_buy as price_buy, 
         p.price_sell as price_sell, p.product_image as product_image
-        from fp_pwd_5.cart_items ci, fp_pwd_5.cart c, fp_pwd_5.products p 
+        from cart_items ci, cart c, products p 
         where ci.product_id = p.product_id and ci.cart_id = c.cart_id 
         and c.user_id = ${db.escape(request.query.user_id)};`
 
@@ -92,7 +92,7 @@ module.exports = {
     },
     deleteCartItems: (request,response) => {
 
-        let deleteQuery = `delete from fp_pwd_5.cart_items where cart_id = ${db.escape(request.body.cart_id)} and product_id = ${db.escape(request.body.product_id)}
+        let deleteQuery = `delete from cart_items where cart_id = ${db.escape(request.body.cart_id)} and product_id = ${db.escape(request.body.product_id)}
         and size = ${db.escape(request.body.size)}` 
 
         db.query(deleteQuery, (err, result)=> {
