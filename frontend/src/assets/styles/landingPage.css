@@ -86,7 +86,9 @@ p{
 }
 
 .payment-container{
-    margin-top: 150px
+    margin-top: 150px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 /* .container{
