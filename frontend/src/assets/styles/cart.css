@@ -99,3 +99,9 @@ p{
 .font-weight-bold{
     font-weight: 800 !important;
 }
+
+.btn-dark{
+    text-decoration: underline !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}

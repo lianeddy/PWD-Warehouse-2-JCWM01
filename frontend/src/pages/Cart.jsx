@@ -162,6 +162,14 @@ class Cart extends React.Component {
     })
   }
 
+  fnQuantityUp = () => {
+    //this.val.quantity + 1
+  }
+
+  fnQuantityDown = () => {
+    //this.val.quantity - 1
+  }
+
   paymentHandler = () => {
     console.log(this.state.transactions_id)
     Axios.post(`${API_URL}/transaction/continue?transactions_id=${this.state.transactions_id}&cart_id=${this.props.userGlobal.cart_id}`,{
@@ -193,7 +201,9 @@ class Cart extends React.Component {
             <td className="align-middle">Rp. {val.price_sell.toLocaleString()}</td>
             <td className="align-middle"><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td className="align-middle">
+            <button onClick={this.fnQuantityUp} className="btn btn-dark btn-sm">+</button>
               {val.quantity}
+            <button onClick={this.fnQuantityUp} className="btn btn-dark btn-sm">-</button>
             </td>
             <td className="align-middle">
               {val.size.toUpperCase()}
