@@ -28,9 +28,9 @@ module.exports = {
             console.log("Success Processing register API")
 
             if(results.insertId) {
+                const insertId = results.insertId
                 //REVISI jadinya pas register harus tambah cart yaa karena pas login cart nya dipanggil
-                let sqlGet =`insert into cart values (null, ${results.insertId});
-                SELECT * from user where user_id = ${results.insertId};`
+                let sqlGet =`SELECT * from user where user_id = ${results.insertId};`
                 
                 db.query(sqlGet, (err2, results2)=> {
                     if(err2) {
@@ -60,12 +60,18 @@ module.exports = {
                         } 
                         return res.status(200).send({ message: "Registration in process, please check your", success: true})
                     })
+
+                    console.log(results2[0].user_id)
+                    console.log(username)
+                    db.query(`insert into cart values (null, ${db.escape(user_id)}); SELECT * FROM user WHERE username = ${db.escape(username)};`, (err3, results3) => {
+                        if (err3) return res.status(500).send(err3)
+                        return res.status(200).send({ message: 'registration succesfull', data: results3 })
+                    })
                 })
+                
+
             }
-            db.query(`SELECT * FROM user WHERE username = ${db.escape(username)};`, (err2, results2) => {
-                if (err2) return res.status(500).send(err2)
-                return res.status(200).send({ message: 'registration succesfull', data: results2 })
-            })
+
         }) 
     },
 
