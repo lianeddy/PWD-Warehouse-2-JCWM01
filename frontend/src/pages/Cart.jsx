@@ -56,7 +56,7 @@ class Cart extends React.Component {
   }
 
   fetchAdressLocation = () => {
-    Axios.get(`${API_URL}/keeplogin/address?user_id=${this.props.userGlobal.user_id}`)
+    Axios.get(`${API_URL}/keeplogin/defAddress?user_id=${this.props.userGlobal.user_id}`)
     .then((res)=> {
             this.setState({addressLocation:res.data[0]})
             const sep = res.data[0].user_location.split(",")
