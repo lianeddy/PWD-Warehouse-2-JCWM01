@@ -128,10 +128,10 @@ class UserProfile extends React.Component {
                         <div readOnly className="form-control-plaintext">Your Email: {this.state.email}</div>
                     </div>
                     <div className="row">
-                        <div readOnly className="form-control-plaintext">Your default Address: {this.state.address ? this.state.defAddress.user_address : null}</div>
+                        <div readOnly className="form-control-plaintext">Your default Address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
                     </div>
                     <div className="row">
-                        <div readOnly className="form-control-plaintext">Your address: {this.state.defAddress ? this.state.address.user_address : null}</div>
+                        <div readOnly className="form-control-plaintext">Your address: {this.state.address ? this.state.address.user_address : null}</div>
                     </div>
                 </div>
             </div>
