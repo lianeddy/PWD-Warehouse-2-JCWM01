@@ -6,8 +6,8 @@ const transporter = require('../helper/nodemailer')
 module.exports = {
 
     registerUser: (req, res) => {
-        console.log("Connecting to register API success")
         let { username, email, password, fullname, gender, age, auth_status } = req.body
+        console.log(`Connecting to register API success, user email is ${req.body.email}`)
         password = Crypto.createHmac("sha1", "hash123").update(password).digest("hex");
         let insertQuery = `Insert into user (username, email, password, fullname, gender, age, auth_status) values (
         ${db.escape(username)},
@@ -28,9 +28,9 @@ module.exports = {
             console.log("Success Processing register API")
 
             if(results.insertId) {
+                const insertId = results.insertId
                 //REVISI jadinya pas register harus tambah cart yaa karena pas login cart nya dipanggil
-                let sqlGet =`insert into cart values (null, ${results.insertId});
-                SELECT * from user where user_id = ${results.insertId};`
+                let sqlGet =`SELECT * from user where user_id = ${results.insertId};`
                 
                 db.query(sqlGet, (err2, results2)=> {
                     if(err2) {
@@ -46,8 +46,8 @@ module.exports = {
 
                     //Email verification format
                     let mail = { 
-                        from:`Annett's admin <kevinnp28@gmail.com`,
-                        to: `${email}`,
+                        from:`Annett's admin <outerhaven67@gmail.com>`,
+                        to: `${req.body.email}`,
                         subject: 'Account Verification',
                         html:`<a href='http://localhost:3000/auth/${token}'>Click here to verify your account!</a>`
                     }
@@ -60,18 +60,24 @@ module.exports = {
                         } 
                         return res.status(200).send({ message: "Registration in process, please check your", success: true})
                     })
+
+                    console.log(results2[0].user_id)
+                    console.log(username)
+                    db.query(`insert into cart values (null, ${db.escape(user_id)}); SELECT * FROM user WHERE username = ${db.escape(username)};`, (err3, results3) => {
+                        if (err3) return res.status(500).send(err3)
+                        return res.status(200).send({ message: 'registration succesfull', data: results3 })
+                    })
                 })
+                
+
             }
-            db.query(`SELECT * FROM user WHERE username = ${db.escape(username)};`, (err2, results2) => {
-                if (err2) return res.status(500).send(err2)
-                return res.status(200).send({ message: 'registration succesfull', data: results2 })
-            })
+
         }) 
     },
 
     //Verification middleware
     verifyUser:(req, res) =>{
-        let updateQuery = `Update user set verification_status = 'verified' where user_id =${req.user.user_id}`
+        let updateQuery = `Update user set verification_status = 'verified' where user_id = ${req.user.user_id};`
         db.query(updateQuery,(err,results)=>{
             if(err){
                 console.log(err)
