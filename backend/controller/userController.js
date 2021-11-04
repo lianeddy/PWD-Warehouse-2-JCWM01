@@ -61,8 +61,6 @@ module.exports = {
                         return res.status(200).send({ message: "Registration in process, please check your", success: true})
                     })
 
-                    console.log(results2[0].user_id)
-                    console.log(username)
                     db.query(`insert into cart values (null, ${db.escape(user_id)}); SELECT * FROM user WHERE username = ${db.escape(username)};`, (err3, results3) => {
                         if (err3) return res.status(500).send(err3)
                         return res.status(200).send({ message: 'registration succesfull', data: results3 })

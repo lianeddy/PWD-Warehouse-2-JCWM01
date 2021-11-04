@@ -63,7 +63,6 @@ class Cart extends React.Component {
             this.setState({lat:parseFloat(sep[0]),long:parseFloat(sep[1])})
             this.findDistance()
             this.createTransaction()
-            this.createRequestStock()
     })
     .catch((err)=>{
         alert("address not found!")
@@ -91,6 +90,7 @@ class Cart extends React.Component {
     .then((res)=> {
         console.log(res.data[0].transactions_id)
         this.setState({transactions_id:res.data[0].transactions_id})
+        this.createRequestStock()
     })
     .catch((err)=>{
         alert(err)
