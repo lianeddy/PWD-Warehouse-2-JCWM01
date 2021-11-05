@@ -6,5 +6,7 @@ router.get('/id',cartController.getCartID)
 router.post('/add',cartController.addCartItems)
 router.get('/get',cartController.getCartItems)
 router.post('/delete',cartController.deleteCartItems)
+router.post('/qtyUp',cartController.quantityUp)
+router.post('/qtyDown',cartController.quantityDown)
 
 module.exports = router

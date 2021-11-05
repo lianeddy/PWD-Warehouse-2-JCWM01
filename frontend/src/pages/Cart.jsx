@@ -18,7 +18,6 @@ class Cart extends React.Component {
   state = {
     cartList:[],
     isCheckout:false,
-
     addressLocation:[],
     lat:0,
     long:0,
@@ -162,14 +161,6 @@ class Cart extends React.Component {
     })
   }
 
-  fnQuantityUp = () => {
-    //this.val.quantity + 1
-  }
-
-  fnQuantityDown = () => {
-    //this.val.quantity - 1
-  }
-
   paymentHandler = () => {
     console.log(this.state.transactions_id)
     Axios.post(`${API_URL}/transaction/continue?transactions_id=${this.state.transactions_id}&cart_id=${this.props.userGlobal.cart_id}`,{
@@ -187,6 +178,7 @@ class Cart extends React.Component {
   }
 
   renderProducts = ()=>{
+    console.log(this.state.cartList)
     if(this.state.redirect){
       return <Redirect to={{
         pathname: '/payment',
@@ -195,15 +187,23 @@ class Cart extends React.Component {
     }
     return this.state.cartList.map((val) =>{
       const totalPrice = val.price_sell*val.quantity
+
+      const fnQuantityUp = ()=>{
+       return val + 1
+      }
+      const fnQuantityDown = ()=>{
+       return val - 1
+      }
+
         return(
           <tr>
             <td className="align-middle">{val.product_name}</td>
             <td className="align-middle">Rp. {val.price_sell.toLocaleString()}</td>
             <td className="align-middle"><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
             <td className="align-middle">
-            <button onClick={this.fnQuantityUp} className="btn btn-dark btn-sm">+</button>
+            <button onClick={()=>{this.quantityUpHandler(val)}} className="btn btn-dark btn-sm">+</button>
               {val.quantity}
-            <button onClick={this.fnQuantityUp} className="btn btn-dark btn-sm">-</button>
+            <button onClick={()=>{this.quantityDownHandler(val)}} disabled={val.quantity === 1} className="btn btn-dark btn-sm">-</button>
             </td>
             <td className="align-middle">
               {val.size.toUpperCase()}
@@ -222,6 +222,36 @@ class Cart extends React.Component {
 
   refreshPage = ()=>{
     window.location.reload();
+  }
+
+  quantityUpHandler = (val) => {
+    Axios.post(`${API_URL}/cart/qtyUp`, {
+      cart_id: this.props.userGlobal.cart_id,
+      product_id: val.product_id,
+      size: val.size.toLowerCase(),
+    })
+    .then(()=> {
+      this.props.getCartData(this.props.userGlobal.user_id)
+      this.refreshPage()
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+  
+  quantityDownHandler = (val) => {
+    Axios.post(`${API_URL}/cart/qtyDown`, {
+      cart_id: this.props.userGlobal.cart_id,
+      product_id: val.product_id,
+      size: val.size.toLowerCase(),
+    })
+    .then(()=> {
+      this.props.getCartData(this.props.userGlobal.user_id)
+      this.refreshPage()
+    })
+    .catch((err)=>{
+      alert(err)
+  })
   }
 
   deleteHandler = (val) => {

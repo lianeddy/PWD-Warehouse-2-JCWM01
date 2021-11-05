@@ -103,5 +103,27 @@ module.exports = {
             }
         })
     },
+
+    quantityUp: (req, res) => {
+        let addQuery = `UPDATE cart_items SET quantity = quantity + 1  where cart_id = ${db.escape(req.body.cart_id)} and product_id = ${db.escape(req.body.product_id)} and size = ${db.escape(req.body.size)}`
+        db.query(addQuery, (err, result) => {
+            if (err) {
+                return res.status(500).send(err)
+            } else {
+                return res.status(200).send(result)
+            }
+        })
+    },
+
+    quantityDown: (req, res) => {
+        let addQuery = `UPDATE cart_items SET quantity = quantity - 1  where cart_id = ${db.escape(req.body.cart_id)} and product_id = ${db.escape(req.body.product_id)} and size = ${db.escape(req.body.size)}`
+        db.query(addQuery, (err, result) => {
+            if (err) {
+                return res.status(500).send(err)
+            } else {
+                return res.status(200).send(result)
+            }
+        })
+    },
     
 }
