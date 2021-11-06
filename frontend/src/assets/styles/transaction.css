@@ -1,0 +1,13 @@
+.cart-container{
+    margin-top: 100px;
+}
+
+thead, td {
+    font-family: 'poppins-regular';
+    font-size: 12px !important;
+    margin:0 !important;
+}
+
+table{
+    margin-top: 16px;
+}

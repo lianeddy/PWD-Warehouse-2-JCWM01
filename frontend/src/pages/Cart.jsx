@@ -17,6 +17,7 @@ const mapStyles = {
 class Cart extends React.Component {
   state = {
     cartList:[],
+    transaction: [],
     isCheckout:false,
     addressLocation:[],
     lat:0,
@@ -178,7 +179,6 @@ class Cart extends React.Component {
   }
 
   renderProducts = ()=>{
-    console.log(this.state.cartList)
     if(this.state.redirect){
       return <Redirect to={{
         pathname: '/payment',
@@ -187,13 +187,6 @@ class Cart extends React.Component {
     }
     return this.state.cartList.map((val) =>{
       const totalPrice = val.price_sell*val.quantity
-
-      const fnQuantityUp = ()=>{
-       return val + 1
-      }
-      const fnQuantityDown = ()=>{
-       return val - 1
-      }
 
         return(
           <tr>

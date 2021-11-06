@@ -20,6 +20,10 @@ class UserProfile extends React.Component {
         redirectNonUser: false,
     }
 
+    refreshPage = ()=>{
+        window.location.reload();
+      }
+
     componentDidMount() {
         if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="superadmin" || this.props.userGlobal.auth_status==="admin"){
             console.log("authorized")
@@ -69,6 +73,7 @@ class UserProfile extends React.Component {
             formData.append('file', this.state.addFile);
             Axios.post(`${API_URL}/upload/add-profile-picture`,formData)
                 .then(res => {
+                    this.refreshPage()
                     alert(res.data.message)
                 })
                 .catch(err => {

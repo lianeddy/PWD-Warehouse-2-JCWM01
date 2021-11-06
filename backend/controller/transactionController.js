@@ -349,5 +349,19 @@ module.exports = {
                 return response.status(200).send(result)
             }
         })
+    },
+    getCurrentTransaction: (req,res) => {
+        let scriptQuery = `SELECT * FROM transactions WHERE user_id = ${db.escape(req.query.user_id)} AND transaction_status = "waiting_payment";`
+
+        db.query(scriptQuery, (err, result)=> {
+            console.log(result[0])
+            if (err) {
+                return res.status(500).send(err)
+            } else if (result[0]) {
+                return res.status(200).send(result)
+            } else { 
+                    return res.status(200).send({message: "no transaction at the moment"})
+            } 
+            })
+        }
     }
-}
