@@ -21,6 +21,8 @@ import setDefAddress from "./pages/setDefAddress";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Sales from "./pages/SalesReport";
+import History from "./pages/history";
+import AdminTransaction from "./pages/adminTransaction";
 
 class App extends React.Component {
   componentDidMount() {
@@ -60,8 +62,10 @@ class App extends React.Component {
             <Route component={resetPass} path="/resetPassword" />
             <Route component={VerificationPage} path="/auth/:token" />
             <Route component={Cart} path="/cart" />
+            <Route component={AdminTransaction} path="/adminTransaction" />
             <Route component={Payment} path="/payment" />
             <Route component={Sales} path="/sales" />
+            <Route component={History} path="/history" />
             <Route component={LandingPage} path="/" />
           </Switch>
         </BrowserRouter>

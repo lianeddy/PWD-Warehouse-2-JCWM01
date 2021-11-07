@@ -6,6 +6,7 @@ const bodyParser = require("body-parser"); //menerjemahkan databody dr url req f
 const port = 2700; //port
 const app = express();
 
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());

@@ -92,12 +92,12 @@ module.exports = {
         //REVISI supaya ambil cart_id (bikin error ketika delete items in cart)
         let scriptQuery = `SELECT * FROM user u join (select * from cart) c
         on u.user_id = c.user_id WHERE u.username = ${db.escape(req.body.username)} AND u.password = ${db.escape(req.body.password)}`;
-       db.query(scriptQuery, (err, result) => {
-            console.log(`${scriptQuery} is running`)
+        db.query(scriptQuery, (err, result) => {
+            //console.log(`${scriptQuery} is running`)
             if (err) {
                 return res.send({err, message: "Wrong username or password"})
             }
-            //console.log(`Creating token for ${result[0].username}`)
+            console.log(result[0])
             if (result[0]) {  //create token    
                 let { user_id, username, email, verification_status } = result[0]
                 //console.log(`result[0] is set for ${result[0].username}`)

@@ -18,6 +18,7 @@ class UserProfile extends React.Component {
         pic_location:this.props.userGlobal.pic_location,
         redirect: false,
         redirectNonUser: false,
+        auth_status: this.props.userGlobal.auth_status
     }
 
     refreshPage = ()=>{
@@ -90,6 +91,22 @@ class UserProfile extends React.Component {
         }
     }
     
+    renderHistoryButton = () => {
+        if(this.state.auth_status==='admin'){
+            return(
+            <Link to="/adminTransaction">
+                <button className="btn-dark">Check request transaction</button>
+            </Link>
+            )
+        } else {
+            return(
+            <Link to="/history">
+                 <button className="btn-dark">Check your transactions</button>
+            </Link>
+            )  
+        }
+    }
+
     render() {
         const { redirectNonUser } = this.state;
         if(redirectNonUser) {
@@ -146,6 +163,7 @@ class UserProfile extends React.Component {
                 <Link to="/editAddress">Modify Address</Link>
                 <Link to="/setDefAddress">Set Default Address</Link>
                 <Link to="/resetPassword">Modify Password</Link>
+                {this.renderHistoryButton()}
             </div>
         </div>
     }

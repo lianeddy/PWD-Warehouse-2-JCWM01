@@ -49,15 +49,15 @@ class Payment extends React.Component {
                 console.log(err)
             });
     }
-}
-
-previewHandler = (e) => {
-  if (e.target.files[0]) {
-      this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
-      //let preview = document.getElementById("imgpreview")
-      //preview.src = URL.createObjectURL(e.target.files[0])
   }
-}
+
+  previewHandler = (e) => {
+    if (e.target.files[0]) {
+        this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+        //let preview = document.getElementById("imgpreview")
+        //preview.src = URL.createObjectURL(e.target.files[0])
+    }
+  }
 
   payHandler = () => {
     let idTransaction = 0
@@ -86,28 +86,27 @@ previewHandler = (e) => {
 
   renderTransaction = () => {
     if(this.state.transaction[0]){
-    return this.state.transaction.map((val) =>{
-    return(
-    <tr>    
-    <td className="align-middle">{val.transactions_id}</td>
-    <td className="align-middle">{this.props.userGlobal.username}</td>
-    <td className="align-middle">{val.transaction_status}</td>
-    <td className="align-middle">
-      <input type="file" className="form-control-dark" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} />
-    </td> 
-    <td className="align-middle">
-      <button className="btn-basic" onClick={this.uploadHandler}>Add Picture</button>
-    </td>
-    <td className="align-middle">
-      <button className="btn-basic" onClick={this.payHandler}><p>Pay</p></button>
-    </td>
-  </tr>
+      return this.state.transaction.map((val) => {
+        return(
+          <tr>    
+            <td className="align-middle">{val.transactions_id}</td>
+            <td className="align-middle">{this.props.userGlobal.username}</td>
+            <td className="align-middle">{val.transaction_status}</td>
+            <td className="align-middle">
+              <input type="file" className="form-control-dark" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} />
+            </td> 
+            <td className="align-middle">
+              <button className="btn-basic" onClick={this.uploadHandler}>Add Picture</button>
+            </td>
+            <td className="align-middle">
+              <button className="btn-basic" onClick={this.payHandler}><p>Pay</p></button>
+            </td>
+          </tr>
     )}
-  ) 
-  } else { 
+  )} else { 
     console.log ("no transaction require payment")
+    }
   }
-}
 
   
   render(){
@@ -118,23 +117,23 @@ previewHandler = (e) => {
     console.log()
       return (
         <div className="p-5 cart-container">
-        <div className="col-9 text-center">
-          <table className="table">
-            <thead className="table-light">
-                  <tr>
-                    <th scope="col">Transaction no.</th>
-                    <th scope="col">Buyer id</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Payment Proof</th>
-                    <th scope="col">Upload Payment Proof</th>
-                    <th scope="col">Action</th>
-                  </tr>
-            </thead>
-            <tbody>
-              {this.renderTransaction()}
-            </tbody>
-          </table>
-        </div>
+          <div className="col-9 text-center">
+            <table className="table">
+              <thead className="table-light">
+                    <tr>
+                      <th scope="col">Transaction no.</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Payment Proof</th>
+                      <th scope="col">Upload Payment Proof</th>
+                      <th scope="col">Action</th>
+                    </tr>
+              </thead>
+              <tbody>
+                {this.renderTransaction()}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     }

@@ -338,6 +338,7 @@ module.exports = {
             }
         })
     },
+
     payHandler: (request,response) => {
         //ganti status di transactions jadi "paid"
         let payQuery = `update transactions set transaction_status = "pending" where transactions_id = ${db.escape(request.body.transactions_id)};`
@@ -350,6 +351,34 @@ module.exports = {
             }
         })
     },
+
+    confirmPurchase: (request,response) => {
+        //ganti status di transactions jadi "paid"
+        let payQuery = `UPDATE transactions SET transaction_status = "paid" WHERE transactions_id = ${db.escape(request.body.transactions_id)};`
+
+        db.query(payQuery, (err, result)=> {
+            
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+            }
+        })
+    },
+
+    rejectPurchase: (request,response) => {
+        //ganti status di transactions jadi "paid"
+        let payQuery = `UPDATE transactions SET transaction_status = "rejected" WHERE transactions_id = ${db.escape(request.body.transactions_id)};`
+
+        db.query(payQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+            }
+        })
+    },
+
     getCurrentTransaction: (req,res) => {
         let scriptQuery = `SELECT * FROM transactions WHERE user_id = ${db.escape(req.query.user_id)} AND transaction_status = "waiting_payment";`
 
@@ -363,5 +392,42 @@ module.exports = {
                     return res.status(200).send(err)
             } 
             })
-        }
+        },
+
+    getAllTransaction: (req,res) => {
+        let scriptQuery = `SELECT transactions.transactions_id, transactions.transaction_status, transactions.payment_proof,transaction_items.transaction_price FROM transactions JOIN transaction_items ON transactions.transactions_id = transaction_items.transactions_id WHERE transactions.user_id = ${db.escape(req.query.user_id)}`
+        
+        db.query(scriptQuery, (err, result)=> {
+            console.log(result)
+            if (err) {
+                return res.status(500).send(err)
+            } else if (result) {
+                return res.status(200).send(result)
+            } else { 
+                    return res.status(200).send({message: "No transaction at the moment"})
+            } 
+            })
+        },
+
+        getAdminTransaction: (req,res) => {
+            console.log("Admin transaction API detected")
+            let scriptQuery = `SELECT transactions.transactions_id, transactions.transaction_status, transactions.payment_proof,transaction_items.transaction_price, warehouse.warehouse_id 
+            FROM transactions 
+            JOIN transaction_items ON transactions.transactions_id = transaction_items.transactions_id 
+            JOIN admin ON transactions.warehouse_id = admin.warehouse_id
+            JOIN warehouse ON admin.warehouse_id = warehouse.warehouse_id 
+            WHERE transactions.transaction_status ='pending';`
+            
+            db.query(scriptQuery, (err, result)=> {
+                console.log(result)
+                if (err) {
+                    return res.status(500).send(err)
+                } else if (result) {
+                    return res.status(200).send(result)
+                } else { 
+                        return res.status(200).send({message: "No transaction at the moment"})
+                } 
+                })
+            },
+
     }
