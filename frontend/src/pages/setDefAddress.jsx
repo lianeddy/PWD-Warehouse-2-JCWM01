@@ -1,5 +1,7 @@
 import React from 'react';
+import Axios from 'axios';
 import {Redirect} from 'react-router-dom'
+import { API_URL } from "../constants/API";
 import { setDefaultAddress } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import "../assets/styles/loginRegister.css"
@@ -31,9 +33,35 @@ class editProfile extends React.Component {
     
     componentDidMount() {
         if(this.props.userGlobal.auth_status==="user" || this.props.userGlobal.auth_status==="superadmin" || this.props.userGlobal.auth_status==="admin"){
-            console.log("authorized")
+            this.getAddress()
         } else {
             this.setState({redirectNonUser: true})
+        }
+    }
+
+    getAddress = () => {
+        Axios.get(API_URL + `/keeplogin/address?user_id=${this.props.userGlobal.user_id}`)
+        .then((res) => {
+           this.setState({address:res.data})
+        })
+        .catch((err) => {
+            alert(err);
+        });
+    }
+
+    renderAddress = () => {
+        if(this.state.address){
+            return this.state.address.map((val) => {
+                return(
+                    <tr>
+                        <td>{val.user_address}</td>
+                        <td>{val.user_location}</td>
+                        <td>
+                        <button onClick={()=>{this.props.setDefaultAddress(val) ; this.redirectHandler()}} type="submit" className="btn btn-login">Set as Default</button>
+                        </td>
+                    </tr>
+                    )
+            })
         }
     }
 
@@ -45,25 +73,26 @@ class editProfile extends React.Component {
 
         const { redirect } = this.state;
         if(redirect) {
-            return <Redirect to="/"/>
+            return <Redirect to="/profile"/>
         }
 
         return <div className="base-container">
                     <div className="content">
                         <div className="header">Set Default Address</div>
-                            <div className="form-group">
-                                    <div className="form-group">
-                                        <label htmlFor="text">Please enter one of your stored address that you want to set as a default address</label>
-                                        <input type="text" name="address" onChange={this.inputHandler} placeholder="Address"></input>                
-                                    </div>
-                            <div className='detail'>
-                        </div>
+                        <table className="table">
+                            <thead className="table-light">
+                                <tr>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Geolocation</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.renderAddress()}
+                            </tbody>
+                        </table>
                     </div>
-                    <div className="footer">
-                    <button onClick={()=>{this.props.setDefaultAddress(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Edit Now</button>
                 </div>
-                </div>
-        </div>
     }
 }
 

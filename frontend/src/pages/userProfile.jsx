@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { API_URL } from "../constants/API";
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from "react-redux";
-import "../assets/styles/loginRegister.css"
+import "../assets/styles/userProfile.css"
 
 
 class UserProfile extends React.Component {
@@ -108,6 +108,7 @@ class UserProfile extends React.Component {
     }
 
     render() {
+        console.log(this.state.address)
         const { redirectNonUser } = this.state;
         if(redirectNonUser) {
             return <Redirect to="/"/>
@@ -120,52 +121,61 @@ class UserProfile extends React.Component {
 
         return <div className=".base-container">
             <div className="content">
-            <div className="header">User Profile</div>
-            <div className="container">
-            <div className="d-flex justify-content-center">
-                <div className="col-md-3 p-4 bg-dark text-white text-left">
-                    <div className="col-md-3">
-                        <img id="imgpreview" width="100%" />
+                <div className="header">User Profile</div>
+                    <div className="container">
+                    <div className="d-flex justify-content-center">
+                        <div className="col-md-3 p-4 bg-dark text-white text-left">
+                            <div className="col-md-3">
+                                <img id="imgpreview" width="100%" />
+                            </div>
+                                <form>
+                                    <div className="form-group">
+                                        <label htmlFor="title">Title</label>
+                                        <input type="text" className="form-control" id="title"  aria-describedby="emailHelp" ref={elemen => this.inputTitle = elemen} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="img">Image</label>
+                                        <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} ref={elemen => this.inputImage = elemen} />
+                                    </div>
+                                </form>
+                                <button type="button" className="btn btn-primary float-right" onClick={this.uploadHandler}>Add Data</button>
+                        </div>
+                        <div className="col-md-3 p-4 bg-light text-white text-left">
+                        <div className="row">
+                        <img src={API_URL + this.state.pic_location}  alt="user-profile-picture" />
+                        </div>
+                        <div className="row">
+                            <div readOnly className="form-control-plaintext">Your Username: {this.state.username}</div>
+                        </div>
+                        <div className="row">
+                            <div readOnly className="form-control-plaintext">Your Email: {this.state.email}</div>
+                        </div>
+                        <div className="row">
+                            <div readOnly className="form-control-plaintext">Your default Address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
+                        </div>
+                        <div className="row">
+                            <div readOnly className="form-control-plaintext">Your address: {this.state.address ? this.state.address.user_address : null}</div>
+                        </div>
                     </div>
-                            <form>
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" className="form-control" id="title"  aria-describedby="emailHelp" ref={elemen => this.inputTitle = elemen} />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="img">Image</label>
-                                    <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} ref={elemen => this.inputImage = elemen} />
-                                </div>
-                            </form>
-                            <button type="button" className="btn btn-primary float-right" onClick={this.uploadHandler}>Add Data</button>
                 </div>
-                <div className="col-md-3 p-4 bg-light text-white text-left">
-                    <div className="row">
-                    <img src={API_URL + this.state.pic_location}  alt="user-profile-picture" />
-                    </div>
-                    <div className="row">
-                        <div readOnly className="form-control-plaintext">Your Username: {this.state.username}</div>
-                    </div>
-                    <div className="row">
-                        <div readOnly className="form-control-plaintext">Your Email: {this.state.email}</div>
-                    </div>
-                    <div className="row">
-                        <div readOnly className="form-control-plaintext">Your default Address: {this.state.defAddress ? this.state.defAddress.user_address : null}</div>
-                    </div>
-                    <div className="row">
-                        <div readOnly className="form-control-plaintext">Your address: {this.state.address ? this.state.address.user_address : null}</div>
-                    </div>
+                
                 </div>
+                
             </div>
-            </div>
-            </div>
-            <div className="footer">
-                <Link to="/editAddress">Modify Address</Link>
-                <Link to="/setDefAddress">Set Default Address</Link>
-                <Link to="/resetPassword">Modify Password</Link>
-                {this.renderHistoryButton()}
-            </div>
+                <div className="d-flex justify-content-center footer-tab">
+                    <Link to="/editAddress">
+                    <button className="btn-dark">Add Address</button>
+                    </Link>
+                    <Link to="/setDefAddress">
+                    <button className="btn-dark">Set Default Address</button>
+                    </Link>
+                    <Link to="/resetPassword">
+                    <button className="btn-dark">Modify Password</button>
+                    </Link>
+                    {this.renderHistoryButton()}
+                </div>
         </div>
+        
     }
 }
 

@@ -88,10 +88,10 @@ export const modifyUserAddress = (data) => {
 };
 
 export const setDefaultAddress = (data) => {
+  console.log(`${data} found`)
   return (dispatch) => {
-    Axios.post(API_URL + `/setDefault/`, {
-      user_id: data.user_id,
-      address: data.address,
+    Axios.post(API_URL + `/setDefault/id?user_id=${data.user_id}`, {
+      address: data.user_address,
     })
       .then((res) => {
         alert("User Profile updated");
