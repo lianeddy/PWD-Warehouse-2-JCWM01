@@ -340,7 +340,7 @@ module.exports = {
     },
     payHandler: (request,response) => {
         //ganti status di transactions jadi "paid"
-        let payQuery = `update transactions set transaction_status = "paid" where transactions_id = ${db.escape(request.body.transactions_id)};`
+        let payQuery = `update transactions set transaction_status = "pending" where transactions_id = ${db.escape(request.body.transactions_id)};`
 
         db.query(payQuery, (err, result)=> {
             if (err) {
@@ -360,7 +360,7 @@ module.exports = {
             } else if (result[0]) {
                 return res.status(200).send(result)
             } else { 
-                    return res.status(200).send({message: "no transaction at the moment"})
+                    return res.status(200).send(err)
             } 
             })
         }

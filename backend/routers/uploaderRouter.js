@@ -6,5 +6,5 @@ router.post('/add-product',uploaderController.addProduct)
 router.patch('/edit-image',uploaderController.editImage)
 router.post('/add-profile-picture',uploaderController.addProfPic)
 router.get('/getAlbum',uploaderController.getAlbum)
-
+router.post('/proof-upload',uploaderController.addPaymentProof)
 module.exports = router

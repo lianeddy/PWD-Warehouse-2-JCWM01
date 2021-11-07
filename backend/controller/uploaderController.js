@@ -169,6 +169,41 @@ module.exports = {
         }
     },
 
+    addPaymentProof: (req, res) => {
+        try { 
+            let path = '/images'
+            const upload = uploader(path, 'PRF').fields([{ name: 'file' }])
+
+            upload(req, res, (err) => {
+                if (err) {
+                    console.log(err)
+                    res.status(500).send(err)
+                }
+
+                const { file } = req.files
+                const filepath = file ? path + '/' + file[0].filename : null
+
+                let data = JSON.parse(req.body.data)
+                data.image = filepath
+
+                let sqlInsert = `UPDATE transactions set payment_proof=${db.escape(filepath)} WHERE transactions_id = ${db.escape(data.transactions_id)};`
+                db.query(sqlInsert , (err, results) => {
+                    if (err) {
+                        console.log(err)
+                        fs.unlinkSync('./public' + filepath)
+                        res.status(500).send(err)
+                    } else {
+                        res.status(200).send({ dataPicture:results, message: "Proof Uploaded" })
+                    }
+                })
+
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send(err)
+        }
+    },
+
     editImage: (req, res) => {
         try { //ini promise kayak then
             let path = '/images'

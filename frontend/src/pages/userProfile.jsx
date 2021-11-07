@@ -60,7 +60,7 @@ class UserProfile extends React.Component {
         this.setState({ [name]: value })
     }
 
-    onBtAdd = () => {
+    uploadHandler = () => {
         if (this.state.addFile) {
             let formData = new FormData()
 
@@ -82,7 +82,7 @@ class UserProfile extends React.Component {
         }
     }
 
-    onBtAddFile = (e) => {
+    previewHandler = (e) => {
         if (e.target.files[0]) {
             this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
             let preview = document.getElementById("imgpreview")
@@ -117,10 +117,10 @@ class UserProfile extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="img">Image</label>
-                                    <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.onBtAddFile} ref={elemen => this.inputImage = elemen} />
+                                    <input type="file" className="form-control" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} ref={elemen => this.inputImage = elemen} />
                                 </div>
                             </form>
-                            <button type="button" className="btn btn-primary float-right" onClick={this.onBtAdd}>Add Data</button>
+                            <button type="button" className="btn btn-primary float-right" onClick={this.uploadHandler}>Add Data</button>
                 </div>
                 <div className="col-md-3 p-4 bg-light text-white text-left">
                     <div className="row">

@@ -27,6 +27,38 @@ class Payment extends React.Component {
     }
   }
 
+  uploadHandler = () => {
+     if (this.state.addFile) {
+      let idTransaction = 0
+        let formData = new FormData()
+        this.state.transaction.map((val)=>{idTransaction = val.transactions_id})
+
+        let obj = {
+            user_id: this.props.userGlobal.user_id,
+            transactions_id: idTransaction,
+        }
+
+        formData.append('data', JSON.stringify(obj));
+        formData.append('file', this.state.addFile);
+        Axios.post(`${API_URL}/upload/proof-upload`,formData)
+            .then(res => {
+                this.refreshPage()
+                alert(res.data.message)
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+}
+
+previewHandler = (e) => {
+  if (e.target.files[0]) {
+      this.setState({ addFileName: e.target.files[0].name, addFile: e.target.files[0] })
+      //let preview = document.getElementById("imgpreview")
+      //preview.src = URL.createObjectURL(e.target.files[0])
+  }
+}
+
   payHandler = () => {
     let idTransaction = 0
     this.state.transaction.map((val)=>{idTransaction = val.transactions_id})
@@ -34,7 +66,7 @@ class Payment extends React.Component {
       transactions_id: idTransaction
     })
     .then((res)=> {
-        alert(`Your transaction number ${idTransaction} has been paid successfully`)
+        alert(`Your transaction number ${idTransaction} has been processed, please check your transaction history for updates`)
         this.refreshPage()
     })
     .catch((err)=>{
@@ -59,10 +91,16 @@ class Payment extends React.Component {
     <tr>    
     <td className="align-middle">{val.transactions_id}</td>
     <td className="align-middle">{this.props.userGlobal.username}</td>
-    <td className="align-middle">Waiting Payment</td>
+    <td className="align-middle">{val.transaction_status}</td>
+    <td className="align-middle">
+      <input type="file" className="form-control-dark" id="img" aria-describedby="emailHelp" onChange={this.previewHandler} />
+    </td> 
+    <td className="align-middle">
+      <button className="btn-basic" onClick={this.uploadHandler}>Add Picture</button>
+    </td>
     <td className="align-middle">
       <button className="btn-basic" onClick={this.payHandler}><p>Pay</p></button>
-    </td> 
+    </td>
   </tr>
     )}
   ) 
@@ -87,7 +125,9 @@ class Payment extends React.Component {
                     <th scope="col">Transaction no.</th>
                     <th scope="col">Buyer id</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Total Price</th>
+                    <th scope="col">Payment Proof</th>
+                    <th scope="col">Upload Payment Proof</th>
+                    <th scope="col">Action</th>
                   </tr>
             </thead>
             <tbody>
