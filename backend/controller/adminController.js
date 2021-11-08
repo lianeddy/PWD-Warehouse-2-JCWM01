@@ -120,6 +120,33 @@ module.exports = {
             }
         })
     },
+
+    confirmRequest: (request,response) => {
+        let { request_id } = request.body
+        let scriptQuery = `UPDATE request set status = 'confirmed' WHERE request_id = ${db.escape(request_id)} ;`
+    
+        db.query(scriptQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+            }
+        })
+    },
+
+    restockAmount: (request,response) => {
+        let { amount, request_id } = request.body
+        let scriptQuery = `UPDATE request set amount = ${db.escape(amount)} WHERE request_id = ${db.escape(request_id)} ;`
+    
+        db.query(scriptQuery, (err, result)=> {
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                return response.status(200).send(result)
+            }
+        })
+    },
+
     hideProduct: (request,response) => {
         let sqlHide = `Update products set hide = 0 where product_id = ${db.escape(request.query.product_id)};`
     

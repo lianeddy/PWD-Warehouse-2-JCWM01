@@ -105,6 +105,37 @@ class Admin extends React.Component {
       alert(err)
   })
   }
+
+  confirmResupply = (val) => {
+    Axios.post(`${API_URL}/admin/confirm-request`, {
+      request_id: val
+    })
+    .then((result) => {
+      alert("Confirmed you will be responsible of resupplying this request")
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+
+  confirmAmount = (val) => {
+    let amountQuery = prompt("Please enter the amount you wish you to resupply (Numbers only)")
+    let amount = parseInt(amountQuery)
+    if (typeof amount === 'number'){
+      Axios.post(`${API_URL}/admin/restock-amount`,
+      {request_id: val,amount}
+      )
+      .then((result) => {
+        alert("Confirmed")
+      })
+      .catch((err)=>{
+        alert(err)
+    })
+    } else {
+      alert("Error please try again")
+    }
+
+  }
  
   inputHandler = (event) => {
     const value = event.target.value;
@@ -283,7 +314,13 @@ class Admin extends React.Component {
             <td className="align-middle">{val.warehouse_id_form}</td>
             <td className="align-middle">{val.warehouse_id_to}</td> 
             <td className="align-middle">{val.amount}</td> 
-            <td className="align-middle">{val.status}</td> 
+            <td className="align-middle">{val.status}</td>
+            <td className="align-middle">
+              <button onClick={()=>this.confirmAmount(val.request_id)}>Select Amount</button>
+            </td> 
+            <td className="align-middle">
+              <button onClick={()=>this.confirmResupply(val.request_id)}>Confirm Resupply</button>
+            </td>  
           </tr>
     )}
   )} else { 
@@ -791,7 +828,7 @@ class Admin extends React.Component {
                             <th>From</th>
                             <th>To</th>
                             <th>Amount</th>
-                            <th>Status</th>
+                            <th colSpan='3'>Status</th>
                         </tr>
                     </thead>
                     <tbody>

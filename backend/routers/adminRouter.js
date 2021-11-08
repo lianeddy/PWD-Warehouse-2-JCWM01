@@ -13,6 +13,8 @@ router.get('/top-three',adminController.getTopThree)
 router.get('/time-transaction',adminController.timeTransactions)
 router.post('/request',adminController.stockRequest)
 router.get('/get-request',adminController.getRequest)
+router.post('/confirm-request',adminController.confirmRequest)
+router.post('/restock-amount',adminController.restockAmount)
 
 router.patch('/edit-product',adminController.editProduct)
 router.patch('/edit-stock',adminController.editStock)

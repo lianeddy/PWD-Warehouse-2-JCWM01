@@ -59,14 +59,13 @@ class Payment extends React.Component {
     }
   }
 
-  payHandler = () => {
-    let idTransaction = 0
-    this.state.transaction.map((val)=>{idTransaction = val.transactions_id})
+  payHandler = (val) => {
+    
     Axios.post(`${API_URL}/transaction/pay`,{
-      transactions_id: idTransaction
+      transactions_id: val
     })
     .then((res)=> {
-        alert(`Your transaction number ${idTransaction} has been processed, please check your transaction history for updates`)
+        alert(`Your transaction number ${val} has been processed, please check your transaction history for updates`)
         this.refreshPage()
     })
     .catch((err)=>{
@@ -99,7 +98,7 @@ class Payment extends React.Component {
               <button className="btn-basic" onClick={this.uploadHandler}>Add Picture</button>
             </td>
             <td className="align-middle">
-              <button className="btn-basic" onClick={this.payHandler}><p>Pay</p></button>
+              <button className="btn-basic" onClick={()=>{this.payHandler(val.transactions_id)}}><p>Pay</p></button>
             </td>
           </tr>
     )}

@@ -164,15 +164,14 @@ class UserProfile extends React.Component {
             </div>
                 <div className="d-flex justify-content-center footer-tab">
                     <Link to="/editAddress" style={{ textDecoration: 'none' }}>
-                    <button className="btn-dark" style={{ textDecoration: 'none' }}>Add Address</button>
+                    <button className="btn-userTab" style={{ textDecoration: 'none' }}>Add Address</button>
                     </Link>
                     <Link to="/setDefAddress" style={{ textDecoration: 'none' }}>
-                    <button className="btn-dark">Set Default Address</button>
+                    <button className="btn-userTab">Set Default Address</button>
                     </Link>
                     <Link to="/resetPassword" style={{ textDecoration: 'none' }}>
-                    <button className="btn-dark">Modify Password</button>
+                    <button className="btn-userTab">Modify Password</button>
                     </Link>
-                    {this.renderHistoryButton()}
                 </div>
         </div>
         

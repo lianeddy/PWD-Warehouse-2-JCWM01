@@ -109,11 +109,24 @@
     padding: 10px!important;
 }
 
+.btn-userTab{
+    color: white !important;
+    background-color: black !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.btn-userTab:hover{
+    color: white !important;
+    background-color: black !important;
+    text-decoration: underline !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .footer-tab{
     margin: 1rem 2rem 2rem 3rem;
 }
-
-
 
 .footer h6 {
     padding: 1rem;
