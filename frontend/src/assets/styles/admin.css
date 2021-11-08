@@ -4,6 +4,12 @@
     object-fit: contain;
 }
 
+.payment-proof-image{
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+}
+
 .detail-transaction-image{
     width: 85px;
     height: 85px;

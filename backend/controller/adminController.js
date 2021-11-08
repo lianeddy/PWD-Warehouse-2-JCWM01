@@ -193,7 +193,7 @@ module.exports = {
     getTransactionHistory: (request,response) => {
 
         if(request.query.warehouse_id){
-            let scriptQuery = `SELECT t.transactions_id, t.transaction_status, t.time, t.user_id, 
+            let scriptQuery = `SELECT t.transactions_id, t.payment_proof, t.transaction_status, t.time, t.user_id, 
             u.username, t.warehouse_id, w.warehouse_name
             FROM transactions t join user u join warehouse w
             on t.user_id = u.user_id
@@ -202,7 +202,7 @@ module.exports = {
             order by time;`
 
             if(request.query.warehouse_id>0){
-                scriptQuery = `SELECT t.transactions_id, t.transaction_status, t.time, t.user_id, 
+                scriptQuery = `SELECT t.transactions_id, t.payment_proof, t.transaction_status, t.time, t.user_id, 
                 u.username, t.warehouse_id, w.warehouse_name
                 FROM transactions t join user u join warehouse w
                 on t.user_id = u.user_id

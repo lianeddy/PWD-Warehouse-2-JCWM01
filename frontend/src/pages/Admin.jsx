@@ -33,6 +33,7 @@ class Admin extends React.Component {
     subTotalPrice:0,
     totalPrice:0,
     shippingPrice:18000,
+    payProof:"",
   }
 
   fetchAdminData = () => {
@@ -449,12 +450,13 @@ class Admin extends React.Component {
   }
 
   fetchTransactionItems = () => {
-    console.log(this.state.see_detail_id)
+    // console.log(this.state.see_detail_id)
     Axios.get(`${API_URL}/admin/transaction-items?transactions_id=${this.state.see_detail_id}`)
     .then((result) => {
       this.setState({detailTransactions: result.data})
-      console.log(result.data)
+      // console.log(result.data)
       this.totalPrice()
+      this.renderTransactionPayProof()
     })
     .catch((err)=>{
       alert(err)
@@ -463,7 +465,7 @@ class Admin extends React.Component {
 
   renderTransactionItems = () =>{
     return this.state.detailTransactions.map((val)=>{
-      console.log(val)
+      // console.log(val)
       return(
         <tr>
           <td>{val.product_name}</td>
@@ -474,6 +476,18 @@ class Admin extends React.Component {
           <td>Rp. {(val.quantity*val.transaction_price).toLocaleString()}</td>
         </tr>
       )
+    })
+  }
+
+  renderTransactionPayProof = () =>{
+    console.log(this.state.see_detail_id)
+    Axios.get(`${API_URL}/admin/transaction-items?transactions_id=${this.state.see_detail_id}`)
+    .then((result) => {
+      this.setState({payProof: result.data[0].payment_proof})
+      // console.log(result.data[0].payment_proof)
+    })
+    .catch((err)=>{
+      alert(err)
     })
   }
 
@@ -727,8 +741,18 @@ class Admin extends React.Component {
                               <h3 className="font-weight-bold">TOTAL PRICE</h3>
                               <p>Rp. {this.state.totalPrice.toLocaleString()}</p>
                             </div>
+                            <div className="mb-3">
+                              <h4 className="mb-1"><b>Payment Proof</b></h4>
+                              {
+                                this.state.payProof?
+                                <img src={API_URL + '/public' + this.state.payProof} className="payment-proof-image" alt="payment_proof"/>
+                                : <p>There is no payment proof</p>
+                              }
+                            </div>
                           </div>
+
                         </div>
+
                         <button onClick={this.closeDetailHandler} className="mt-2 btn btn-cancel col-2">Close</button>
                       </div>
                     </div>
