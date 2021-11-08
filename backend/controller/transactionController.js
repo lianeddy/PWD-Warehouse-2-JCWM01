@@ -368,7 +368,7 @@ module.exports = {
 
     rejectPurchase: (request,response) => {
         //ganti status di transactions jadi "paid"
-        let payQuery = `UPDATE transactions SET transaction_status = "rejected" WHERE transactions_id = ${db.escape(request.body.transactions_id)};`
+        let payQuery = `UPDATE transactions SET transaction_status = "reject" WHERE transactions_id = ${db.escape(request.body.transactions_id)};`
 
         db.query(payQuery, (err, result)=> {
             if (err) {
@@ -411,12 +411,12 @@ module.exports = {
 
         getAdminTransaction: (req,res) => {
             console.log("Admin transaction API detected")
-            let scriptQuery = `SELECT transactions.transactions_id, transactions.transaction_status, transactions.payment_proof,transaction_items.transaction_price, warehouse.warehouse_id 
+            let scriptQuery = `SELECT transactions.transactions_id, transactions.transaction_status, transactions.time, transactions.user_id, 
+            user.username, transactions.warehouse_id, warehouse.warehouse_name
             FROM transactions 
-            JOIN transaction_items ON transactions.transactions_id = transaction_items.transactions_id 
-            JOIN admin ON transactions.warehouse_id = admin.warehouse_id
-            JOIN warehouse ON admin.warehouse_id = warehouse.warehouse_id 
-            WHERE transactions.transaction_status ='pending';`
+            JOIN user JOIN warehouse ON transactions.user_id = user.user_id
+            and transactions.warehouse_id = warehouse.warehouse_id
+            where transactions.transaction_status ='pending' order by time;`
             
             db.query(scriptQuery, (err, result)=> {
                 console.log(result)

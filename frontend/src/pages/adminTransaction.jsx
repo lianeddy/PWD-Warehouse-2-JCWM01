@@ -29,8 +29,6 @@ class History extends React.Component {
       }
 
       confirmHandler = (val) => {
-        //let transactions_id = 0
-        //this.state.pendingTransaction.map((val)=>{idTransaction = val.transactions_id})
         Axios.post(`${API_URL}/transaction/confirm`,{
           transactions_id: val
         })
@@ -44,8 +42,6 @@ class History extends React.Component {
       }
 
       rejectHandler = (val) => {
-        let idTransaction = 0
-        //this.state.pendingTransaction.map((val)=>{idTransaction = val.transactions_id})
         Axios.post(`${API_URL}/transaction/reject`,{
           transactions_id: val
         })
@@ -75,7 +71,7 @@ class History extends React.Component {
             return(
               <tr>    
                 <td className="align-middle">{val.transactions_id}</td>
-                <td className="align-middle">{val.payment_proof}</td>
+                <td className="align-middle">{val.time.slice(0,10)}</td>
                 <td className="align-middle">Rp. {val.transaction_price}</td>
                 <td className="align-middle">{val.transaction_status}</td>
                 <td className="align-middle">
@@ -104,7 +100,7 @@ class History extends React.Component {
                   <thead className="table-light">
                         <tr>
                           <th scope="col">Transaction no.</th>
-                          <th scope="col">Payment images</th>
+                          <th scope="col">Date</th>
                           <th scope="col">Total Price</th>
                           <th scope="col">Status</th>
                           <th scope="col">Action</th>

@@ -94,13 +94,13 @@ class UserProfile extends React.Component {
     renderHistoryButton = () => {
         if(this.state.auth_status==='admin'){
             return(
-            <Link to="/adminTransaction">
-                <button className="btn-dark">Check request transaction</button>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+                <button className="btn-dark">Back Home</button>
             </Link>
             )
         } else {
             return(
-            <Link to="/history">
+            <Link to="/history" style={{ textDecoration: 'none' }}>
                  <button className="btn-dark">Check your transactions</button>
             </Link>
             )  
@@ -163,13 +163,13 @@ class UserProfile extends React.Component {
                 
             </div>
                 <div className="d-flex justify-content-center footer-tab">
-                    <Link to="/editAddress">
-                    <button className="btn-dark">Add Address</button>
+                    <Link to="/editAddress" style={{ textDecoration: 'none' }}>
+                    <button className="btn-dark" style={{ textDecoration: 'none' }}>Add Address</button>
                     </Link>
-                    <Link to="/setDefAddress">
+                    <Link to="/setDefAddress" style={{ textDecoration: 'none' }}>
                     <button className="btn-dark">Set Default Address</button>
                     </Link>
-                    <Link to="/resetPassword">
+                    <Link to="/resetPassword" style={{ textDecoration: 'none' }}>
                     <button className="btn-dark">Modify Password</button>
                     </Link>
                     {this.renderHistoryButton()}

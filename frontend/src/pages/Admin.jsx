@@ -218,6 +218,32 @@ class Admin extends React.Component {
     } 
   }
 
+  confirmHandler = (val) => {
+    Axios.post(`${API_URL}/transaction/confirm`,{
+      transactions_id: val
+    })
+    .then((res)=> {
+        alert(`The transaction number ${val} has been confirmed`)
+        this.refreshPage()
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
+  rejectHandler = (val) => {
+    Axios.post(`${API_URL}/transaction/reject`,{
+      transactions_id: val
+    })
+    .then((res)=> {
+        alert(`The transaction number ${val} has been rejected`)
+        this.refreshPage()
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
   hideProducts = (val) =>{
     const confirmEdit = window.confirm("You will only hide this product from user. Continue?")
     if(confirmEdit) {
@@ -360,6 +386,12 @@ class Admin extends React.Component {
             <td>
               <button onClick={()=>this.seeDetailHandler(val)} >See Details</button>
             </td>
+            <td>
+              <button onClick={()=>{this.confirmHandler(val.transactions_id)}}>Confirm</button>
+            </td> 
+            <td>
+              <button onClick={()=>{this.rejectHandler(val.transactions_id)}}>Reject</button>
+            </td> 
         </tr>
       )
     })
@@ -380,6 +412,7 @@ class Admin extends React.Component {
 
   renderTransactionItems = () =>{
     return this.state.detailTransactions.map((val)=>{
+      console.log(val)
       return(
         <tr>
           <td>{val.product_name}</td>
