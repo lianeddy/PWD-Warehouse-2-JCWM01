@@ -195,19 +195,19 @@ class ProductDetail extends React.Component {
                       {this.renderSize()}
                     </select>
                   </div>
-                  <button disabled={true} onClick={this.fnQuantityDown} className="btn btn-dark btn-sm">
+                  <button disabled={true} onClick={this.fnQuantityDown} className="btn btn-add btn-sm">
                     -
                   </button>
                   <div className="mx-4">
                     <h4>0</h4>
                   </div>
-                  <button onClick={this.fnQuantityUp} disabled={true} className="btn btn-dark btn-sm">
+                  <button onClick={this.fnQuantityUp} disabled={true} className="btn btn-add btn-sm">
                     +
                   </button>
                   <p className="warning ms-2">  Sorry, our stock for size {this.state.selectedSize.toUpperCase()} has run out.</p>
 
                 </div>
-                <button disabled={true} className="btn btn-sm btn-dark mt-3 col-6">
+                <button disabled={true} className="btn btn-sm btn-add mt-3 col-6">
                     <p>Add to cart</p>
                 </button>
               </>
@@ -220,13 +220,13 @@ class ProductDetail extends React.Component {
                       {this.renderSize()}
                     </select>
                   </div>
-                  <button disabled={this.state.productQty===1} onClick={this.fnQuantityDown} className="btn btn-dark btn-sm">
+                  <button disabled={this.state.productQty===1} onClick={this.fnQuantityDown} className="btn btn-add btn-sm">
                     -
                   </button>
                   <div className="mx-4">
                     <h4>{this.state.productQty}</h4>
                   </div>
-                  <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock -  this.state.cartQty} className="btn btn-dark btn-sm">
+                  <button onClick={this.fnQuantityUp} disabled={this.state.productQty===this.state.availableStock -  this.state.cartQty} className="btn btn-add btn-sm">
                     +
                   </button>
                   {
@@ -239,11 +239,11 @@ class ProductDetail extends React.Component {
                 {/* klo bukan user gabisa add to cart, keluarnya alert */}
                 {
                   this.props.userGlobal.auth_status==="user"?
-                  <button onClick={this.addToCartHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                  <button onClick={this.addToCartHandler} className="btn btn-sm btn-add mt-3 col-6">
                       <p>Add to cart</p>
                   </button>
                   :
-                  <button onClick={this.alertHandler} className="btn btn-sm btn-dark mt-3 col-6">
+                  <button onClick={this.alertHandler} className="btn btn-sm btn-add mt-3 col-6">
                       <p>Add to cart</p>
                   </button>
 

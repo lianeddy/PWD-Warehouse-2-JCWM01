@@ -95,3 +95,27 @@ p{
     font-size: 12px !important;
     margin: 0px !important;
 }
+
+.btn-filter{
+    color: white !important;
+    background-color: black !important;
+}
+
+.btn-filter:hover{
+    color: white !important;
+    background-color: black !important;
+    text-decoration: underline !important;
+}
+
+.btn-reset{
+    color: black !important;
+    background-color: white !important;
+    border: grey 1px solid !important;
+}
+
+.btn-reset:hover{
+    color: black !important;
+    background-color: white !important;
+    text-decoration: underline !important;
+    border: grey 1px solid !important;
+}

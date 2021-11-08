@@ -116,3 +116,15 @@ p{
     color: black;
     padding: 0px;
 }
+
+.btn-search{
+    color: white !important;
+    background-color: black !important;
+}
+
+.btn-search:hover{
+    color: white !important;
+    background-color: black !important;
+    text-decoration: underline !important;
+}
+

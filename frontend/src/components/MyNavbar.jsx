@@ -56,7 +56,7 @@ class MyNavbar extends React.Component{
                         <input className="form-control" name="searchProduct"  onChange={this.inputHandler} type="search" placeholder="Search products..." />
 
                         <Link  to="/products" >
-                            <button onClick={this.searchProductHandler} className="btn btn-dark ms-2" type="submit"><p>Search</p></button>
+                            <button onClick={this.searchProductHandler} className="btn btn-search ms-2" type="submit"><p>Search</p></button>
                         </Link> 
 
                     </form>

@@ -100,7 +100,16 @@ p{
     font-weight: 800 !important;
 }
 
-.btn-dark{
+.btn-add{
+    color: white !important;
+    background-color: black !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.btn-add:hover{
+    color: white !important;
+    background-color: black !important;
     text-decoration: underline !important;
     margin-left: 10px;
     margin-right: 10px;

@@ -185,32 +185,37 @@ class Cart extends React.Component {
         state: { transactions_id: this.state.transactions_id }
     }} />
     }
-    return this.state.cartList.map((val) =>{
-      const totalPrice = val.price_sell*val.quantity
-
-        return(
-          <tr>
-            <td className="align-middle">{val.product_name}</td>
-            <td className="align-middle">Rp. {val.price_sell.toLocaleString()}</td>
-            <td className="align-middle"><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
-            <td className="align-middle">
-            <button onClick={()=>{this.quantityUpHandler(val)}} className="btn btn-dark btn-sm">+</button>
-              {val.quantity}
-            <button onClick={()=>{this.quantityDownHandler(val)}} disabled={val.quantity === 1} className="btn btn-dark btn-sm">-</button>
-            </td>
-            <td className="align-middle">
-              {val.size.toUpperCase()}
-            </td>
-            <td className="align-middle">
-              Rp. {totalPrice.toLocaleString()}
-            </td>
-            <td className="align-middle">
-              <button onClick={()=>{this.deleteHandler(val)}} className="btn btn-delete" >Delete</button>
-            </td>
-          </tr>
-        )
+    // console.log(this.state.cartList)
+    if(this.state.cartList){
+      return this.state.cartList.map((val) =>{
+        const totalPrice = val.price_sell*val.quantity
+  
+          return(
+            <tr>
+              <td className="align-middle">{val.product_name}</td>
+              <td className="align-middle">Rp. {val.price_sell.toLocaleString()}</td>
+              <td className="align-middle"><img src={API_URL + '/public' + val.product_image} className="admin-product-image" alt={val.productName}/></td>
+              <td className="align-middle">
+  
+              <button onClick={()=>{this.quantityDownHandler(val)}} disabled={val.quantity === 1} className="btn btn-add btn-sm">-</button>
+                {val.quantity}
+              <button onClick={()=>{this.quantityUpHandler(val)}} className="btn btn-add btn-sm">+</button>
+              </td>
+              <td className="align-middle">
+                {val.size.toUpperCase()}
+              </td>
+              <td className="align-middle">
+                Rp. {totalPrice.toLocaleString()}
+              </td>
+              <td className="align-middle">
+                <button onClick={()=>{this.deleteHandler(val)}} className="btn btn-delete" >Delete</button>
+              </td>
+            </tr>
+          )
+      }
+      )
     }
-    )
+
   }
 
   refreshPage = ()=>{
@@ -269,7 +274,6 @@ class Cart extends React.Component {
   componentDidMount(){
     if(this.props.userGlobal.auth_status==="user"){
       this.props.getCartData(this.props.userGlobal.user_id)
-      this.setState({cartList: this.props.cartGlobal.cartList})
       this.fetchCartList()
       this.fetchWarehouseData()
     }else{

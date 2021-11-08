@@ -189,8 +189,8 @@ class Products extends React.Component {
               </ul>
             </div>
             <div>
-              <button className="btn btn-dark btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
-              <button className="btn btn-light btn-sm ms-2 filter" onClick={this.resetFilter}><p>Reset Filter</p></button>
+              <button className="btn btn-filter btn-sm filter" onClick={this.fetchFilteredProducts}><p>Filter</p></button>
+              <button className="btn btn-reset btn-sm ms-2 filter" onClick={this.resetFilter}><p>Reset Filter</p></button>
             </div>
           </div>
 
@@ -225,11 +225,11 @@ class Products extends React.Component {
                   <div className="d-flex flex-direction-row align-items-center justify-content-between mt-3">
                     <div className="col-4"></div>
                     <div className="col-4 d-flex flex-direction-row align-items-center justify-content-center"> 
-                      <button disabled={this.state.page===1} onClick={this.prevPageHandler} className="btn btn-sm btn-dark">
+                      <button disabled={this.state.page===1} onClick={this.prevPageHandler} className="btn btn-sm btn-filter">
                         {"<"}
                       </button>
                       <p className="text-center text-page my-0 mx-2">Page {this.state.page} of {this.state.maxPage}</p>
-                      <button disabled={this.state.page===this.state.maxPage}  onClick={this.nextPageHandler} className="btn btn-sm btn-dark">
+                      <button disabled={this.state.page===this.state.maxPage}  onClick={this.nextPageHandler} className="btn btn-sm btn-filter">
                         {">"}
                       </button>
                     </div>
