@@ -14,6 +14,7 @@ class Admin extends React.Component {
     adminData:[],
     selectedWarehouse:1,
     warehouseList:[],
+    request:[],
     
     edit_id:0,
     edit_product_id:0,
@@ -39,6 +40,16 @@ class Admin extends React.Component {
     .then((result) => {
       this.setState({adminData: result.data[0]})
       this.selectWarehouse()
+    })
+    .catch((err)=>{
+      alert(err)
+  })
+  }
+
+  fetchRequestStock = () => {
+    Axios.get(`${API_URL}/admin/get-request`)
+    .then((result) => {
+      this.setState({request: result.data})
     })
     .catch((err)=>{
       alert(err)
@@ -244,6 +255,41 @@ class Admin extends React.Component {
     })
   }
 
+  requestStockHandler = (val) => {
+    Axios.post(`${API_URL}/admin/request`,{
+      product_id: val.product_id,
+      size: val.size,
+      warehouse_id_form: val.warehouse_id,
+    })
+    .then((res)=> {
+        alert(`A request of resupply for ${val.product_name} size ${val.size} has been created`)
+        this.refreshPage()
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  }
+
+  renderRequestForm = () => {
+    console.log(this.state.request)
+    if(this.state.request[0]){
+      return this.state.request.map((val) => {
+        return(
+          <tr>    
+            <td className="align-middle">{val.request_id}</td>
+            <td className="align-middle">{val.product_id}</td>
+            <td className="align-middle">{val.size}</td>
+            <td className="align-middle">{val.warehouse_id_form}</td>
+            <td className="align-middle">{val.warehouse_id_to}</td> 
+            <td className="align-middle">{val.amount}</td> 
+            <td className="align-middle">{val.status}</td> 
+          </tr>
+    )}
+  )} else { 
+    console.log (`err`)
+    }
+  }
+
   hideProducts = (val) =>{
     const confirmEdit = window.confirm("You will only hide this product from user. Continue?")
     if(confirmEdit) {
@@ -275,7 +321,9 @@ class Admin extends React.Component {
   }
 
   renderProducts = ()=>{
+    
     return this.state.productList.map((val) =>{
+      console.log(val)
       if(val.warehouse_stock_id===this.state.edit_id){
         return(
           <tr>
@@ -349,6 +397,9 @@ class Admin extends React.Component {
             </td>
             <td>
               <button className="btn btn-edit" onClick={()=>this.editStock(val.warehouse_stock_id)}>Edit Stock</button>
+            </td>
+            <td>
+              <button className="btn btn-edit" onClick={()=>this.requestStockHandler(val)}>Request Stock</button>
             </td>
             {
               val.hide===1?
@@ -497,9 +548,11 @@ class Admin extends React.Component {
   componentDidMount = () => {
     if(this.props.userGlobal.auth_status==="superadmin"){
       this.fetchAdminProduct()
+      this.fetchRequestStock()
       this.fetchTransactions()
     }
     this.fetchAdminData()
+    this.fetchRequestStock()
     this.fetchWarehouseList()
   }
 
@@ -599,7 +652,7 @@ class Admin extends React.Component {
                           <th>Image</th>
                           <th>Size</th>
                           <th>Stock</th>
-                          <th colSpan="3">Action</th>
+                          <th colSpan="4">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -703,9 +756,31 @@ class Admin extends React.Component {
                 </div>
                 :
                 this.state.menu==="requests"?
+                <div className="mt-3 col-6">
                 <h2>STOCK REQUESTS TABLE</h2>
+                <table className="table">
+                    <thead className="table-light">
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Product ID</th>
+                            <th>Size</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {this.renderRequestForm()}
+                    </tbody>
+                </table>
+                </div>
                 :
-                null
+                
+                <h3>STOCK REQUESTS TABLE</h3>
+
+              
+                
               }
             </div>
           </div>

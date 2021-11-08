@@ -311,6 +311,35 @@ module.exports = {
             })
 
         }
-    }
+    },
+
+    stockRequest: (request,response) => {
+        let { product_id, warehouse_id_form, size } = request.body
+        let scriptQuery = `INSERT INTO request (product_id, size, warehouse_id_form, warehouse_id_to, amount, status, transactions_id) VALUES (${db.escape(product_id)},${db.escape(size)},${db.escape(warehouse_id_form)},0,0,'unconfirmed',0);`
+
+        db.query(scriptQuery, (err, result)=> {
+            //console.log(scriptQuery)
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                //console.log(result)
+                return response.status(200).send(result)
+            }
+        })
+    },
+
+    getRequest: (request,response) => {
+        let scriptQuery = `SELECT * FROM request WHERE status = 'unconfirmed' AND transactions_id = 0`
+
+        db.query(scriptQuery, (err, result)=> {
+            console.log(scriptQuery)
+            if (err) {
+                return response.status(500).send(err)
+            } else {
+                console.log(result)
+                return response.status(200).send(result)
+            }
+        })
+    },
 
 }

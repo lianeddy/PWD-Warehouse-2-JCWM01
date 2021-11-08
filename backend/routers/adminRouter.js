@@ -11,7 +11,8 @@ router.get('/transaction',adminController.getTransactionHistory)
 router.get('/transaction-items',adminController.getTransactionItems)
 router.get('/top-three',adminController.getTopThree)
 router.get('/time-transaction',adminController.timeTransactions)
-
+router.post('/request',adminController.stockRequest)
+router.get('/get-request',adminController.getRequest)
 
 router.patch('/edit-product',adminController.editProduct)
 router.patch('/edit-stock',adminController.editStock)
