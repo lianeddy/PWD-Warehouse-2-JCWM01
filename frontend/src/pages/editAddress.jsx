@@ -60,10 +60,10 @@ class editProfile extends React.Component {
                                         <label htmlFor="text">Location Coordinate</label>
                                         <input type="text" name="coordinate" onChange={this.inputHandler} placeholder="Coordinate"></input>                
                                     </div>
-                            <div className='detail'>
+                            {/* <div className='detail'>
                                 <label>Your default Address</label>
                                 <div>{this.state.defAddress}</div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="footer">
                     <button onClick={()=>{this.props.modifyUserAddress(this.state) ; this.redirectHandler()}} type="submit" className="btn btn-login">Edit Now</button>
