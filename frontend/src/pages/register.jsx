@@ -12,6 +12,7 @@ class Register extends React.Component {
         username: "",
         email: "",
         password: "",
+        confirmPassword: "",
         fullname: "",
         gender: "",
         age: "",
@@ -53,6 +54,11 @@ class Register extends React.Component {
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input type="password" name="password" onChange={this.inputHandler} placeholder="password"></input>                
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="password">Confirm Password</label>
+                        <input type="password" name="confirmPassword" onChange={this.inputHandler} placeholder="confirmPassword"></input>                
                     </div>
 
                     <div className="form-group">

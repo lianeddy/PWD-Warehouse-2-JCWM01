@@ -11,6 +11,7 @@ export const searchProduct = (searchProduct) => {
 };
 
 export const confirmRegBtn = (data) => {
+  if(data.password === data.confirmPassword) {
   return (dispatch) => {
     Axios.post(API_URL + "/register/", {
       username: data.username,
@@ -33,7 +34,10 @@ export const confirmRegBtn = (data) => {
         alert("Registration failed");
         console.log(err);
       });
-  };
+    };
+  } else {
+    alert("Wrong password or doesnt match")
+  }
 };
 
 export const loginUser = (data) => {
