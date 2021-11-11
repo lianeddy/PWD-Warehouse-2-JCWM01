@@ -12,6 +12,7 @@ const init_state = {
   defAddress:"",
   storageIsChecked:false,
   cart_id: 0,
+  checkStatusPlaceHolder: ""
 };
 
 const reducer = (state = init_state, action) => {

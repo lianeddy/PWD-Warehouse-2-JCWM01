@@ -10,6 +10,26 @@ export const searchProduct = (searchProduct) => {
   };
 };
 
+export const checkUsername = (data) => {
+  return (dispatch) => {
+  Axios.post(API_URL + "/register/check", { 
+    usernameCheck: data.usernameCheck
+    })
+      .then((res) => {
+        if(res) {
+          dispatch({
+            type: "USER_LOGIN",
+            payload: res.data,
+          });
+        }
+      })
+      .catch((err) =>{
+        alert("Checker error");
+        console.log(err);
+      })
+    }
+}
+
 export const confirmRegBtn = (data) => {
   if(data.password === data.confirmPassword) {
   return (dispatch) => {

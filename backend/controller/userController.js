@@ -134,6 +134,22 @@ module.exports = {
         })
     },
     
+    checkUsername: (req, res) => {
+        let { usernameCheck } = req.body
+        //console.log(req.body)
+        let checkQuery = `SELECT user.username FROM user where username = ${db.escape(usernameCheck)};`
+        db.query(checkQuery, (err, result)=>{
+            console.log(result)
+            if(result){
+                return res.status(200).send(result)
+            } else if (err) {
+                return res.status(500).send(err) 
+            } else {
+                return res.status(500).send({ err, message: "Something's wrong"}) 
+            }
+        })
+    },
+
     keepLogin: (req,res) => {
         //REVISI supaya ambil cart_id (bikin error ketika delete items in cart)
         db.query(`SELECT * FROM user u join (select * from cart) c

@@ -1,5 +1,5 @@
 import React from "react";
-import { confirmRegBtn } from "../redux/actions/user";  
+import { confirmRegBtn, checkUsername } from "../redux/actions/user";  
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import "../assets/styles/loginRegister.css"
@@ -16,7 +16,9 @@ class Register extends React.Component {
         fullname: "",
         gender: "",
         age: "",
-        auth_status: "user"
+        auth_status: "user",
+        usernameCheck: "",
+        checkStatusPlaceHolder: ""
     }
 
     redirectHandler = () => {
@@ -43,7 +45,7 @@ class Register extends React.Component {
 
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
-                        <input type="text" name="username" onChange={this.inputHandler} placeholder="username"></input>
+                        <input type="text" name="username" onChange={{this.inputHandler ; this.props.checkUsername}} placeholder="username"></input>
                     </div>
 
                     <div className="form-group">
@@ -102,6 +104,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     confirmRegBtn,
+    checkUsername,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
