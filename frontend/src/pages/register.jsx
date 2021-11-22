@@ -18,7 +18,6 @@ class Register extends React.Component {
         age: "",
         auth_status: "user",
         usernameCheck: "",
-        checkStatusPlaceHolder: ""
     }
 
     redirectHandler = () => {
@@ -45,7 +44,7 @@ class Register extends React.Component {
 
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
-                        <input type="text" name="username" onChange={{this.inputHandler ; this.props.checkUsername}} placeholder="username"></input>
+                        <input type="text" name="username" onChange={()=>{this.inputHandler() ; this.props.checkUsername()}} placeholder="username"></input>
                     </div>
 
                     <div className="form-group">

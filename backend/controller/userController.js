@@ -139,7 +139,7 @@ module.exports = {
         //console.log(req.body)
         let checkQuery = `SELECT user.username FROM user where username = ${db.escape(usernameCheck)};`
         db.query(checkQuery, (err, result)=>{
-            console.log(result)
+            console.log(`result is ${result}`)
             if(result){
                 return res.status(200).send(result)
             } else if (err) {
